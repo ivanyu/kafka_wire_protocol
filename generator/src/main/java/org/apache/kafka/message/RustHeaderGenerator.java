@@ -29,17 +29,37 @@ public class RustHeaderGenerator {
             importsByPackage.computeIfAbsent(prefix, k -> new ArrayList<>()).add(symbol);
         }
 
-        for (Map.Entry<String, List<String>> entry : importsByPackage.entrySet()) {
-            String prefix = entry.getKey();
-            List<String> symbols = entry.getValue();
-            if (symbols.size() == 1) {
-                buffer.printf("use %s::%s;%n", prefix, symbols.get(0));
-            } else {
-                symbols.sort(String::compareTo);
-                buffer.printf("use %s::{%s};%n", prefix, String.join(", ", symbols));
-            }
+        List<Map.Entry<String, List<String>>> stdImports = importsByPackage.entrySet().stream()
+                .filter(e -> e.getKey().startsWith("std::"))
+                .collect(Collectors.toList());
+        stdImports.forEach(this::outputPackage);
+        if (!stdImports.isEmpty()) {
+            buffer.printf("%n");
         }
 
+        List<Map.Entry<String, List<String>>> otherImports = importsByPackage.entrySet().stream()
+                .filter(e -> !e.getKey().startsWith("std::") && !e.getKey().startsWith("crate::"))
+                .collect(Collectors.toList());
+        otherImports.forEach(this::outputPackage);
+        if (!otherImports.isEmpty()) {
+            buffer.printf("%n");
+        }
+
+        List<Map.Entry<String, List<String>>> crateImports = importsByPackage.entrySet().stream()
+                .filter(e -> e.getKey().startsWith("crate::"))
+                .collect(Collectors.toList());
+        crateImports.forEach(this::outputPackage);
         buffer.printf("%n");
+    }
+
+    private void outputPackage(Map.Entry<String, List<String>> entry) {
+        String prefix = entry.getKey();
+        List<String> symbols = entry.getValue();
+        symbols.sort(String::compareTo);
+        if (symbols.size() == 1) {
+            buffer.printf("use %s::%s;%n", prefix, symbols.get(0));
+        } else {
+            buffer.printf("use %s::{%s};%n", prefix, String.join(", ", symbols));
+        }
     }
 }
