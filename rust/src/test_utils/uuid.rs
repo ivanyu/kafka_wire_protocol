@@ -1,10 +1,13 @@
+use std::io::{Read, Write};
+use byteorder::{BigEndian, ReadBytesExt, WriteBytesExt};
 use proptest::num::u128::Any;
 use proptest::prelude::{any, Arbitrary, Strategy};
 use proptest::strategy::Map;
 use serde::{Deserialize, Serialize, Serializer};
 use uuid::Uuid as UuidNormal;
+use crate::primitives::{KafkaReadable, KafkaWritable};
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, PartialEq)]
 pub struct Uuid {
     normal_uuid: UuidNormal,
 }
@@ -33,6 +36,19 @@ impl Arbitrary for Uuid {
     type Strategy = Map<Any, fn(u128) -> Uuid>;
 }
 
+impl KafkaReadable for Uuid {
+    fn read(input: &mut impl Read) -> std::io::Result<Self> {
+        input.read_u128::<BigEndian>().map(UuidNormal::from_u128).map(|normal_uuid| Self { normal_uuid })
+    }
+}
+
+impl KafkaWritable for Uuid {
+    #[inline]
+    fn write(&self, output: &mut impl Write) -> std::io::Result<()> {
+        output.write_u128::<BigEndian>(self.normal_uuid.as_u128())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use proptest::prelude::ProptestConfig;
@@ -42,11 +58,11 @@ mod tests {
     #[test]
     fn test_json_serialization() {
         let uuid = Uuid::from_u128(0);
-        let str = serde_json::to_string(&uuid).expect("should work");
+        let str = serde_json::to_string(&uuid).unwrap();
         assert_eq!(str, "\"00000000-0000-0000-0000-000000000000\"");
 
         let uuid = Uuid::from_u128(u128::MAX);
-        let str = serde_json::to_string(&uuid).expect("should work");
+        let str = serde_json::to_string(&uuid).unwrap();
         assert_eq!(str, "\"ffffffff-ffff-ffff-ffff-ffffffffffff\"");
     }
 
@@ -54,7 +70,7 @@ mod tests {
         #![proptest_config(ProptestConfig::with_cases(10))]
         #[test]
         fn test_generation(uuid in any::<Uuid>()) {
-            serde_json::to_string(&uuid).expect("should work");
+            serde_json::to_string(&uuid).unwrap();
         }
     }
 }
