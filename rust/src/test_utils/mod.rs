@@ -9,6 +9,8 @@ use crate::primitives::KafkaWritable;
 
 pub mod uuid;
 pub(crate) mod proptest_strategies;
+pub(crate) mod serde_bytes;
+pub(crate) mod serde_option_bytes;
 
 pub(crate) fn test_serde<T>(data: T) -> Result<(), TestCaseError>
 where
