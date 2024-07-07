@@ -83,7 +83,7 @@ public class RustMessageDataGenerator {
             buffer.printf("#[test]%n");
             buffer.printf("fn test_serde(data: %s) {%n", className);
             buffer.incrementIndent();
-            buffer.printf("crate::test_utils::test_serde(data)?;%n");
+            buffer.printf("crate::test_utils::test_serde(&data)?;%n");
             buffer.decrementIndent();
             buffer.printf("}%n");
             buffer.decrementIndent();
