@@ -112,10 +112,20 @@ public class RustMessageDataGenerator {
                 buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::optional_string()\"))]%n");
             } else if (type.equals("Vec<u8>")) {
                 headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
+                headerGenerator.addImportTest("crate::test_utils::serde_bytes");
                 buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::bytes()\"))]%n");
+                buffer.printf("#[cfg_attr(test, serde(with=\"serde_bytes\"))]%n");
             } else if (type.equals("Option<Vec<u8>>")) {
                 headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
+                headerGenerator.addImportTest("crate::test_utils::serde_option_bytes");
                 buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::optional_bytes()\"))]%n");
+                buffer.printf("#[cfg_attr(test, serde(with=\"serde_option_bytes\"))]%n");
+            } else if (type.equals("Uuid")) {
+                headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
+                buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::uuid()\"))]%n");
+            } else if (type.equals("Vec<Uuid>")) {
+                headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
+                buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::vec_elem::<Uuid>(proptest_strategies::uuid())\"))]%n");
             } else if (type.startsWith("Vec<")) {
                 headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
                 buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::vec()\"))]%n");
@@ -233,8 +243,7 @@ public class RustMessageDataGenerator {
             return "i64::read(input)";
         } else if (type instanceof FieldType.UUIDFieldType) {
             headerGenerator.addImport("crate::primitives::KafkaReadable");
-            headerGenerator.addImportTest("crate::test_utils::uuid::Uuid");
-            headerGenerator.addImportNonTest("uuid::Uuid");
+            headerGenerator.addImport("uuid::Uuid");
             return "Uuid::read(input)";
         } else if (type instanceof FieldType.Float64FieldType) {
             headerGenerator.addImport("crate::primitives::KafkaReadable");
@@ -491,8 +500,7 @@ public class RustMessageDataGenerator {
         } else if (type instanceof FieldType.Int64FieldType) {
             return "i64";
         } else if (type instanceof FieldType.UUIDFieldType) {
-            headerGenerator.addImportTest("crate::test_utils::uuid::Uuid");
-            headerGenerator.addImportNonTest("uuid::Uuid");
+            headerGenerator.addImport("uuid::Uuid");
             return "Uuid";
         } else if (type instanceof FieldType.Float64FieldType) {
             return "f64";
