@@ -6,7 +6,7 @@ use crate::arrays::{k_read_array, k_write_array};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 #[cfg(test)] use crate::test_utils::serde_bytes;
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct RawTaggedField {
     pub tag: i32,
