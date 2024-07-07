@@ -53,9 +53,15 @@ impl JavaTester {
         let result = serde_json::from_str::<Value>(&line).unwrap();
         let success = result.get("success").unwrap().as_bool().unwrap();
         if !success {
-            let message = result.get("message").unwrap().as_str()
-                .or(result.get("exception").unwrap().as_str())
-                .unwrap();
+            let message = match result.get("message") {
+                Some(m) => m.as_str().unwrap(),
+
+                None => match result.get("exception") {
+                    Some(e) => e.as_str().unwrap(),
+
+                    None => ""
+                }
+            };
             assert!(success, "{}", format!("{}", message));
         }
     }
