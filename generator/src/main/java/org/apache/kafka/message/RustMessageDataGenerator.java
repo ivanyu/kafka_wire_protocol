@@ -42,8 +42,10 @@ public class RustMessageDataGenerator {
                                StructSpec struct) throws Exception {
         headerGenerator.addImport("serde::Serialize");
         headerGenerator.addImport("serde::Deserialize");
+        headerGenerator.addImportTest("proptest_derive::Arbitrary");
 
-        buffer.printf("#[derive(Serialize, Deserialize)]%n");
+        buffer.printf("#[derive(Serialize, Deserialize, PartialEq, Debug)]%n");
+        buffer.printf("#[cfg_attr(test, derive(Arbitrary))]%n");
         buffer.printf("pub struct %s {%n", className);
         buffer.incrementIndent();
         generateFieldDeclarations(struct);
@@ -51,11 +53,9 @@ public class RustMessageDataGenerator {
         buffer.printf("}%n");
         buffer.printf("%n");
 
-        buffer.printf("impl %s {%n", className);
-        buffer.incrementIndent();
         generateClassReader(className, struct);
-        buffer.decrementIndent();
-        buffer.printf("}%n");
+        buffer.printf("%n");
+        generateClassWriter(className, struct);
         buffer.printf("%n");
 
         generateSubclasses(struct);
@@ -70,12 +70,21 @@ public class RustMessageDataGenerator {
             buffer.printf("mod tests {%n");
             buffer.incrementIndent();
             buffer.printf("use super::*;%n");
+            buffer.printf("use proptest::prelude::*;%n");
             buffer.printf("%n");
 
+            buffer.printf("proptest! {%n");
+            buffer.incrementIndent();
             buffer.printf("#[test]%n");
-            buffer.printf("fn it_works() {%n");
+            buffer.printf("fn test_serde(data: %s) {%n", className);
+            buffer.incrementIndent();
+            buffer.printf("crate::test_utils::test_serde(data)?;%n");
+            buffer.decrementIndent();
             buffer.printf("}%n");
             buffer.decrementIndent();
+            buffer.printf("}%n");
+            buffer.decrementIndent();
+
             buffer.printf("}%n");
         }
     }
@@ -90,6 +99,25 @@ public class RustMessageDataGenerator {
             if (field.nullableVersions().contains(version)) {
                 type = "Option<" + type + ">";
             }
+            if (type.equals("String")) {
+                headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
+                buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::string()\"))]%n");
+            } else if (type.equals("Option<String>")) {
+                headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
+                buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::optional_string()\"))]%n");
+            } else if (type.equals("Vec<u8>")) {
+                headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
+                buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::bytes()\"))]%n");
+            } else if (type.equals("Option<Vec<u8>>")) {
+                headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
+                buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::optional_bytes()\"))]%n");
+            } else if (type.startsWith("Vec<")) {
+                headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
+                buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::vec()\"))]%n");
+            } else if (type.startsWith("Option<Vec<")) {
+                headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
+                buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::optional_vec()\"))]%n");
+            }
             buffer.printf("pub %s: %s,%n", fieldName(field), type);
         }
     }
@@ -97,7 +125,10 @@ public class RustMessageDataGenerator {
     private void generateClassReader(String className, StructSpec struct) {
         headerGenerator.addImport("std::io::Read");
         headerGenerator.addImport("std::io::Result");
-        buffer.printf("pub fn read(#[allow(unused)] input: &mut impl Read) -> Result<Self> {%n");
+        headerGenerator.addImport("crate::primitives::KafkaReadable");
+        buffer.printf("impl KafkaReadable for %s {%n", className);
+        buffer.incrementIndent();
+        buffer.printf("fn read(#[allow(unused)] input: &mut impl Read) -> Result<Self> {%n");
         buffer.incrementIndent();
 
         List<String> fieldsForConstructor = new ArrayList<>();
@@ -107,30 +138,15 @@ public class RustMessageDataGenerator {
                 continue;
             }
 
-            final String fieldNameInRust = fieldName(field);
+            String fieldNameInRust = fieldName(field);
             fieldsForConstructor.add(fieldNameInRust);
-            if (field.type().isString()) {
-                generateReadForString(field);
-            } else if (field.type().isBytes()) {
-                generateReadForBytes(field);
-            } else if (field.type().isArray()) {
-                generateReadForArray(field);
-            } else {
-                final String readExpression = primitiveReadExpression(field.type());
-                if (field.nullableVersions().contains(version)) {
-                    buffer.printf("let %s = if input.read_i8()? < 0 {%n", fieldNameInRust);
-                    buffer.incrementIndent();
-                    buffer.printf("None%n");
-                    buffer.decrementIndent();
-                    buffer.printf("} else {%n");
-                    buffer.incrementIndent();
-                    buffer.printf("Some(%s)%n", readExpression);
-                    buffer.decrementIndent();
-                    buffer.printf("};%n");
-                } else {
-                    buffer.printf("let %s = %s;%n", fieldNameInRust, readExpression);
-                }
-            }
+            String readExpression = readExpression(
+                field.type(),
+                fieldFlexibleVersions(field).contains(version),
+                field.nullableVersions().contains(version),
+                fieldName(field)
+            );
+            buffer.printf("let %s = %s?;%n", fieldName(field), readExpression);
         }
 
         buffer.printf("Ok(%s {%n", className);
@@ -141,171 +157,244 @@ public class RustMessageDataGenerator {
 
         buffer.decrementIndent();
         buffer.printf("}%n");
-    }
-
-    private void generateReadForString(FieldSpec field) {
-        buffer.printf("let %s = %s;%n", fieldName(field),
-                stringReadExpression(field, field.nullableVersions().contains(version), fieldName(field))
-        );
-    }
-
-    private void generateReadForBytes(FieldSpec field) {
-        buffer.printf("let %s = {%n", fieldName(field));
-        buffer.incrementIndent();
-        if (fieldFlexibleVersions(field).contains(version)) {
-            headerGenerator.addImport("varint_rs::VarintReader");
-            buffer.printf("let bytes_len = (input.read_u32_varint()? as i32) - 1;%n");
-        } else {
-            headerGenerator.addImport("byteorder::BigEndian");
-            headerGenerator.addImport("byteorder::ReadBytesExt");
-            buffer.printf("let bytes_len = input.read_i32::<BigEndian>()?;%n");
-        }
-        buffer.printf("if bytes_len < 0 {%n");
-        buffer.incrementIndent();
-        if (field.nullableVersions().contains(version)) {
-            buffer.printf("None%n");
-        } else {
-            headerGenerator.addImport("std::io::Error");
-            headerGenerator.addImport("std::io::ErrorKind");
-            buffer.printf("// TODO replace with proper error%n");
-            buffer.printf("return Err(Error::new(ErrorKind::Other, \"non-nullable field %s was serialized as null\"));%n",
-                    fieldName(field));
-        }
-        buffer.decrementIndent();
-        buffer.printf("} else {%n");
-        buffer.incrementIndent();
-        buffer.printf("let mut buf = vec![0_u8; bytes_len as usize];%n");
-        buffer.printf("input.read_exact(&mut buf)?;%n");
-        if (field.nullableVersions().contains(version)) {
-            buffer.printf("Some(buf)%n");
-        } else {
-            buffer.printf("buf%n");
-        }
         buffer.decrementIndent();
         buffer.printf("}%n");
-
-        buffer.decrementIndent();
-        buffer.printf("};%n");
     }
 
-    private void generateReadForArray(FieldSpec field) {
-        FieldType.ArrayType arrayType = (FieldType.ArrayType) field.type();
+    private String arrayReadExpression(FieldType type, boolean flexible, boolean nullable, String fieldNameInRust) {
+        FieldType.ArrayType arrayType = (FieldType.ArrayType) type;
+        String rustElementType = rustType(arrayType.elementType(), headerGenerator);
 
-        buffer.printf("let %s = {%n", fieldName(field));
-        buffer.incrementIndent();
-        if (fieldFlexibleVersions(field).contains(version)) {
-            headerGenerator.addImport("varint_rs::VarintReader");
-            buffer.printf("let arr_len = (input.read_u32_varint()? as i32) - 1;%n");
-        } else {
-            headerGenerator.addImport("byteorder::BigEndian");
-            headerGenerator.addImport("byteorder::ReadBytesExt");
-            buffer.printf("let arr_len = input.read_i32::<BigEndian>()?;%n");
-        }
-        buffer.printf("if arr_len < 0 {%n");
-        buffer.incrementIndent();
-        if (field.nullableVersions().contains(version)) {
-            buffer.printf("None%n");
-        } else {
-            headerGenerator.addImport("std::io::Error");
-            headerGenerator.addImport("std::io::ErrorKind");
-            buffer.printf("// TODO replace with proper error%n");
-            buffer.printf("return Err(Error::new(ErrorKind::Other, \"non-nullable field %s was serialized as null\"));%n",
-                    fieldName(field));
-        }
-        buffer.decrementIndent();
-        buffer.printf("} else {%n");
-        buffer.incrementIndent();
-        if (arrayType.elementType().isArray()) {
-            throw new RuntimeException("Nested arrays are not supported.  " +
-                    "Use an array of structures containing another array.");
-        } else {
-            buffer.printf("let mut vec: Vec<%s> = Vec::with_capacity(arr_len as usize);%n", rustType(arrayType.elementType(), headerGenerator));
-            buffer.printf("for _ in 0..arr_len {%n");
-            buffer.incrementIndent();
-
-            if (arrayType.elementType().isBytes()) {
-                buffer.printf("TODO%n");
-            } else if (arrayType.elementType().isString()) {
-                buffer.printf("vec.push(%s);%n", stringReadExpression(field, false, fieldName(field)));
+        if (arrayType.elementType().isString()) {
+            if (nullable) {
+                headerGenerator.addImport("crate::str_arrays::k_read_nullable_array_of_strings");
+                return String.format("k_read_nullable_array_of_strings(input, \"%s\", %b)",
+                    fieldNameInRust, flexible);
             } else {
-                buffer.printf("vec.push(%s);%n", primitiveReadExpression(arrayType.elementType()));
+                headerGenerator.addImport("crate::str_arrays::k_read_array_of_strings");
+                return String.format("k_read_array_of_strings(input, \"%s\", %b)",
+                    fieldNameInRust, flexible);
             }
-
-            buffer.decrementIndent();
-            buffer.printf("}%n");
-            if (field.nullableVersions().contains(version)) {
-                buffer.printf("Some(vec)%n");
+        } else {
+            if (nullable) {
+                headerGenerator.addImport("crate::arrays::k_read_nullable_array");
+                return String.format("k_read_nullable_array::<%s>(input, \"%s\", %b)",
+                    rustElementType, fieldNameInRust, flexible);
             } else {
-                buffer.printf("vec%n");
+                headerGenerator.addImport("crate::arrays::k_read_array");
+                return String.format("k_read_array::<%s>(input, \"%s\", %b)",
+                    rustElementType, fieldNameInRust, flexible);
             }
         }
-        buffer.decrementIndent();
-        buffer.printf("}%n");
-        buffer.decrementIndent();
-        buffer.printf("};%n");
     }
 
     private String primitiveReadExpression(FieldType type) {
         if (type instanceof FieldType.RecordsFieldType) {
-            return "BaseRecords {}";
+            headerGenerator.addImport("std::io::Error");
+            return "Ok::<BaseRecords, Error>(BaseRecords {})";
         } else if (type instanceof FieldType.BoolFieldType) {
-            headerGenerator.addImport("byteorder::ReadBytesExt");
-            return "input.read_i8()? != 0";
+            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            return "bool::read(input)";
         } else if (type instanceof FieldType.Int8FieldType) {
-            headerGenerator.addImport("byteorder::ReadBytesExt");
-            return "input.read_i8()?";
+            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            return "i8::read(input)";
         } else if (type instanceof FieldType.Int16FieldType) {
-            headerGenerator.addImport("byteorder::BigEndian");
-            headerGenerator.addImport("byteorder::ReadBytesExt");
-            return "input.read_i16::<BigEndian>()?";
+            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            return "i16::read(input)";
         } else if (type instanceof FieldType.Uint16FieldType) {
-            headerGenerator.addImport("byteorder::BigEndian");
-            headerGenerator.addImport("byteorder::ReadBytesExt");
-            return "input.read_u16::<BigEndian>()?";
+            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            return "u16::read(input)";
         } else if (type instanceof FieldType.Uint32FieldType) {
-            headerGenerator.addImport("byteorder::BigEndian");
-            headerGenerator.addImport("byteorder::ReadBytesExt");
-            return "input.read_u32::<BigEndian>()?";
+            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            return "u32::read(input)";
         } else if (type instanceof FieldType.Int32FieldType) {
-            headerGenerator.addImport("byteorder::BigEndian");
-            headerGenerator.addImport("byteorder::ReadBytesExt");
-            return "input.read_i32::<BigEndian>()?";
+            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            return "i32::read(input)";
         } else if (type instanceof FieldType.Int64FieldType) {
-            headerGenerator.addImport("byteorder::BigEndian");
-            headerGenerator.addImport("byteorder::ReadBytesExt");
-            return "input.read_i64::<BigEndian>()?";
+            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            return "i64::read(input)";
         } else if (type instanceof FieldType.UUIDFieldType) {
-            headerGenerator.addImport("byteorder::BigEndian");
-            headerGenerator.addImport("byteorder::ReadBytesExt");
-            return "Uuid::from_u128(input.read_u128::<BigEndian>()?)";
+            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            headerGenerator.addImportTest("crate::test_utils::uuid::Uuid");
+            headerGenerator.addImportNonTest("uuid::Uuid");
+            return "Uuid::read(input)";
         } else if (type instanceof FieldType.Float64FieldType) {
-            headerGenerator.addImport("byteorder::BigEndian");
-            headerGenerator.addImport("byteorder::ReadBytesExt");
-            return "input.read_f64::<BigEndian>()?";
+            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            return "f64::read(input)";
         } else if (type.isStruct()) {
-            return String.format("%s::read(input)?", type);
+            return String.format("%s::read(input)", type);
         } else {
             throw new RuntimeException("Unsupported field type " + type);
         }
     }
 
-    private String stringReadExpression(FieldSpec field, boolean nullable, String fieldNameInRust) {
-        if (fieldFlexibleVersions(field).contains(version)) {
+    private String readExpression(FieldType type, boolean flexible, boolean nullable, String fieldNameInRust) {
+        if (type.isString()) {
+            return stringReadExpression(flexible, nullable, fieldNameInRust);
+        } else if (type.isBytes()) {
+            return byteReadExpression(flexible, nullable, fieldNameInRust);
+        } else if (type.isArray()) {
+            return arrayReadExpression(type, flexible, nullable, fieldNameInRust);
+        } else {
+            String readExpression = primitiveReadExpression(type);
             if (nullable) {
-                headerGenerator.addImport("crate::string::read_nullable_compact_string");
-                return String.format("read_nullable_compact_string(input, \"%s\")?", fieldNameInRust);
+                headerGenerator.addImport("crate::primitives::KafkaReadable");
+                return String.format("(if i8::read(input)? < 0 { Ok(None) } else { %s.map(Some) })", readExpression);
             } else {
-                headerGenerator.addImport("crate::string::read_compact_string");
-                return String.format("read_compact_string(input, \"%s\")?", fieldNameInRust);
+                return readExpression;
+            }
+        }
+    }
+
+    private String stringReadExpression(boolean flexible, boolean nullable, String fieldNameInRust) {
+        if (nullable) {
+            headerGenerator.addImport("crate::strings::k_read_nullable_string");
+            return String.format("k_read_nullable_string(input, \"%s\", %b)", fieldNameInRust, flexible);
+        } else {
+            headerGenerator.addImport("crate::strings::k_read_string");
+            return String.format("k_read_string(input, \"%s\", %b)", fieldNameInRust, flexible);
+        }
+    }
+
+    private String byteReadExpression(boolean flexible, boolean nullable, String fieldNameInRust) {
+        if (nullable) {
+            headerGenerator.addImport("crate::bytes::k_read_nullable_bytes");
+            return String.format("k_read_nullable_bytes(input, \"%s\", %b)", fieldNameInRust, flexible);
+        } else {
+            headerGenerator.addImport("crate::bytes::k_read_bytes");
+            return String.format("k_read_bytes(input, \"%s\", %b)", fieldNameInRust, flexible);
+        }
+    }
+
+    private void generateClassWriter(String className, StructSpec struct) {
+        headerGenerator.addImport("std::io::Write");
+        headerGenerator.addImport("std::io::Result");
+        headerGenerator.addImport("crate::primitives::KafkaWritable");
+        buffer.printf("impl KafkaWritable for %s {%n", className);
+        buffer.incrementIndent();
+        buffer.printf("fn write(&self, #[allow(unused)] output: &mut impl Write) -> Result<()> {%n");
+        buffer.incrementIndent();
+        for (FieldSpec field : struct.fields()) {
+            if (!field.versions().contains(version)) {
+                continue;
+            }
+
+            boolean flexible = fieldFlexibleVersions(field).contains(version);
+            boolean nullable = field.nullableVersions().contains(version);
+            if (field.type().isString()) {
+                buffer.printf("%s?;%n",
+                    stringWriteExpression(flexible, nullable, fieldName(field))
+                );
+            } else if (field.type().isBytes()) {
+                buffer.printf("%s?;%n",
+                    bytesWriteExpression(flexible, nullable, fieldName(field))
+                );
+            } else if (field.type().isArray()) {
+                buffer.printf("%s?;%n",
+                    arrayWriteExpression(field.type(), flexible, nullable, fieldName(field))
+                );
+            } else {
+                if (nullable) {
+                    String nonNullVar = field.type().isRecords() ? "_" : "v";
+                    buffer.printf("if let Some(%s) = &self.%s {%n", nonNullVar, fieldName(field));
+                    buffer.incrementIndent();
+                    buffer.printf("1_i8.write(output)?;%n");
+                    String writeExpression = primitiveWriteExpression(field.type(), nonNullVar);
+                    buffer.printf("%s?;%n", writeExpression);
+                    buffer.decrementIndent();
+                    buffer.printf("} else {%n");
+                    buffer.incrementIndent();
+                    buffer.printf("(-1_i8).write(output)?;%n");
+                    buffer.decrementIndent();
+                    buffer.printf("}%n");
+                } else {
+                    String writeExpression = primitiveWriteExpression(
+                        field.type(),
+                        String.format("self.%s", fieldName(field))
+                    );
+                    buffer.printf("%s?;%n", writeExpression);
+                }
+            }
+        }
+
+        buffer.printf("Ok(())%n");
+        buffer.decrementIndent();
+        buffer.printf("}%n");
+        buffer.decrementIndent();
+        buffer.printf("}%n");
+    }
+
+    private String stringWriteExpression(boolean flexible, boolean nullable, String fieldNameInRust) {
+        if (nullable) {
+            headerGenerator.addImport("crate::strings::k_write_nullable_string");
+            return String.format("k_write_nullable_string(output, \"%s\", self.%s.as_deref(), %b)",
+                fieldNameInRust, fieldNameInRust, flexible);
+        } else {
+            headerGenerator.addImport("crate::strings::k_write_string");
+            return String.format("k_write_string(output, \"%s\", &self.%s, %b)",
+                fieldNameInRust, fieldNameInRust, flexible);
+        }
+    }
+
+    private String bytesWriteExpression(boolean flexible, boolean nullable, String fieldNameInRust) {
+        if (nullable) {
+            headerGenerator.addImport("crate::bytes::k_write_nullable_bytes");
+            return String.format("k_write_nullable_bytes(output, \"%s\", self.%s.as_deref(), %b)",
+                fieldNameInRust, fieldNameInRust, flexible);
+        } else {
+            headerGenerator.addImport("crate::bytes::k_write_bytes");
+            return String.format("k_write_bytes(output, \"%s\", &self.%s, %b)",
+                fieldNameInRust, fieldNameInRust, flexible);
+        }
+    }
+
+    private String arrayWriteExpression(FieldType type, boolean flexible,
+                                        boolean nullable,
+                                        String fieldNameInRust) {
+        FieldType.ArrayType arrayType = (FieldType.ArrayType) type;
+
+        if (arrayType.elementType().isString()) {
+            if (nullable) {
+                headerGenerator.addImport("crate::str_arrays::k_write_nullable_array_of_strings");
+                return String.format("k_write_nullable_array_of_strings(output, \"%s\", self.%s.as_deref(), %b)",
+                    fieldNameInRust, fieldNameInRust, flexible);
+            } else {
+                headerGenerator.addImport("crate::str_arrays::k_write_array_of_strings");
+                return String.format("k_write_array_of_strings(output, \"%s\", &self.%s, %b)",
+                    fieldNameInRust, fieldNameInRust, flexible);
             }
         } else {
             if (nullable) {
-                headerGenerator.addImport("crate::string::read_nullable_string");
-                return String.format("read_nullable_string(input, \"%s\")?", fieldNameInRust);
+                headerGenerator.addImport("crate::arrays::k_write_nullable_array");
+                return String.format("k_write_nullable_array(output, \"%s\", self.%s.as_deref(), %b)",
+                    fieldNameInRust, fieldNameInRust, flexible);
             } else {
-                headerGenerator.addImport("crate::string::read_string");
-                return String.format("read_string(input, \"%s\")?", fieldNameInRust);
+                headerGenerator.addImport("crate::arrays::k_write_array");
+                return String.format("k_write_array(output, \"%s\", &self.%s, %b)",
+                    fieldNameInRust, fieldNameInRust, flexible);
             }
+        }
+    }
+
+    private String primitiveWriteExpression(FieldType type, String object) {
+        if (type instanceof FieldType.RecordsFieldType) {
+            headerGenerator.addImport("std::io::Error");
+            return "Ok::<(), Error>(())";
+        } else if (type instanceof FieldType.BoolFieldType
+            || type instanceof FieldType.Int8FieldType
+            || type instanceof FieldType.Int16FieldType
+            || type instanceof FieldType.Uint16FieldType
+            || type instanceof FieldType.Uint32FieldType
+            || type instanceof FieldType.Int32FieldType
+            || type instanceof FieldType.Int64FieldType
+            || type instanceof FieldType.UUIDFieldType
+            || type instanceof FieldType.Float64FieldType
+            || type.isStruct()
+        ) {
+            headerGenerator.addImport("crate::primitives::KafkaWritable");
+            return String.format("%s.write(output)", object);
+        } else {
+            throw new RuntimeException("Unsupported field type " + type);
         }
     }
 
@@ -350,7 +439,7 @@ public class RustMessageDataGenerator {
     }
 
     private String fieldName(FieldSpec field) {
-        final String snakeCaseName = field.snakeCaseName();
+        String snakeCaseName = field.snakeCaseName();
         if (snakeCaseName.equals("type")) {
             return "type_";
         } else if (snakeCaseName.equals("match")) {
@@ -376,7 +465,8 @@ public class RustMessageDataGenerator {
         } else if (type instanceof FieldType.Int64FieldType) {
             return "i64";
         } else if (type instanceof FieldType.UUIDFieldType) {
-            headerGenerator.addImport("uuid::Uuid");
+            headerGenerator.addImportTest("crate::test_utils::uuid::Uuid");
+            headerGenerator.addImportNonTest("uuid::Uuid");
             return "Uuid";
         } else if (type instanceof FieldType.Float64FieldType) {
             return "f64";
