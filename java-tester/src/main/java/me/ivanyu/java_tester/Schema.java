@@ -1,4 +1,8 @@
-package io.aiven.kio.java_tester;
+/**
+ * Taken from https://github.com/Aiven-Open/kio
+ */
+
+package me.ivanyu.java_tester;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,14 +40,20 @@ class Schema {
             }
         }
 
-        return switch (fieldName) {
-            case "TimeoutMs" -> fieldSchema("timeoutMs");
-            case "ValidateOnly" -> fieldSchema("validateOnly");
-            case "MemberAssignment" -> fieldSchema("memberAssignment");
-            case "GroupId" -> fieldSchema("groupId");
-            case "IsKRaftController" -> fieldSchema("isKRaftController");
-            default -> throw new Exception("field " + fieldName + " not found");
-        };
+        switch (fieldName) {
+            case "TimeoutMs":
+                return fieldSchema("timeoutMs");
+            case "ValidateOnly":
+                return fieldSchema("validateOnly");
+            case "MemberAssignment":
+                return fieldSchema("memberAssignment");
+            case "GroupId":
+                return fieldSchema("groupId");
+            case "IsKRaftController":
+                return fieldSchema("isKRaftController");
+            default:
+                throw new Exception("field " + fieldName + " not found");
+        }
     }
 
     boolean isTaggedVersion(short version) {

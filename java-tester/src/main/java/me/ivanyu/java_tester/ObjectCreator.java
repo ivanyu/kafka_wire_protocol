@@ -1,4 +1,8 @@
-package io.aiven.kio.java_tester;
+/**
+ * Taken from https://github.com/Aiven-Open/kio
+ */
+
+package me.ivanyu.java_tester;
 
 import java.nio.ByteBuffer;
 import java.util.AbstractCollection;
@@ -66,7 +70,7 @@ class ObjectCreator<T> extends BaseCreator {
                 // Add the handling fo this type if you face this.
                 throw new Exception("Unsupported primitive type " + parameterType);
             } else if (parameterType.isArray()) {
-                if (parameterType.componentType().equals(byte.class)) {
+                if (parameterType.getComponentType().equals(byte.class)) {
                     setter.invoke(instance, (Object) getBytes(fieldValue, fieldName));
                 } else {
                     throw new Exception("Unsupported array type " + parameterType);
@@ -82,8 +86,9 @@ class ObjectCreator<T> extends BaseCreator {
                 setter.invoke(instance, getByteBuffer(fieldValue, fieldName));
             } else if (AbstractCollection.class.isAssignableFrom(parameterType)) {
                 CollectionCreator creator = new CollectionCreator(rootMessageInfo, fieldValue, fieldName, fieldSchema);
-                AbstractCollection<Object> collection = creator.createAbstractCollection(
-                    (Class<AbstractCollection<Object>>) parameterType);
+                @SuppressWarnings("unchecked")
+                Class<AbstractCollection<Object>> parameterTypeCollection = (Class<AbstractCollection<Object>>) parameterType;
+                AbstractCollection<Object> collection = creator.createAbstractCollection(parameterTypeCollection);
                 setter.invoke(instance, collection);
             } else if (List.class.isAssignableFrom(parameterType)) {
                 List<?> list = new CollectionCreator(rootMessageInfo, fieldValue, fieldName, fieldSchema).createList();
@@ -105,32 +110,72 @@ class ObjectCreator<T> extends BaseCreator {
 
     private static String kafkaesqueFieldName(String fieldName, List<String> knownFieldNames) {
         switch (fieldName) {
-            case "timeout" -> fieldName = "timeout_ms";
-            case "throttle_time" -> fieldName = "throttle_time_ms";
-            case "max_wait" -> fieldName = "max_wait_ms";
-            case "session_lifetime" -> fieldName = "session_lifetime_ms";
-            case "transaction_timeout" -> fieldName = "transaction_timeout_ms";
-            case "max_lifetime" -> fieldName = "max_lifetime_ms";
-            case "session_timeout" -> fieldName = "session_timeout_ms";
-            case "rebalance_timeout" -> fieldName = "rebalance_timeout_ms";
-            case "expiry_time_period" -> fieldName = "expiry_time_period_ms";
-            case "renew_period" -> fieldName = "renew_period_ms";
-            case "retention_time" -> fieldName = "retention_time_ms";
-            case "heartbeat_interval" -> fieldName = "heartbeat_interval_ms";
-            case "issue_timestamp" -> fieldName = "issue_timestamp_ms";
-            case "expiry_timestamp" -> fieldName = "expiry_timestamp_ms";
-            case "max_timestamp" -> fieldName = "max_timestamp_ms";
-            case "transaction_start_time" -> fieldName = "transaction_start_time_ms";
-            case "log_append_time" -> fieldName = "log_append_time_ms";
+            case "timeout":
+                fieldName = "timeout_ms";
+                break;
+            case "throttle_time":
+                fieldName = "throttle_time_ms";
+                break;
+            case "max_wait":
+                fieldName = "max_wait_ms";
+                break;
+            case "session_lifetime":
+                fieldName = "session_lifetime_ms";
+                break;
+            case "transaction_timeout":
+                fieldName = "transaction_timeout_ms";
+                break;
+            case "max_lifetime":
+                fieldName = "max_lifetime_ms";
+                break;
+            case "session_timeout":
+                fieldName = "session_timeout_ms";
+                break;
+            case "rebalance_timeout":
+                fieldName = "rebalance_timeout_ms";
+                break;
+            case "expiry_time_period":
+                fieldName = "expiry_time_period_ms";
+                break;
+            case "renew_period":
+                fieldName = "renew_period_ms";
+                break;
+            case "retention_time":
+                fieldName = "retention_time_ms";
+                break;
+            case "heartbeat_interval":
+                fieldName = "heartbeat_interval_ms";
+                break;
+            case "issue_timestamp":
+                fieldName = "issue_timestamp_ms";
+                break;
+            case "expiry_timestamp":
+                fieldName = "expiry_timestamp_ms";
+                break;
+            case "max_timestamp":
+                fieldName = "max_timestamp_ms";
+                break;
+            case "transaction_start_time":
+                fieldName = "transaction_start_time_ms";
+                break;
+            case "log_append_time":
+                fieldName = "log_append_time_ms";
+                break;
         }
 
         fieldName = CaseUtils.toCamelCase(fieldName, true, '_');
 
         if (!knownFieldNames.contains(fieldName)) {
             switch (fieldName) {
-                case "IssueTimestampMs" -> fieldName = "IssueTimestamp";
-                case "ExpiryTimestampMs" -> fieldName = "ExpiryTimestamp";
-                case "MaxTimestampMs" -> fieldName = "MaxTimestamp";
+                case "IssueTimestampMs":
+                    fieldName = "IssueTimestamp";
+                    break;
+                case "ExpiryTimestampMs":
+                    fieldName = "ExpiryTimestamp";
+                    break;
+                case "MaxTimestampMs":
+                    fieldName = "MaxTimestamp";
+                    break;
             }
         }
 

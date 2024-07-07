@@ -1,4 +1,8 @@
-package io.aiven.kio.java_tester;
+/**
+ * Taken from https://github.com/Aiven-Open/kio
+ */
+
+package me.ivanyu.java_tester;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -60,6 +64,8 @@ class RootMessageInfo {
         ) {
             className += "Data";
         }
-        return new EntityClass<>((Class<ApiMessage>) RootMessageInfo.class.getClassLoader().loadClass(className));
+        @SuppressWarnings("unchecked")
+        Class<ApiMessage> clazz = (Class<ApiMessage>) RootMessageInfo.class.getClassLoader().loadClass(className);
+        return new EntityClass<>(clazz);
     }
 }

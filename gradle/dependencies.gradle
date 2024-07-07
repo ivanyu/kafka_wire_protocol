@@ -98,6 +98,7 @@ versions += [
   // gradle/resources/dependencycheck-suppressions.xml
   checkstyle: "8.36.2",
   commonsCli: "1.4",
+  commonsText: "1.9",
   commonsValidator: "1.7",
   dropwizardMetrics: "4.1.12.1",
   gradle: "8.7",
@@ -183,6 +184,7 @@ libs += [
   bcpkix: "org.bouncycastle:bcpkix-jdk18on:$versions.bcpkix",
   caffeine: "com.github.ben-manes.caffeine:caffeine:$versions.caffeine",
   commonsCli: "commons-cli:commons-cli:$versions.commonsCli",
+  commonsText: "org.apache.commons:commons-text:$versions.commonsText",
   commonsValidator: "commons-validator:commons-validator:$versions.commonsValidator",
   easymock: "org.easymock:easymock:$easymockVersion",
   jacksonAnnotations: "com.fasterxml.jackson.core:jackson-annotations:$versions.jackson",
