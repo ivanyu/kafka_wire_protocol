@@ -2,9 +2,8 @@
 
 use std::fmt::Debug;
 use std::io::{Cursor, Seek, SeekFrom};
-use proptest::prelude::{ProptestConfig, TestCaseError};
+use proptest::prelude::TestCaseError;
 use proptest::prop_assert_eq;
-use proptest::test_runner::Config;
 use serde::Serialize;
 use static_init::dynamic;
 use crate::primitives::KafkaReadable;
