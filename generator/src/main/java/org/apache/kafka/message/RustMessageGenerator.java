@@ -5,7 +5,6 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -60,7 +59,12 @@ public class RustMessageGenerator {
 
     private static String processJson(String outputDir, Path inputPath) throws Exception {
         MessageSpec spec = MessageGenerator.JSON_SERDE.readValue(inputPath.toFile(), MessageSpec.class);
-        final String messageTypeMod = MessageGenerator.toSnakeCase(spec.dataClassName());
+
+        String className = spec.dataClassName();
+        if (className.endsWith("Data")) {
+            className = className.substring(0, className.length() - 4);
+        }
+        final String messageTypeMod = MessageGenerator.toSnakeCase(className);
         Path messageTypeModDir = Paths.get(outputDir, messageTypeMod);
         Files.createDirectories(messageTypeModDir);
 
