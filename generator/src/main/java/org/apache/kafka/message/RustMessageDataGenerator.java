@@ -32,7 +32,12 @@ public class RustMessageDataGenerator {
     private void generate() throws Exception {
         structRegistry.register(message);
 
-        generateClass(true, message.dataClassName(), message.struct());
+        String className = message.dataClassName();
+        if (className.endsWith("Data")) {
+            className = className.substring(0, className.length() - 4);
+        }
+
+        generateClass(true, className, message.struct());
 
         headerGenerator.generate();
     }
