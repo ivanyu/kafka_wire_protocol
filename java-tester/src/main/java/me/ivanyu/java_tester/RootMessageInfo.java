@@ -61,6 +61,7 @@ class RootMessageInfo {
             && !shortClassName.equals("ConsumerProtocolSubscription")
             && !shortClassName.equals("LeaderChangeMessage")
             && !shortClassName.equals("DefaultPrincipalData")
+            && !shortClassName.equals("VotersRecord")
         ) {
             className += "Data";
         }

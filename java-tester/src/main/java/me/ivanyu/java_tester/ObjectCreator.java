@@ -190,6 +190,9 @@ class ObjectCreator<T> extends BaseCreator {
                 case "MaxTimestampMs":
                     fieldName = "MaxTimestamp";
                     break;
+                case "KraftVersionFeature":
+                    fieldName = "KRaftVersionFeature";
+                    break;
             }
         }
 
