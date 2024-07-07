@@ -2,6 +2,7 @@ use std::io::{Error, ErrorKind, Read, Result, Write};
 use serde::{Deserialize, Serialize};
 use crate::primitives::{KafkaReadable, KafkaWritable};
 #[cfg(test)] use proptest_derive::Arbitrary;
+use varint_rs::{VarintReader, VarintWriter};
 use crate::arrays::{k_read_array, k_write_array};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 #[cfg(test)] use crate::test_utils::serde_bytes;
@@ -31,11 +32,16 @@ impl KafkaWritable for RawTaggedField {
     }
 }
 
-pub(crate) fn k_read_unknown_tagged_fields(input: &mut impl Read, field_name: &str) -> Result<Vec<RawTaggedField>> {
-    k_read_array::<RawTaggedField>(input, field_name, true)
+pub(crate) fn k_read_unknown_tagged_fields(input: &mut impl Read) -> Result<Vec<RawTaggedField>> {
+    let arr_len = input.read_u32_varint()?;
+    let mut vec: Vec<RawTaggedField> = Vec::with_capacity(arr_len as usize);
+    for _ in 0..arr_len {
+        vec.push(RawTaggedField::read(input)?);
+    }
+    Ok(vec)
 }
 
-pub(crate) fn k_write_unknown_tagged_fields(output: &mut impl Write, field_name: &str, fields: &[RawTaggedField]) -> Result<()> {
+pub(crate) fn k_write_unknown_tagged_fields(output: &mut impl Write, fields: &[RawTaggedField]) -> Result<()> {
     for x in fields.windows(2) {
         let tag0 = &x[0].tag;
         let tag1 = &x[1].tag;
@@ -46,7 +52,11 @@ pub(crate) fn k_write_unknown_tagged_fields(output: &mut impl Write, field_name:
         }
     }
 
-    k_write_array(output, field_name, fields, true)
+    output.write_u32_varint(fields.len() as u32)?;
+    for el in fields {
+        el.write(output)?
+    }
+    Ok(())
 }
 
 #[cfg(test)]
@@ -71,10 +81,10 @@ mod tests {
         };
 
         let mut cur = Cursor::new(Vec::<u8>::new());
-        k_write_unknown_tagged_fields(&mut cur, "test", &original_fields).unwrap();
+        k_write_unknown_tagged_fields(&mut cur, &original_fields).unwrap();
 
         cur.seek(SeekFrom::Start(0)).unwrap();
-        let read_fields = k_read_unknown_tagged_fields(&mut cur, "test").unwrap();
+        let read_fields = k_read_unknown_tagged_fields(&mut cur).unwrap();
 
         assert_eq!(read_fields, original_fields);
     }
@@ -88,7 +98,7 @@ mod tests {
         };
 
         let mut cur = Cursor::new(Vec::<u8>::new());
-        let error = k_write_unknown_tagged_fields(&mut cur, "test", &original_fields)
+        let error = k_write_unknown_tagged_fields(&mut cur, &original_fields)
             .expect_err("must_be_error");
         assert_eq!(error.to_string(), "Invalid raw tag field list: tag 0 comes after tag 1, but is not higher than it.");
     }
@@ -98,10 +108,10 @@ mod tests {
         let original_fields = vec![];
 
         let mut cur = Cursor::new(Vec::<u8>::new());
-        k_write_unknown_tagged_fields(&mut cur, "test", &original_fields).unwrap();
+        k_write_unknown_tagged_fields(&mut cur, &original_fields).unwrap();
 
         cur.seek(SeekFrom::Start(0)).unwrap();
-        let read_fields = k_read_unknown_tagged_fields(&mut cur, "test").unwrap();
+        let read_fields = k_read_unknown_tagged_fields(&mut cur).unwrap();
 
         assert_eq!(read_fields, original_fields);
     }

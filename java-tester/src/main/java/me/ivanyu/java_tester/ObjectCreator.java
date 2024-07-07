@@ -9,6 +9,7 @@ import java.util.AbstractCollection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.apache.kafka.common.Uuid;
 import org.apache.kafka.common.record.BaseRecords;
 import org.apache.kafka.common.record.MemoryRecords;
@@ -34,6 +35,15 @@ class ObjectCreator<T> extends BaseCreator {
         Iterator<String> fieldNames = json.fieldNames();
         while (fieldNames.hasNext()) {
             String fieldName = fieldNames.next();
+
+            // Skip unknown tags -- we don't test them now
+            if (fieldName.equals("_unknown_tagged_fields")) {
+                if (!json.get(fieldName).isArray() || !json.get(fieldName).isEmpty()) {
+                    throw new Exception("Non-empty array _unknown_tagged_fields are not supported");
+                }
+                continue;
+            }
+
             String kafkaesqueFieldName = kafkaesqueFieldName(fieldName, knownFieldNames);
             Schema fieldSchema = schema.fieldSchema(kafkaesqueFieldName);
             JsonNode fieldValue = json.get(fieldName);
