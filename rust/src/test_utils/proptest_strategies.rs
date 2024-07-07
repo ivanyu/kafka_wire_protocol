@@ -2,6 +2,7 @@ use std::fmt::Debug;
 use proptest::{collection, option};
 use proptest::prelude::*;
 use proptest::prelude::Strategy;
+use proptest::strategy::LazyJust;
 use uuid::Uuid;
 use crate::tagged_fields::RawTaggedField;
 
@@ -54,4 +55,8 @@ prop_compose! {
             .map(|(tag, d)| RawTaggedField { tag: tag as i32, data: d })
             .collect()
     }
+}
+
+pub(crate) fn unknown_tagged_fields_empty() -> impl Strategy<Value=Vec<RawTaggedField>> {
+    LazyJust::new(Vec::<RawTaggedField>::new)
 }

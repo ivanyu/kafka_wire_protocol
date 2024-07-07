@@ -3525,16 +3525,25 @@ project(':connect:test-plugins') {
 }
 
 project(':java-tester') {
+  apply plugin: 'application'
+
+  checkstyle {
+    ignoreFailures = true
+    showViolations = false
+  }
+
+  spotbugs {
+    ignoreFailures = true
+  }
+
   dependencies {
     implementation project(':clients')
     implementation libs.jacksonDatabind
     implementation libs.commonsText
   }
 
-  task run(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
+  application {
     mainClass = 'me.ivanyu.java_tester.JavaTester'
-    standardInput = System.in
   }
 }
 

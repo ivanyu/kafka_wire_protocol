@@ -88,6 +88,22 @@ public class RustMessageDataGenerator {
             buffer.printf("}%n");
             buffer.decrementIndent();
             buffer.printf("}%n");
+
+            if (!className.equals("ProduceRequest") && !className.equals("FetchResponse")) {
+                buffer.printf("%n");
+
+                buffer.printf("proptest! {%n");
+                buffer.incrementIndent();
+                buffer.printf("#[test]%n");
+                buffer.printf("fn test_java(data: %s) {%n", className);
+                buffer.incrementIndent();
+                buffer.printf("crate::test_utils::test_java(&data, \"%s\", %d);%n", className, version);
+                buffer.decrementIndent();
+                buffer.printf("}%n");
+                buffer.decrementIndent();
+                buffer.printf("}%n");
+            }
+
             buffer.decrementIndent();
 
             buffer.printf("}%n");
@@ -139,7 +155,7 @@ public class RustMessageDataGenerator {
         if (hasTaggedFields()) {
             headerGenerator.addImport("crate::tagged_fields::RawTaggedField");
             headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
-            buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::unknown_tagged_fields()\"))]%n");
+            buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::unknown_tagged_fields_empty()\"))]%n");
             buffer.printf("pub _unknown_tagged_fields: Vec<RawTaggedField>,%n");
         }
     }
@@ -173,7 +189,7 @@ public class RustMessageDataGenerator {
 
         if (hasTaggedFields()) {
             headerGenerator.addImport("crate::tagged_fields::k_read_unknown_tagged_fields");
-            buffer.printf("let _unknown_tagged_fields = k_read_unknown_tagged_fields(input, \"_unknown_tagged_fields\")?;%n");
+            buffer.printf("let _unknown_tagged_fields = k_read_unknown_tagged_fields(input)?;%n");
             fieldsForConstructor.add("_unknown_tagged_fields");
         }
 
@@ -345,7 +361,7 @@ public class RustMessageDataGenerator {
         }
         if (hasTaggedFields()) {
             headerGenerator.addImport("crate::tagged_fields::k_write_unknown_tagged_fields");
-            buffer.printf("k_write_unknown_tagged_fields(output, \"_unknown_tagged_fields\", &self._unknown_tagged_fields)?;%n");
+            buffer.printf("k_write_unknown_tagged_fields(output, &self._unknown_tagged_fields)?;%n");
         }
 
         buffer.printf("Ok(())%n");
