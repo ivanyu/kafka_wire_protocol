@@ -7,7 +7,6 @@ use proptest::prop_assert_eq;
 use crate::primitives::KafkaReadable;
 use crate::primitives::KafkaWritable;
 
-pub mod uuid;
 pub(crate) mod proptest_strategies;
 pub(crate) mod serde_bytes;
 pub(crate) mod serde_option_bytes;
