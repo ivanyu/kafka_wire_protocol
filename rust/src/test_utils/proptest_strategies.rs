@@ -1,6 +1,7 @@
 use proptest::{collection, option};
 use proptest::prelude::*;
 use proptest::prelude::Strategy;
+use crate::tagged_fields::RawTaggedField;
 
 pub(crate) fn string() -> impl Strategy<Value=String> {
     "\"[0-9a-zA-Z]{0,10}\""
@@ -30,4 +31,14 @@ where
     T: Arbitrary,
 {
     option::of(vec())
+}
+
+prop_compose! {
+    pub(crate) fn unknown_tagged_fields()
+                                       (len in 0..=2_usize)
+                                       (data in collection::vec(vec::<u8>(), 0..=len)) -> Vec<RawTaggedField> {
+        data.into_iter().enumerate()
+            .map(|(tag, d)| RawTaggedField { tag: tag as i32, data: d })
+            .collect()
+    }
 }

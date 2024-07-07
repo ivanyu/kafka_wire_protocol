@@ -41,6 +41,19 @@ impl KafkaWritable for i8 {
     }
 }
 
+impl KafkaReadable for u8 {
+    fn read(input: &mut impl Read) -> Result<Self> {
+        input.read_u8()
+    }
+}
+
+impl KafkaWritable for u8 {
+    #[inline]
+    fn write(&self, output: &mut impl Write) -> Result<()> {
+        output.write_u8(*self)
+    }
+}
+
 impl KafkaReadable for u16 {
     fn read(input: &mut impl Read) -> Result<Self> {
         input.read_u16::<BigEndian>()
@@ -149,6 +162,17 @@ mod tests {
         original_value.write(&mut cur).unwrap();
         cur.seek(SeekFrom::Start(0)).unwrap();
         let read_value = bool::read(&mut cur).unwrap();
+        assert_eq!(read_value, original_value);
+    }
+
+    #[rstest]
+    #[case(0)]
+    #[case(1)]
+    fn test_u8(#[case] original_value: u8) {
+        let mut cur = Cursor::new(Vec::<u8>::new());
+        original_value.write(&mut cur).unwrap();
+        cur.seek(SeekFrom::Start(0)).unwrap();
+        let read_value = u8::read(&mut cur).unwrap();
         assert_eq!(read_value, original_value);
     }
 

@@ -125,6 +125,13 @@ public class RustMessageDataGenerator {
             }
             buffer.printf("pub %s: %s,%n", fieldName(field), type);
         }
+
+        if (hasTaggedFields()) {
+            headerGenerator.addImport("crate::tagged_fields::RawTaggedField");
+            headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
+            buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::unknown_tagged_fields()\"))]%n");
+            buffer.printf("pub _unknown_tagged_fields: Vec<RawTaggedField>,%n");
+        }
     }
 
     private void generateClassReader(String className, StructSpec struct) {
@@ -152,6 +159,12 @@ public class RustMessageDataGenerator {
                 fieldName(field)
             );
             buffer.printf("let %s = %s?;%n", fieldName(field), readExpression);
+        }
+
+        if (hasTaggedFields()) {
+            headerGenerator.addImport("crate::tagged_fields::k_read_unknown_tagged_fields");
+            buffer.printf("let _unknown_tagged_fields = k_read_unknown_tagged_fields(input, \"_unknown_tagged_fields\")?;%n");
+            fieldsForConstructor.add("_unknown_tagged_fields");
         }
 
         buffer.printf("Ok(%s {%n", className);
@@ -321,6 +334,10 @@ public class RustMessageDataGenerator {
                 }
             }
         }
+        if (hasTaggedFields()) {
+            headerGenerator.addImport("crate::tagged_fields::k_write_unknown_tagged_fields");
+            buffer.printf("k_write_unknown_tagged_fields(output, \"_unknown_tagged_fields\", &self._unknown_tagged_fields)?;%n");
+        }
 
         buffer.printf("Ok(())%n");
         buffer.decrementIndent();
@@ -436,6 +453,10 @@ public class RustMessageDataGenerator {
                 }
             }
         }
+    }
+
+    private boolean hasTaggedFields() {
+        return message.flexibleVersions().contains(this.version);
     }
 
     void write(BufferedWriter writer) throws Exception {
