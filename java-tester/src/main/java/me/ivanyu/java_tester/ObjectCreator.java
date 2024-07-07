@@ -28,6 +28,10 @@ class ObjectCreator<T> extends BaseCreator {
     }
 
     T create(JsonNode json) throws Exception {
+        if (json.isNull()) {
+            return null;
+        }
+
         T instance = clazz.newInstance();
 
         List<String> knownFieldNames = schema.knownFieldNames();
