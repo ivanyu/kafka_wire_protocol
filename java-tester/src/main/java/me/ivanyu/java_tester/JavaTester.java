@@ -78,23 +78,23 @@ public class JavaTester {
             ByteBufferAccessor writer = new ByteBufferAccessor(ByteBuffer.allocate(size));
             constructedMessage.write(writer, objectSerializationCache, version);
 
-            byte[] serializedFromPython = Base64.getDecoder().decode(caseNode.get("serialized").asText());
-            Readable readable = new ByteBufferAccessor(ByteBuffer.wrap(serializedFromPython));
-            ApiMessage messageDeserializedFromPython = rootMessageInfo.rootClazz.newInstance();
-            messageDeserializedFromPython.read(readable, version);
+            byte[] serializedFromExternal = Base64.getDecoder().decode(caseNode.get("serialized").asText());
+            Readable readable = new ByteBufferAccessor(ByteBuffer.wrap(serializedFromExternal));
+            ApiMessage messageDeserializedFromExternal = rootMessageInfo.rootClazz.newInstance();
+            messageDeserializedFromExternal.read(readable, version);
 
-            if (!messageDeserializedFromPython.equals(constructedMessage)) {
+            if (!messageDeserializedFromExternal.equals(constructedMessage)) {
                 String message = "Deserialized message is not equal to constructed\n"
                     + "Input: " + caseStr + "\n"
-                    + "Deserialized: " + messageDeserializedFromPython + "\n"
+                    + "Deserialized: " + messageDeserializedFromExternal + "\n"
                     + "Constructed: " + constructedMessage;
                 return failureResponse(message);
             } else {
                 byte[] serializedInJava = writer.buffer().array();
-                if (!Arrays.equals(serializedFromPython, serializedInJava)) {
-                    String message = "Message serialized in Java is not equal to message serialized in Python\n"
+                if (!Arrays.equals(serializedFromExternal, serializedInJava)) {
+                    String message = "Message serialized in Java is not equal to message externally serialized\n"
                         + "Input: " + caseStr + "\n"
-                        + "Deserialized: " + messageDeserializedFromPython + "\n"
+                        + "Deserialized: " + messageDeserializedFromExternal + "\n"
                         + "Constructed: " + constructedMessage;
                     return failureResponse(message);
                 } else {
