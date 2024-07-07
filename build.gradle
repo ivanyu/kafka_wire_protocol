@@ -3524,6 +3524,20 @@ project(':connect:test-plugins') {
   }
 }
 
+project(':java-tester') {
+  dependencies {
+    implementation project(':clients')
+    implementation libs.jacksonDatabind
+    implementation libs.commonsText
+  }
+
+  task run(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'me.ivanyu.java_tester.JavaTester'
+    standardInput = System.in
+  }
+}
+
 task aggregatedJavadoc(type: Javadoc, dependsOn: compileJava) {
   def projectsWithJavadoc = subprojects.findAll { it.javadoc.enabled }
   source = projectsWithJavadoc.collect { it.sourceSets.main.allJava }

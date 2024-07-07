@@ -1,4 +1,8 @@
-package io.aiven.kio.java_tester;
+/**
+ * Taken from https://github.com/Aiven-Open/kio
+ */
+
+package me.ivanyu.java_tester;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

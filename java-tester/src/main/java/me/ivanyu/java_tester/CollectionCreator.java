@@ -1,6 +1,9 @@
-package io.aiven.kio.java_tester;
+/**
+ * Taken from https://github.com/Aiven-Open/kio
+ */
 
-import com.fasterxml.jackson.databind.node.NullNode;
+package me.ivanyu.java_tester;
+
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
@@ -44,7 +47,9 @@ class CollectionCreator extends BaseCreator {
         // `find` is expected to be present in all `AbstractCollection`s of interest.
         for (Method method : collectionClazz.getDeclaredMethods()) {
             if (method.getName().equals("find")) {
-                return (Class<Object>) method.getReturnType();
+                @SuppressWarnings("unchecked")
+                Class<Object> returnType = (Class<Object>) method.getReturnType();
+                return returnType;
             }
         }
         throw new Exception("No 'find' method for " + collectionClazz);
@@ -63,16 +68,29 @@ class CollectionCreator extends BaseCreator {
             elementTypeInSchema = tmp.substring(2);
         }
 
-        Class<?> elementClazz = switch (elementTypeInSchema) {
-            case "int8" -> Byte.class;
-            case "int16" -> Short.class;
-            case "int32" -> Integer.class;
-            case "int64" -> Long.class;
-            case "string" -> String.class;
-            default -> rootMessageInfo.rootClazz.declaredClasses()
-                .filter(c -> c.getName().endsWith("$" + elementTypeInSchema))
-                .findFirst().get();
-        };
+        Class<?> elementClazz;
+        switch (elementTypeInSchema) {
+            case "int8":
+                elementClazz = Byte.class;
+                break;
+            case "int16":
+                elementClazz = Short.class;
+                break;
+            case "int32":
+                elementClazz = Integer.class;
+                break;
+            case "int64":
+                elementClazz = Long.class;
+                break;
+            case "string":
+                elementClazz = String.class;
+                break;
+            default:
+                elementClazz = rootMessageInfo.rootClazz.declaredClasses()
+                        .filter(c -> c.getName().endsWith("$" + elementTypeInSchema))
+                        .findFirst().get();
+                break;
+        }
 
         List<Object> list = new ArrayList<>();
         fillCollectionFromChildren(elementClazz, list);
