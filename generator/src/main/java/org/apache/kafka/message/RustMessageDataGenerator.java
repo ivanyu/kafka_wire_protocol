@@ -49,7 +49,7 @@ public class RustMessageDataGenerator {
         headerGenerator.addImport("serde::Deserialize");
         headerGenerator.addImportTest("proptest_derive::Arbitrary");
 
-        buffer.printf("#[derive(Serialize, Deserialize, PartialEq, Debug)]%n");
+        buffer.printf("#[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]%n");
         buffer.printf("#[cfg_attr(test, derive(Arbitrary))]%n");
         buffer.printf("pub struct %s {%n", className);
         buffer.incrementIndent();
