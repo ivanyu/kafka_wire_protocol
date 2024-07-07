@@ -58,7 +58,7 @@ mod tests {
     proptest! {
         #[test]
         fn test_serde(data: RawTaggedField) {
-            crate::test_utils::test_serde(data)?;
+            crate::test_utils::test_serde(&data)?;
         }
     }
 
