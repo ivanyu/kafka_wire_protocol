@@ -45,7 +45,10 @@ public class RustMessageGenerator {
         try (DirectoryStream<Path> directoryStream = Files
                 .newDirectoryStream(Paths.get(inputDir), MessageGenerator.JSON_GLOB)) {
             for (Path inputPath : directoryStream) {
-                messageTypeMods.add(processJson(outputDir, inputPath));
+                String messageTypeMod = processJson(outputDir, inputPath);
+                if (messageTypeMod != null) {
+                    messageTypeMods.add(messageTypeMod);
+                }
             }
         }
 
@@ -64,6 +67,10 @@ public class RustMessageGenerator {
         if (className.endsWith("Data")) {
             className = className.substring(0, className.length() - 4);
         }
+        if (className.equals("ProduceRequest") || className.equals("FetchResponse")) {
+            return null;
+        }
+
         final String messageTypeMod = MessageGenerator.toSnakeCase(className);
         Path messageTypeModDir = Paths.get(outputDir, messageTypeMod);
         Files.createDirectories(messageTypeModDir);

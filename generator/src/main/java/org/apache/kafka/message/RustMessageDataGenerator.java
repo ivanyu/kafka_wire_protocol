@@ -89,20 +89,18 @@ public class RustMessageDataGenerator {
             buffer.decrementIndent();
             buffer.printf("}%n");
 
-            if (!className.equals("ProduceRequest") && !className.equals("FetchResponse")) {
-                buffer.printf("%n");
+            buffer.printf("%n");
 
-                buffer.printf("proptest! {%n");
-                buffer.incrementIndent();
-                buffer.printf("#[test]%n");
-                buffer.printf("fn test_java(data: %s) {%n", className);
-                buffer.incrementIndent();
-                buffer.printf("crate::test_utils::test_java(&data, \"%s\", %d);%n", className, version);
-                buffer.decrementIndent();
-                buffer.printf("}%n");
-                buffer.decrementIndent();
-                buffer.printf("}%n");
-            }
+            buffer.printf("proptest! {%n");
+            buffer.incrementIndent();
+            buffer.printf("#[test]%n");
+            buffer.printf("fn test_java(data: %s) {%n", className);
+            buffer.incrementIndent();
+            buffer.printf("crate::test_utils::test_java(&data, \"%s\", %d);%n", className, version);
+            buffer.decrementIndent();
+            buffer.printf("}%n");
+            buffer.decrementIndent();
+            buffer.printf("}%n");
 
             buffer.decrementIndent();
 
