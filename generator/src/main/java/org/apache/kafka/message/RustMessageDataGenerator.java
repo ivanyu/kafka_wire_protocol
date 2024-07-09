@@ -202,12 +202,14 @@ public class RustMessageDataGenerator {
 
             RustFieldSpecAdaptor rustFieldSpecAdaptor = new RustFieldSpecAdaptor(field, version, headerGenerator);
             RustType type = rustFieldSpecAdaptor.fieldType();
+            buffer.printf("/// %s%n", field.about());
             type.writeDeclaration(rustFieldSpecAdaptor.fieldName(), headerGenerator, buffer);
         }
 
         if (hasTaggedFields()) {
             headerGenerator.addImport("crate::tagged_fields::RawTaggedField");
             headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
+            buffer.printf("/// Unknown tagged fields%n");
             buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::unknown_tagged_fields()\"))]%n");
             buffer.printf("pub _unknown_tagged_fields: Vec<RawTaggedField>,%n");
         }
