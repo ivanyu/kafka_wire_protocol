@@ -11,6 +11,14 @@ class RustFieldSpecAdaptor {
         this.headerGenerator = headerGenerator;
     }
 
+    RustType fieldType() {
+        RustType type = rustType(fieldSpec.type(), headerGenerator);
+        if (fieldSpec.nullableVersions().contains(version)) {
+            type = new RustTypeOption(type);
+        }
+        return type;
+    }
+
     String fieldDefault() {
         HeaderGenerator fakeHeaderGenerator = new HeaderGenerator("");
 
@@ -95,7 +103,7 @@ class RustFieldSpecAdaptor {
                 return "None";
             } else {
                 FieldType.ArrayType arrayType = (FieldType.ArrayType) type;
-                String result = String.format("Vec::<%s>::new()", rustType(arrayType.elementType(), headerGenerator));
+                String result = String.format("Vec::<%s>::new()", rustType(arrayType.elementType(), headerGenerator).strRepr(false));
                 if (fieldSpec.nullableVersions().contains(version)) {
                     result = "Some(" + result + ")";
                 }
@@ -106,37 +114,31 @@ class RustFieldSpecAdaptor {
         }
     }
 
-    static String rustType(FieldType type, RustHeaderGenerator headerGenerator) {
-        if (type instanceof FieldType.BoolFieldType) {
-            return "bool";
-        } else if (type instanceof FieldType.Int8FieldType) {
-            return "i8";
-        } else if (type instanceof FieldType.Int16FieldType) {
-            return "i16";
-        } else if (type instanceof FieldType.Uint16FieldType) {
-            return "u16";
-        } else if (type instanceof FieldType.Uint32FieldType) {
-            return "u32";
-        } else if (type instanceof FieldType.Int32FieldType) {
-            return "i32";
-        } else if (type instanceof FieldType.Int64FieldType) {
-            return "i64";
+    static RustType rustType(FieldType type, RustHeaderGenerator headerGenerator) {
+        if (type instanceof FieldType.BoolFieldType
+        || type instanceof FieldType.Int8FieldType
+        || type instanceof FieldType.Int16FieldType
+        || type instanceof FieldType.Uint16FieldType
+        || type instanceof FieldType.Uint32FieldType
+        || type instanceof FieldType.Int32FieldType
+        || type instanceof FieldType.Int64FieldType
+        || type instanceof FieldType.Float64FieldType) {
+            return new RustTypeSimple(type);
         } else if (type instanceof FieldType.UUIDFieldType) {
             headerGenerator.addImport("uuid::Uuid");
-            return "Uuid";
-        } else if (type instanceof FieldType.Float64FieldType) {
-            return "f64";
+            return new RustTypeUuid();
         } else if (type.isString()) {
-            return "String";
+            return new RustTypeString();
         } else if (type.isBytes()) {
-            return "Vec<u8>";
+            return new RustTypeBytes();
         } else if (type instanceof FieldType.RecordsFieldType) {
             throw new RuntimeException("not supported yet");
         } else if (type.isStruct()) {
-            return MessageGenerator.capitalizeFirst(type.toString());
+            return new RustTypeStruct(MessageGenerator.capitalizeFirst(type.toString()));
         } else if (type.isArray()) {
             FieldType.ArrayType arrayType = (FieldType.ArrayType) type;
-            return String.format("Vec<%s>", rustType(arrayType.elementType(), headerGenerator));
+            RustType innerType = rustType(arrayType.elementType(), headerGenerator);
+            return new RustTypeVec(innerType);
         } else {
             throw new RuntimeException("Unknown field type " + type);
         }
