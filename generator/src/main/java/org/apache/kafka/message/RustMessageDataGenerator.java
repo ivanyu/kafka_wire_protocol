@@ -168,7 +168,7 @@ public class RustMessageDataGenerator {
         if (hasTaggedFields()) {
             headerGenerator.addImport("crate::tagged_fields::RawTaggedField");
             headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
-            buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::unknown_tagged_fields_empty()\"))]%n");
+            buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::unknown_tagged_fields()\"))]%n");
             buffer.printf("pub _unknown_tagged_fields: Vec<RawTaggedField>,%n");
         }
     }

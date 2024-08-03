@@ -107,7 +107,7 @@ abstract class BaseCreator {
         return ByteBuffer.wrap(Base64.getDecoder().decode(str));
     }
 
-    protected static byte[] getBytes(JsonNode fieldValue, String fieldName) throws Exception {
+    static byte[] getBytes(JsonNode fieldValue, String fieldName) throws Exception {
         String str = getString(fieldValue, fieldName);
         if (str == null) {
             return null;

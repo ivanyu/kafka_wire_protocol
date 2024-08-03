@@ -9,8 +9,8 @@ import java.util.AbstractCollection;
 import java.util.Iterator;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.apache.kafka.common.Uuid;
+import org.apache.kafka.common.protocol.Message;
 import org.apache.kafka.common.record.BaseRecords;
 import org.apache.kafka.common.record.MemoryRecords;
 
@@ -44,17 +44,22 @@ class ObjectCreator<T> extends BaseCreator {
         while (fieldNames.hasNext()) {
             String fieldName = fieldNames.next();
 
-            // Skip unknown tags -- we don't test them now
+            JsonNode fieldValue = json.get(fieldName);
+
             if (fieldName.equals("_unknown_tagged_fields")) {
-                if (!json.get(fieldName).isArray() || !json.get(fieldName).isEmpty()) {
-                    throw new Exception("Non-empty array _unknown_tagged_fields are not supported");
+                if (!json.get(fieldName).isArray()) {
+                    throw new Exception("_unknown_tagged_fields my be array");
                 }
+                if (!(instance instanceof Message)) {
+                    throw new Exception("_unknown_tagged_fields can be only on Messages");
+                }
+                Message instanceMessage = (Message) instance;
+                RawTaggedFieldsFiller.fill(instanceMessage.unknownTaggedFields(), fieldValue);
                 continue;
             }
 
             String kafkaesqueFieldName = kafkaesqueFieldName(fieldName, knownFieldNames);
             Schema fieldSchema = schema.fieldSchema(kafkaesqueFieldName);
-            JsonNode fieldValue = json.get(fieldName);
             Setter setter = clazz.setterForFieldName(kafkaesqueFieldName);
             Class<?> parameterType = setter.parameterType();
 
