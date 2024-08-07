@@ -205,7 +205,7 @@ public class RustMessageDataGenerator {
     private void generateClassReader(String className, StructSpec struct) {
         headerGenerator.addImport("std::io::Read");
         headerGenerator.addImport("std::io::Result");
-        headerGenerator.addImport("crate::primitives::KafkaReadable");
+        headerGenerator.addImport("crate::readable_writable::KafkaReadable");
         buffer.printf("impl KafkaReadable for %s {%n", className);
         buffer.incrementIndent();
         buffer.printf("fn read(#[allow(unused)] input: &mut impl Read) -> Result<Self> {%n");
@@ -296,27 +296,14 @@ public class RustMessageDataGenerator {
     private String arrayReadExpression(String readSource, FieldType type, boolean flexible, boolean nullable, String fieldNameInRust) {
         FieldType.ArrayType arrayType = (FieldType.ArrayType) type;
         String rustElementType = RustFieldSpecAdaptor.rustType(arrayType.elementType(), headerGenerator);
-
-        if (arrayType.elementType().isString()) {
-            if (nullable) {
-                headerGenerator.addImport("crate::str_arrays::k_read_nullable_array_of_strings");
-                return String.format("k_read_nullable_array_of_strings(%s, \"%s\", %b)",
-                    readSource, fieldNameInRust, flexible);
-            } else {
-                headerGenerator.addImport("crate::str_arrays::k_read_array_of_strings");
-                return String.format("k_read_array_of_strings(%s, \"%s\", %b)",
-                    readSource, fieldNameInRust, flexible);
-            }
+        if (nullable) {
+            headerGenerator.addImport("crate::arrays::k_read_nullable_array");
+            return String.format("k_read_nullable_array::<%s>(%s, \"%s\", %b)",
+                rustElementType, readSource, fieldNameInRust, flexible);
         } else {
-            if (nullable) {
-                headerGenerator.addImport("crate::arrays::k_read_nullable_array");
-                return String.format("k_read_nullable_array::<%s>(%s, \"%s\", %b)",
-                    rustElementType, readSource, fieldNameInRust, flexible);
-            } else {
-                headerGenerator.addImport("crate::arrays::k_read_array");
-                return String.format("k_read_array::<%s>(%s, \"%s\", %b)",
-                    rustElementType, readSource, fieldNameInRust, flexible);
-            }
+            headerGenerator.addImport("crate::arrays::k_read_array");
+            return String.format("k_read_array::<%s>(%s, \"%s\", %b)",
+                rustElementType, readSource, fieldNameInRust, flexible);
         }
     }
 
@@ -330,7 +317,7 @@ public class RustMessageDataGenerator {
         } else {
             String readExpression = primitiveReadExpression(readSource, type);
             if (nullable) {
-                headerGenerator.addImport("crate::primitives::KafkaReadable");
+                headerGenerator.addImport("crate::readable_writable::KafkaReadable");
                 return String.format("(if i8::read(input)? < 0 { Ok(None) } else { %s.map(Some) })", readExpression);
             } else {
                 return readExpression;
@@ -342,32 +329,32 @@ public class RustMessageDataGenerator {
         if (type instanceof FieldType.RecordsFieldType) {
             throw new RuntimeException("not supported yet");
         } else if (type instanceof FieldType.BoolFieldType) {
-            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            headerGenerator.addImport("crate::readable_writable::KafkaReadable");
             return String.format("bool::read(%s)", readSource);
         } else if (type instanceof FieldType.Int8FieldType) {
-            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            headerGenerator.addImport("crate::readable_writable::KafkaReadable");
             return String.format("i8::read(%s)", readSource);
         } else if (type instanceof FieldType.Int16FieldType) {
-            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            headerGenerator.addImport("crate::readable_writable::KafkaReadable");
             return String.format("i16::read(%s)", readSource);
         } else if (type instanceof FieldType.Uint16FieldType) {
-            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            headerGenerator.addImport("crate::readable_writable::KafkaReadable");
             return String.format("u16::read(%s)", readSource);
         } else if (type instanceof FieldType.Uint32FieldType) {
-            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            headerGenerator.addImport("crate::readable_writable::KafkaReadable");
             return String.format("u32::read(%s)", readSource);
         } else if (type instanceof FieldType.Int32FieldType) {
-            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            headerGenerator.addImport("crate::readable_writable::KafkaReadable");
             return String.format("i32::read(%s)", readSource);
         } else if (type instanceof FieldType.Int64FieldType) {
-            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            headerGenerator.addImport("crate::readable_writable::KafkaReadable");
             return String.format("i64::read(%s)", readSource);
         } else if (type instanceof FieldType.UUIDFieldType) {
-            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            headerGenerator.addImport("crate::readable_writable::KafkaReadable");
             headerGenerator.addImport("uuid::Uuid");
             return String.format("Uuid::read(%s)", readSource);
         } else if (type instanceof FieldType.Float64FieldType) {
-            headerGenerator.addImport("crate::primitives::KafkaReadable");
+            headerGenerator.addImport("crate::readable_writable::KafkaReadable");
             return String.format("f64::read(%s)", readSource);
         } else if (type.isStruct()) {
             return String.format("%s::read(%s)", type, readSource);
@@ -377,12 +364,11 @@ public class RustMessageDataGenerator {
     }
 
     private String stringReadExpression(String readSource, boolean flexible, boolean nullable, String fieldNameInRust) {
+        headerGenerator.addImport("crate::readable_writable::KafkaReadable");
         if (nullable) {
-            headerGenerator.addImport("crate::strings::k_read_nullable_string");
-            return String.format("k_read_nullable_string(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
+            return String.format("Option::<String>::read_ext(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
         } else {
-            headerGenerator.addImport("crate::strings::k_read_string");
-            return String.format("k_read_string(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
+            return String.format("String::read_ext(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
         }
     }
 
@@ -399,7 +385,7 @@ public class RustMessageDataGenerator {
     private void generateClassWriter(String className, StructSpec struct) {
         headerGenerator.addImport("std::io::Write");
         headerGenerator.addImport("std::io::Result");
-        headerGenerator.addImport("crate::primitives::KafkaWritable");
+        headerGenerator.addImport("crate::readable_writable::KafkaWritable");
         buffer.printf("impl KafkaWritable for %s {%n", className);
         buffer.incrementIndent();
         buffer.printf("fn write(&self, #[allow(unused)] output: &mut impl Write) -> Result<()> {%n");
@@ -484,15 +470,9 @@ public class RustMessageDataGenerator {
     }
 
     private String stringWriteExpression(String writeTarget, boolean flexible, boolean nullable, String fieldNameInRust) {
-        if (nullable) {
-            headerGenerator.addImport("crate::strings::k_write_nullable_string");
-            return String.format("k_write_nullable_string(%s, \"%s\", self.%s.as_deref(), %b)",
-                writeTarget, fieldNameInRust, fieldNameInRust, flexible);
-        } else {
-            headerGenerator.addImport("crate::strings::k_write_string");
-            return String.format("k_write_string(%s, \"%s\", &self.%s, %b)",
-                writeTarget, fieldNameInRust, fieldNameInRust, flexible);
-        }
+        headerGenerator.addImport("crate::readable_writable::KafkaWritable");
+        return String.format("self.%s.write_ext(%s, \"%s\", %b)",
+            fieldNameInRust, writeTarget, fieldNameInRust, flexible);
     }
 
     private String bytesWriteExpression(String writeTarget, boolean flexible, boolean nullable, String fieldNameInRust) {
@@ -512,28 +492,14 @@ public class RustMessageDataGenerator {
                                         boolean flexible,
                                         boolean nullable,
                                         String fieldNameInRust) {
-        FieldType.ArrayType arrayType = (FieldType.ArrayType) type;
-
-        if (arrayType.elementType().isString()) {
-            if (nullable) {
-                headerGenerator.addImport("crate::str_arrays::k_write_nullable_array_of_strings");
-                return String.format("k_write_nullable_array_of_strings(%s, \"%s\", self.%s.as_deref(), %b)",
-                    writeTarget, fieldNameInRust, fieldNameInRust, flexible);
-            } else {
-                headerGenerator.addImport("crate::str_arrays::k_write_array_of_strings");
-                return String.format("k_write_array_of_strings(%s, \"%s\", &self.%s, %b)",
-                    writeTarget, fieldNameInRust, fieldNameInRust, flexible);
-            }
+        if (nullable) {
+            headerGenerator.addImport("crate::arrays::k_write_nullable_array");
+            return String.format("k_write_nullable_array(%s, \"%s\", self.%s.as_deref(), %b)",
+                writeTarget, fieldNameInRust, fieldNameInRust, flexible);
         } else {
-            if (nullable) {
-                headerGenerator.addImport("crate::arrays::k_write_nullable_array");
-                return String.format("k_write_nullable_array(%s, \"%s\", self.%s.as_deref(), %b)",
-                    writeTarget, fieldNameInRust, fieldNameInRust, flexible);
-            } else {
-                headerGenerator.addImport("crate::arrays::k_write_array");
-                return String.format("k_write_array(%s, \"%s\", &self.%s, %b)",
-                    writeTarget, fieldNameInRust, fieldNameInRust, flexible);
-            }
+            headerGenerator.addImport("crate::arrays::k_write_array");
+            return String.format("k_write_array(%s, \"%s\", &self.%s, %b)",
+                writeTarget, fieldNameInRust, fieldNameInRust, flexible);
         }
     }
 
@@ -552,7 +518,7 @@ public class RustMessageDataGenerator {
             || type instanceof FieldType.Float64FieldType
             || type.isStruct()
         ) {
-            headerGenerator.addImport("crate::primitives::KafkaWritable");
+            headerGenerator.addImport("crate::readable_writable::KafkaWritable");
             return String.format("%s.write(%s)", object, writeTarget);
         } else {
             throw new RuntimeException("Unsupported field type " + type);

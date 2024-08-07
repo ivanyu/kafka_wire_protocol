@@ -6,4 +6,4 @@ mod primitives;
 mod strings;
 mod bytes;
 mod utils;
-mod str_arrays;
+mod readable_writable;
