@@ -296,27 +296,14 @@ public class RustMessageDataGenerator {
     private String arrayReadExpression(String readSource, FieldType type, boolean flexible, boolean nullable, String fieldNameInRust) {
         FieldType.ArrayType arrayType = (FieldType.ArrayType) type;
         String rustElementType = RustFieldSpecAdaptor.rustType(arrayType.elementType(), headerGenerator);
-
-        if (arrayType.elementType().isString()) {
-            if (nullable) {
-                headerGenerator.addImport("crate::str_arrays::k_read_nullable_array_of_strings");
-                return String.format("k_read_nullable_array_of_strings(%s, \"%s\", %b)",
-                    readSource, fieldNameInRust, flexible);
-            } else {
-                headerGenerator.addImport("crate::str_arrays::k_read_array_of_strings");
-                return String.format("k_read_array_of_strings(%s, \"%s\", %b)",
-                    readSource, fieldNameInRust, flexible);
-            }
+        if (nullable) {
+            headerGenerator.addImport("crate::arrays::k_read_nullable_array");
+            return String.format("k_read_nullable_array::<%s>(%s, \"%s\", %b)",
+                rustElementType, readSource, fieldNameInRust, flexible);
         } else {
-            if (nullable) {
-                headerGenerator.addImport("crate::arrays::k_read_nullable_array");
-                return String.format("k_read_nullable_array::<%s>(%s, \"%s\", %b)",
-                    rustElementType, readSource, fieldNameInRust, flexible);
-            } else {
-                headerGenerator.addImport("crate::arrays::k_read_array");
-                return String.format("k_read_array::<%s>(%s, \"%s\", %b)",
-                    rustElementType, readSource, fieldNameInRust, flexible);
-            }
+            headerGenerator.addImport("crate::arrays::k_read_array");
+            return String.format("k_read_array::<%s>(%s, \"%s\", %b)",
+                rustElementType, readSource, fieldNameInRust, flexible);
         }
     }
 
@@ -377,12 +364,11 @@ public class RustMessageDataGenerator {
     }
 
     private String stringReadExpression(String readSource, boolean flexible, boolean nullable, String fieldNameInRust) {
+        headerGenerator.addImport("crate::readable_writable::KafkaReadable");
         if (nullable) {
-            headerGenerator.addImport("crate::strings::k_read_nullable_string");
-            return String.format("k_read_nullable_string(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
+            return String.format("Option::<String>::read_ext(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
         } else {
-            headerGenerator.addImport("crate::strings::k_read_string");
-            return String.format("k_read_string(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
+            return String.format("String::read_ext(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
         }
     }
 
@@ -484,15 +470,9 @@ public class RustMessageDataGenerator {
     }
 
     private String stringWriteExpression(String writeTarget, boolean flexible, boolean nullable, String fieldNameInRust) {
-        if (nullable) {
-            headerGenerator.addImport("crate::strings::k_write_nullable_string");
-            return String.format("k_write_nullable_string(%s, \"%s\", self.%s.as_deref(), %b)",
-                writeTarget, fieldNameInRust, fieldNameInRust, flexible);
-        } else {
-            headerGenerator.addImport("crate::strings::k_write_string");
-            return String.format("k_write_string(%s, \"%s\", &self.%s, %b)",
-                writeTarget, fieldNameInRust, fieldNameInRust, flexible);
-        }
+        headerGenerator.addImport("crate::readable_writable::KafkaWritable");
+        return String.format("self.%s.write_ext(%s, \"%s\", %b)",
+            fieldNameInRust, writeTarget, fieldNameInRust, flexible);
     }
 
     private String bytesWriteExpression(String writeTarget, boolean flexible, boolean nullable, String fieldNameInRust) {
@@ -512,28 +492,14 @@ public class RustMessageDataGenerator {
                                         boolean flexible,
                                         boolean nullable,
                                         String fieldNameInRust) {
-        FieldType.ArrayType arrayType = (FieldType.ArrayType) type;
-
-        if (arrayType.elementType().isString()) {
-            if (nullable) {
-                headerGenerator.addImport("crate::str_arrays::k_write_nullable_array_of_strings");
-                return String.format("k_write_nullable_array_of_strings(%s, \"%s\", self.%s.as_deref(), %b)",
-                    writeTarget, fieldNameInRust, fieldNameInRust, flexible);
-            } else {
-                headerGenerator.addImport("crate::str_arrays::k_write_array_of_strings");
-                return String.format("k_write_array_of_strings(%s, \"%s\", &self.%s, %b)",
-                    writeTarget, fieldNameInRust, fieldNameInRust, flexible);
-            }
+        if (nullable) {
+            headerGenerator.addImport("crate::arrays::k_write_nullable_array");
+            return String.format("k_write_nullable_array(%s, \"%s\", self.%s.as_deref(), %b)",
+                writeTarget, fieldNameInRust, fieldNameInRust, flexible);
         } else {
-            if (nullable) {
-                headerGenerator.addImport("crate::arrays::k_write_nullable_array");
-                return String.format("k_write_nullable_array(%s, \"%s\", self.%s.as_deref(), %b)",
-                    writeTarget, fieldNameInRust, fieldNameInRust, flexible);
-            } else {
-                headerGenerator.addImport("crate::arrays::k_write_array");
-                return String.format("k_write_array(%s, \"%s\", &self.%s, %b)",
-                    writeTarget, fieldNameInRust, fieldNameInRust, flexible);
-            }
+            headerGenerator.addImport("crate::arrays::k_write_array");
+            return String.format("k_write_array(%s, \"%s\", &self.%s, %b)",
+                writeTarget, fieldNameInRust, fieldNameInRust, flexible);
         }
     }
 
