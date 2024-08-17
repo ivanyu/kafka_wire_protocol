@@ -518,8 +518,7 @@ public final class FieldSpec {
                 return "byte[]";
             }
         } else if (type instanceof FieldType.RecordsFieldType) {
-            headerGenerator.addImport(MessageGenerator.BASE_RECORDS_CLASS);
-            return "BaseRecords";
+            throw new RuntimeException("not supported yet");
         } else if (type.isStruct()) {
             return MessageGenerator.capitalizeFirst(typeString());
         } else if (type.isArray()) {
