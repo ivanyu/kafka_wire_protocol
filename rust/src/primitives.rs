@@ -4,11 +4,11 @@ use std::io::{Read, Result, Write};
 use byteorder::{BigEndian, ReadBytesExt, WriteBytesExt};
 use uuid::Uuid;
 use paste::paste;
-use crate::readable_writable::{KafkaReadable, KafkaWritable};
+use crate::readable_writable::{Readable, Writable};
 
 macro_rules! impl_num_8bit {
     ($type:ty) => {
-        impl KafkaReadable for $type {
+        impl Readable for $type {
             #[inline]
             fn read(input: &mut impl Read) -> Result<Self> {
                 paste! {
@@ -17,7 +17,7 @@ macro_rules! impl_num_8bit {
             }
         }
 
-        impl KafkaWritable for $type {
+        impl Writable for $type {
             #[inline]
             fn write(&self, output: &mut impl Write) -> Result<()> {
                 paste! {
@@ -33,7 +33,7 @@ impl_num_8bit!(u8);
 
 macro_rules! impl_num {
     ($type:ty) => {
-        impl KafkaReadable for $type {
+        impl Readable for $type {
             #[inline]
             fn read(input: &mut impl Read) -> Result<Self> {
                 paste! {
@@ -42,7 +42,7 @@ macro_rules! impl_num {
             }
         }
 
-        impl KafkaWritable for $type {
+        impl Writable for $type {
             #[inline]
             fn write(&self, output: &mut impl Write) -> Result<()> {
                 paste! {
@@ -60,13 +60,13 @@ impl_num!(i32);
 impl_num!(i64);
 impl_num!(f64);
 
-impl KafkaReadable for bool {
+impl Readable for bool {
     fn read(input: &mut impl Read) -> io::Result<Self> {
         input.read_i8().map(|v| v != 0)
     }
 }
 
-impl KafkaWritable for bool {
+impl Writable for bool {
     #[inline]
     fn write(&self, output: &mut impl Write) -> io::Result<()> {
         if *self {
@@ -77,13 +77,13 @@ impl KafkaWritable for bool {
     }
 }
 
-impl KafkaReadable for Uuid {
+impl Readable for Uuid {
     fn read(input: &mut impl Read) -> io::Result<Self> {
         input.read_u128::<BigEndian>().map(Uuid::from_u128)
     }
 }
 
-impl KafkaWritable for Uuid {
+impl Writable for Uuid {
     #[inline]
     fn write(&self, output: &mut impl Write) -> io::Result<()> {
         output.write_u128::<BigEndian>(self.as_u128())

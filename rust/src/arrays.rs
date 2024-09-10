@@ -1,12 +1,12 @@
 use std::io::{Error, ErrorKind, Read, Result, Write};
 
-use crate::readable_writable::{KafkaReadable, KafkaWritable};
+use crate::readable_writable::{Readable, Writable};
 use crate::utils::{read_len_i32, write_len_i32};
 
 #[inline]
 pub(crate) fn read_array<T>(input: &mut impl Read, field_name: &str, compact: bool) -> Result<Vec<T>>
 where
-    T: KafkaReadable,
+    T: Readable,
 {
     let len = read_len_i32(input, invalid_len_message(field_name), compact)?;
     if len < 0 {
@@ -22,7 +22,7 @@ where
 #[inline]
 pub(crate) fn read_nullable_array<T>(input: &mut impl Read, field_name: &str, compact: bool) -> Result<Option<Vec<T>>>
 where
-    T: KafkaReadable,
+    T: Readable,
 {
     let len = read_len_i32(input, invalid_len_message(field_name), compact)?;
     if len < 0 {
@@ -35,7 +35,7 @@ where
 #[inline]
 fn read_array_inner<T>(input: &mut impl Read, arr_len: i32, field_name: &str, compact: bool) -> Result<Vec<T>>
 where
-    T: KafkaReadable,
+    T: Readable,
 {
     let mut vec: Vec<T> = Vec::with_capacity(arr_len as usize);
     for _ in 0..arr_len {
@@ -46,7 +46,7 @@ where
 
 pub(crate) fn write_array<T>(output: &mut impl Write, field_name: &str, array: &[T], compact: bool) -> Result<()>
 where
-    T: KafkaWritable,
+    T: Writable,
 {
     write_len_i32(output, invalid_len_message(field_name), array.len() as i32, compact)?;
     write_array_inner(output, array, field_name, compact)
@@ -54,7 +54,7 @@ where
 
 pub(crate) fn write_nullable_array<T>(output: &mut impl Write, field_name: &str, array_opt: Option<&[T]>, compact: bool) -> Result<()>
 where
-    T: KafkaWritable,
+    T: Writable,
 {
     if let Some(array) = array_opt {
         write_len_i32(output, invalid_len_message(field_name), array.len() as i32, compact)?;
@@ -66,7 +66,7 @@ where
 
 fn write_array_inner<T>(output: &mut impl Write, array: &[T], field_name: &str, compact: bool) -> Result<()>
 where
-    T: KafkaWritable,
+    T: Writable,
 {
     for el in array {
         el.write_ext(output, field_name, compact)?

@@ -15,13 +15,13 @@ class RustTypeString implements RustType {
 
     @Override
     public String readExpression(String readSource, String fieldNameInRust, boolean flexible, RustHeaderGenerator headerGenerator) {
-        headerGenerator.addImport("crate::readable_writable::KafkaReadable");
+        headerGenerator.addImport("crate::readable_writable::Readable");
         return String.format("String::read_ext(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
     }
 
     @Override
     public String writeExpression(String writeTarget, String object, boolean flexible, RustHeaderGenerator headerGenerator) {
-        headerGenerator.addImport("crate::readable_writable::KafkaWritable");
+        headerGenerator.addImport("crate::readable_writable::Writable");
         return String.format("%s.write_ext(%s, \"%s\", %b)",
                 object, writeTarget, object, flexible);
     }

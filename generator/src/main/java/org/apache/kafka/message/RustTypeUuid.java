@@ -21,7 +21,7 @@ class RustTypeUuid implements RustType {
 
     @Override
     public String writeExpression(String writeTarget, String object, boolean flexible, RustHeaderGenerator headerGenerator) {
-        headerGenerator.addImport("crate::readable_writable::KafkaWritable");
+        headerGenerator.addImport("crate::readable_writable::Writable");
         return String.format("%s.write(%s)", object, writeTarget);
     }
 }

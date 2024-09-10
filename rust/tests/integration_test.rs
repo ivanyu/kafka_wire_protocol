@@ -9,7 +9,7 @@ use testcontainers::runners::SyncRunner;
 
 use kafka_proto::api_message_type::ApiMessageType;
 use kafka_proto::markers::{Request, Response};
-use kafka_proto::readable_writable::{KafkaReadable, KafkaWritable};
+use kafka_proto::readable_writable::{Readable, Writable};
 
 struct Connection {
     stream: TcpStream,
@@ -28,8 +28,8 @@ impl Connection {
 
     fn send_request<TReq, TResp>(&mut self, request: TReq) -> TResp
     where
-        TReq: Request + KafkaWritable,
-        TResp: Response + KafkaReadable,
+        TReq: Request + Writable,
+        TResp: Response + Readable,
     {
         let api_message_type: ApiMessageType = ApiMessageType::from_api_key(request.api_key());
         let request_api_version = request.version();
