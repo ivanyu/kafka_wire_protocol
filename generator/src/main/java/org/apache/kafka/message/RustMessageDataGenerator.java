@@ -68,21 +68,30 @@ public class RustMessageDataGenerator {
             case REQUEST:
                 headerGenerator.addImport("crate::markers::ApiMessage");
                 headerGenerator.addImport("crate::markers::Request");
-                buffer.printf("impl ApiMessage for %s { }%n", className);
+
+                generateApiMessageImpl(className);
+                buffer.printf("%n");
+
                 buffer.printf("impl Request for %s { }%n%n", className);
                 break;
 
             case RESPONSE:
                 headerGenerator.addImport("crate::markers::ApiMessage");
                 headerGenerator.addImport("crate::markers::Response");
-                buffer.printf("impl ApiMessage for %s { }%n", className);
+
+                generateApiMessageImpl(className);
+                buffer.printf("%n");
+
                 buffer.printf("impl Response for %s { }%n%n", className);
                 break;
 
             case HEADER:
                 headerGenerator.addImport("crate::markers::ApiMessage");
                 headerGenerator.addImport("crate::markers::Header");
-                buffer.printf("impl ApiMessage for %s { }%n", className);
+
+                generateApiMessageImpl(className);
+                buffer.printf("%n");
+
                 buffer.printf("impl Header for %s { }%n%n", className);
                 break;
 
@@ -92,7 +101,10 @@ public class RustMessageDataGenerator {
             case DATA:
                 headerGenerator.addImport("crate::markers::ApiMessage");
                 headerGenerator.addImport("crate::markers::Data");
-                buffer.printf("impl ApiMessage for %s { }%n", className);
+
+                generateApiMessageImpl(className);
+                buffer.printf("%n");
+
                 buffer.printf("impl Data for %s { }%n%n", className);
                 break;
         }
@@ -160,6 +172,28 @@ public class RustMessageDataGenerator {
         }
     }
 
+    private void generateApiMessageImpl(String className) {
+        buffer.printf("impl ApiMessage for %s {%n", className);
+        buffer.incrementIndent();
+
+        buffer.printf("fn api_key(&self) -> i16 {%n");
+        buffer.incrementIndent();
+        buffer.printf("%d%n", message.apiKey().orElseGet(() -> (short) -1));
+        buffer.decrementIndent();
+        buffer.printf("}%n");
+
+        buffer.printf("%n");
+
+        buffer.printf("fn version(&self) -> i16 {%n");
+        buffer.incrementIndent();
+        buffer.printf("%d%n", version);
+        buffer.decrementIndent();
+        buffer.printf("}%n");
+
+        buffer.decrementIndent();
+        buffer.printf("}%n");
+    }
+
     private void generateFieldDeclarations(StructSpec struct) {
         for (FieldSpec field : struct.fields()) {
             if (!field.versions().contains(version)) {
@@ -208,7 +242,7 @@ public class RustMessageDataGenerator {
                 stringParamCounter += 1;
                 typeStr = String.format("S%d", stringParamCounter);
                 fieldsForConstructor.add(String.format("%s: %s.as_ref().to_string()", fieldNameInRust, fieldNameInRust));
-            } else if (Objects.equals(type, "Option<String>")) {
+            } else if (type instanceof RustTypeOption && ((RustTypeOption) type).inner instanceof RustTypeString) {
                 stringParamCounter += 1;
                 typeStr = String.format("Option<S%d>", stringParamCounter);
                 fieldsForConstructor.add(String.format("%s: %s.map(|s| s.as_ref().to_string())", fieldNameInRust, fieldNameInRust));

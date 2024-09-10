@@ -49,6 +49,10 @@ public class RustApiMessageTypeGenerator extends ApiMessageTypeGenerator {
 
         generateHeaderVersion("response");
 
+        buffer.printf("%n");
+
+        generateFromApiKey();
+
         buffer.decrementIndent();
         buffer.printf("}%n");
 
@@ -156,6 +160,28 @@ public class RustApiMessageTypeGenerator extends ApiMessageTypeGenerator {
 
         buffer.decrementIndent();
         buffer.printf("}%n");
+        buffer.decrementIndent();
+        buffer.printf("}%n");
+    }
+
+    private void generateFromApiKey() {
+        buffer.printf("pub fn from_api_key(api_key: i16) -> ApiMessageType {%n");
+        buffer.incrementIndent();
+
+        buffer.printf("match api_key {%n");
+        buffer.incrementIndent();
+
+        for (Map.Entry<Short, ApiData> entry : apis.entrySet()) {
+            short apiKey = entry.getKey();
+            ApiData apiData = entry.getValue();
+            String name = apiData.name();
+            buffer.printf("%d => Self::%s,%n", apiKey, MessageGenerator.toSnakeCase(name).toUpperCase(Locale.ROOT));
+        }
+
+        buffer.printf("_ => panic!(\"Unsupported API key {}\", api_key)%n");
+        buffer.decrementIndent();
+        buffer.printf("}%n");
+
         buffer.decrementIndent();
         buffer.printf("}%n");
     }
