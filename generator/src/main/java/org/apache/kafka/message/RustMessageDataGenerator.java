@@ -413,8 +413,8 @@ public class RustMessageDataGenerator {
 
             buffer.decrementIndent();
             buffer.printf("};%n");
-            headerGenerator.addImport("crate::tagged_fields::k_read_tagged_fields");
-            buffer.printf("let _unknown_tagged_fields = k_read_tagged_fields(input, tagged_fields_callback)?;%n");
+            headerGenerator.addImport("crate::tagged_fields::read_tagged_fields");
+            buffer.printf("let _unknown_tagged_fields = read_tagged_fields(input, tagged_fields_callback)?;%n");
 
             fieldsForConstructor.add("_unknown_tagged_fields");
         }
@@ -477,11 +477,11 @@ public class RustMessageDataGenerator {
                     buffer.decrementIndent();
                     buffer.printf("}%n");
                 });
-                headerGenerator.addImport("crate::tagged_fields::k_write_tagged_fields");
-                buffer.printf("k_write_tagged_fields(output, &known_tagged_fields, &self._unknown_tagged_fields)?;%n");
+                headerGenerator.addImport("crate::tagged_fields::write_tagged_fields");
+                buffer.printf("write_tagged_fields(output, &known_tagged_fields, &self._unknown_tagged_fields)?;%n");
             } else {
-                headerGenerator.addImport("crate::tagged_fields::k_write_tagged_fields");
-                buffer.printf("k_write_tagged_fields(output, &[], &self._unknown_tagged_fields)?;%n");
+                headerGenerator.addImport("crate::tagged_fields::write_tagged_fields");
+                buffer.printf("write_tagged_fields(output, &[], &self._unknown_tagged_fields)?;%n");
             }
         }
 

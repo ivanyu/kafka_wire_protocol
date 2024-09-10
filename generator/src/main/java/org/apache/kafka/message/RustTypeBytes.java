@@ -21,14 +21,14 @@ class RustTypeBytes implements RustType {
 
     @Override
     public String readExpression(String readSource, String fieldNameInRust, boolean flexible, RustHeaderGenerator headerGenerator) {
-        headerGenerator.addImport("crate::bytes::k_read_bytes");
-        return String.format("k_read_bytes(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
+        headerGenerator.addImport("crate::bytes::read_bytes");
+        return String.format("read_bytes(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
     }
 
     @Override
     public String writeExpression(String writeTarget, String object, boolean flexible, RustHeaderGenerator headerGenerator) {
-        headerGenerator.addImport("crate::bytes::k_write_bytes");
-        return String.format("k_write_bytes(%s, \"%s\", &%s, %b)",
+        headerGenerator.addImport("crate::bytes::write_bytes");
+        return String.format("write_bytes(%s, \"%s\", &%s, %b)",
             writeTarget, object, object, flexible);
     }
 }

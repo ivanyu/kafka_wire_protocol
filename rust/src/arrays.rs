@@ -4,7 +4,7 @@ use crate::readable_writable::{KafkaReadable, KafkaWritable};
 use crate::utils::{read_len_i32, write_len_i32};
 
 #[inline]
-pub(crate) fn k_read_array<T>(input: &mut impl Read, field_name: &str, compact: bool) -> Result<Vec<T>>
+pub(crate) fn read_array<T>(input: &mut impl Read, field_name: &str, compact: bool) -> Result<Vec<T>>
 where
     T: KafkaReadable,
 {
@@ -20,7 +20,7 @@ where
 }
 
 #[inline]
-pub(crate) fn k_read_nullable_array<T>(input: &mut impl Read, field_name: &str, compact: bool) -> Result<Option<Vec<T>>>
+pub(crate) fn read_nullable_array<T>(input: &mut impl Read, field_name: &str, compact: bool) -> Result<Option<Vec<T>>>
 where
     T: KafkaReadable,
 {
@@ -44,7 +44,7 @@ where
     Ok(vec)
 }
 
-pub(crate) fn k_write_array<T>(output: &mut impl Write, field_name: &str, array: &[T], compact: bool) -> Result<()>
+pub(crate) fn write_array<T>(output: &mut impl Write, field_name: &str, array: &[T], compact: bool) -> Result<()>
 where
     T: KafkaWritable,
 {
@@ -52,7 +52,7 @@ where
     write_array_inner(output, array, field_name, compact)
 }
 
-pub(crate) fn k_write_nullable_array<T>(output: &mut impl Write, field_name: &str, array_opt: Option<&[T]>, compact: bool) -> Result<()>
+pub(crate) fn write_nullable_array<T>(output: &mut impl Write, field_name: &str, array_opt: Option<&[T]>, compact: bool) -> Result<()>
 where
     T: KafkaWritable,
 {
@@ -118,10 +118,10 @@ mod tests {
 
     fn check_serde_nullable(original_data: Option<Vec<i32>>, compact: bool) {
         let mut cur = Cursor::new(Vec::<u8>::new());
-        k_write_nullable_array(&mut cur, "test", original_data.as_deref(), compact).unwrap();
+        write_nullable_array(&mut cur, "test", original_data.as_deref(), compact).unwrap();
 
         cur.seek(SeekFrom::Start(0)).unwrap();
-        let read_data = k_read_nullable_array::<i32>(&mut cur, "test", compact).unwrap();
+        let read_data = read_nullable_array::<i32>(&mut cur, "test", compact).unwrap();
 
         assert_eq!(read_data, original_data);
     }
@@ -149,10 +149,10 @@ mod tests {
 
     fn check_serde_non_nullable(original_data: Vec<i32>, compact: bool) {
         let mut cur = Cursor::new(Vec::<u8>::new());
-        k_write_array(&mut cur, "test", &original_data, compact).unwrap();
+        write_array(&mut cur, "test", &original_data, compact).unwrap();
 
         cur.seek(SeekFrom::Start(0)).unwrap();
-        let read_data = k_read_array::<i32>(&mut cur, "test", compact).unwrap();
+        let read_data = read_array::<i32>(&mut cur, "test", compact).unwrap();
 
         assert_eq!(read_data, original_data);
     }
@@ -172,7 +172,7 @@ mod tests {
         let mut cur = Cursor::new(Vec::<u8>::new());
         cur.write_i32::<BigEndian>(-1).unwrap();
         cur.seek(SeekFrom::Start(0)).unwrap();
-        let error = k_read_array::<i32>(&mut cur, "test", false)
+        let error = read_array::<i32>(&mut cur, "test", false)
             .expect_err("must be error");
         assert_eq!(error.to_string(), "non-nullable field test was serialized as null");
     }
@@ -182,7 +182,7 @@ mod tests {
         let mut cur = Cursor::new(Vec::<u8>::new());
         cur.write_u32_varint(0).unwrap();
         cur.seek(SeekFrom::Start(0)).unwrap();
-        let error = k_read_array::<i32>(&mut cur, "test", true)
+        let error = read_array::<i32>(&mut cur, "test", true)
             .expect_err("must be error");
         assert_eq!(error.to_string(), "non-nullable field test was serialized as null");
     }
@@ -197,7 +197,7 @@ mod tests {
         let mut cur = Cursor::new(Vec::<u8>::new());
         cur.write_u32_varint(i32::MAX as u32 + 2).unwrap();
         cur.seek(SeekFrom::Start(0)).unwrap();
-        let error = k_read_array::<i32>(&mut cur, "test", true)
+        let error = read_array::<i32>(&mut cur, "test", true)
             .expect_err("must be error");
         assert_eq!(error.to_string(), "array field test had invalid length 2147483648");
     }
@@ -212,7 +212,7 @@ mod tests {
         let mut cur = Cursor::new(Vec::<u8>::new());
         cur.write_u32_varint(i32::MAX as u32 + 2).unwrap();
         cur.seek(SeekFrom::Start(0)).unwrap();
-        let error = k_read_nullable_array::<i32>(&mut cur, "test", true)
+        let error = read_nullable_array::<i32>(&mut cur, "test", true)
             .expect_err("must be error");
         assert_eq!(error.to_string(), "array field test had invalid length 2147483648");
     }

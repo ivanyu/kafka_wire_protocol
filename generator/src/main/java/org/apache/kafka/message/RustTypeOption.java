@@ -39,12 +39,12 @@ class RustTypeOption implements RustType {
             headerGenerator.addImport("crate::readable_writable::KafkaReadable");
             return String.format("Option::<String>::read_ext(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
         } else if (inner instanceof RustTypeBytes) {
-            headerGenerator.addImport("crate::bytes::k_read_nullable_bytes");
-            return String.format("k_read_nullable_bytes(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
+            headerGenerator.addImport("crate::bytes::read_nullable_bytes");
+            return String.format("read_nullable_bytes(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
         } else if (inner instanceof RustTypeVec) {
             RustTypeVec innerVec = (RustTypeVec) inner;
-            headerGenerator.addImport("crate::arrays::k_read_nullable_array");
-            return String.format("k_read_nullable_array::<%s>(%s, \"%s\", %b)",
+            headerGenerator.addImport("crate::arrays::read_nullable_array");
+            return String.format("read_nullable_array::<%s>(%s, \"%s\", %b)",
                 innerVec.inner.strRepr(false), readSource, fieldNameInRust, flexible);
         } else {
             headerGenerator.addImport("crate::readable_writable::KafkaReadable");
@@ -58,12 +58,12 @@ class RustTypeOption implements RustType {
         if (inner instanceof RustTypeString) {
             return inner.writeExpression(writeTarget, object, flexible, headerGenerator);
         } else if (inner instanceof RustTypeBytes) {
-            headerGenerator.addImport("crate::bytes::k_write_nullable_bytes");
-            return String.format("k_write_nullable_bytes(%s, \"%s\", %s.as_deref(), %b)",
+            headerGenerator.addImport("crate::bytes::write_nullable_bytes");
+            return String.format("write_nullable_bytes(%s, \"%s\", %s.as_deref(), %b)",
                 writeTarget, object, object, flexible);
         } else if (inner instanceof RustTypeVec) {
-            headerGenerator.addImport("crate::arrays::k_write_nullable_array");
-            return String.format("k_write_nullable_array(%s, \"%s\", %s.as_deref(), %b)",
+            headerGenerator.addImport("crate::arrays::write_nullable_array");
+            return String.format("write_nullable_array(%s, \"%s\", %s.as_deref(), %b)",
                 writeTarget, object, object, flexible);
         } else {
             String result = String.format("(if let Some(v) = &%s {", object);

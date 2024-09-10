@@ -30,15 +30,15 @@ class RustTypeVec implements RustType {
 
     @Override
     public String readExpression(String readSource, String fieldNameInRust, boolean flexible, RustHeaderGenerator headerGenerator) {
-        headerGenerator.addImport("crate::arrays::k_read_array");
-        return String.format("k_read_array::<%s>(%s, \"%s\", %b)",
+        headerGenerator.addImport("crate::arrays::read_array");
+        return String.format("read_array::<%s>(%s, \"%s\", %b)",
             inner.strRepr(false), readSource, fieldNameInRust, flexible);
     }
 
     @Override
     public String writeExpression(String writeTarget, String object, boolean flexible, RustHeaderGenerator headerGenerator) {
-        headerGenerator.addImport("crate::arrays::k_write_array");
-        return String.format("k_write_array(%s, \"%s\", &%s, %b)",
+        headerGenerator.addImport("crate::arrays::write_array");
+        return String.format("write_array(%s, \"%s\", &%s, %b)",
             writeTarget, object, object, flexible);
     }
 }
