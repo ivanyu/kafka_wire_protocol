@@ -2,7 +2,7 @@ use std::io::{Error, ErrorKind, Read, Result, Write};
 use serde::{Deserialize, Serialize};
 #[cfg(test)] use proptest_derive::Arbitrary;
 use varint_rs::{VarintReader, VarintWriter};
-use crate::readable_writable::{KafkaReadable, KafkaWritable};
+use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 #[cfg(test)] use crate::test_utils::serde_bytes;
 
@@ -15,7 +15,7 @@ pub struct RawTaggedField {
     pub data: Vec<u8>,
 }
 
-impl KafkaReadable for RawTaggedField {
+impl Readable for RawTaggedField {
     fn read(input: &mut impl Read) -> Result<Self> {
         let tag = input.read_u32_varint()? as i32;
         let data_len = input.read_u32_varint()? as i32;
@@ -25,7 +25,7 @@ impl KafkaReadable for RawTaggedField {
     }
 }
 
-impl KafkaWritable for RawTaggedField {
+impl Writable for RawTaggedField {
     fn write(&self, output: &mut impl Write) -> Result<()> {
         output.write_u32_varint(self.tag as u32)?;
         output.write_u32_varint(self.data.len() as u32)?;

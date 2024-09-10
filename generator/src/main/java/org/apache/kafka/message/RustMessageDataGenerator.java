@@ -345,8 +345,8 @@ public class RustMessageDataGenerator {
     private void generateClassReader(String className, StructSpec struct) {
         headerGenerator.addImport("std::io::Read");
         headerGenerator.addImport("std::io::Result");
-        headerGenerator.addImport("crate::readable_writable::KafkaReadable");
-        buffer.printf("impl KafkaReadable for %s {%n", className);
+        headerGenerator.addImport("crate::readable_writable::Readable");
+        buffer.printf("impl Readable for %s {%n", className);
         buffer.incrementIndent();
         buffer.printf("fn read(#[allow(unused)] input: &mut impl Read) -> Result<Self> {%n");
         buffer.incrementIndent();
@@ -438,8 +438,8 @@ public class RustMessageDataGenerator {
     private void generateClassWriter(String className, StructSpec struct) {
         headerGenerator.addImport("std::io::Write");
         headerGenerator.addImport("std::io::Result");
-        headerGenerator.addImport("crate::readable_writable::KafkaWritable");
-        buffer.printf("impl KafkaWritable for %s {%n", className);
+        headerGenerator.addImport("crate::readable_writable::Writable");
+        buffer.printf("impl Writable for %s {%n", className);
         buffer.incrementIndent();
         buffer.printf("fn write(&self, #[allow(unused)] output: &mut impl Write) -> Result<()> {%n");
         buffer.incrementIndent();

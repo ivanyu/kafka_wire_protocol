@@ -1,8 +1,8 @@
 use std::io::{Error, ErrorKind, Read, Result, Write};
-use crate::readable_writable::{KafkaReadable, KafkaWritable};
+use crate::readable_writable::{Readable, Writable};
 use crate::utils::{read_len_i16, write_len_i16};
 
-impl KafkaReadable for String {
+impl Readable for String {
     fn read(#[allow(unused)] input: &mut impl Read) -> Result<Self> {
         unimplemented!()
     }
@@ -21,7 +21,7 @@ impl KafkaReadable for String {
     }
 }
 
-impl KafkaWritable for String {
+impl Writable for String {
     fn write(&self, #[allow(unused)] output: &mut impl Write) -> Result<()> {
         unimplemented!()
     }
@@ -38,7 +38,7 @@ impl KafkaWritable for String {
     }
 }
 
-impl KafkaReadable for Option<String> {
+impl Readable for Option<String> {
     fn read(#[allow(unused)] input: &mut impl Read) -> Result<Self> {
         unimplemented!()
     }
@@ -54,7 +54,7 @@ impl KafkaReadable for Option<String> {
     }
 }
 
-impl KafkaWritable for Option<String> {
+impl Writable for Option<String> {
     fn write(&self, #[allow(unused)] output: &mut impl Write) -> Result<()> {
         unimplemented!()
     }

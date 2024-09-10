@@ -36,7 +36,7 @@ class RustTypeOption implements RustType {
     @Override
     public String readExpression(String readSource, String fieldNameInRust, boolean flexible, RustHeaderGenerator headerGenerator) {
         if (inner instanceof RustTypeString) {
-            headerGenerator.addImport("crate::readable_writable::KafkaReadable");
+            headerGenerator.addImport("crate::readable_writable::Readable");
             return String.format("Option::<String>::read_ext(%s, \"%s\", %b)", readSource, fieldNameInRust, flexible);
         } else if (inner instanceof RustTypeBytes) {
             headerGenerator.addImport("crate::bytes::read_nullable_bytes");
@@ -47,7 +47,7 @@ class RustTypeOption implements RustType {
             return String.format("read_nullable_array::<%s>(%s, \"%s\", %b)",
                 innerVec.inner.strRepr(false), readSource, fieldNameInRust, flexible);
         } else {
-            headerGenerator.addImport("crate::readable_writable::KafkaReadable");
+            headerGenerator.addImport("crate::readable_writable::Readable");
             return String.format("(if i8::read(input)? < 0 { Ok(None) } else { %s.map(Some) })",
                     inner.readExpression(readSource, fieldNameInRust, flexible, headerGenerator));
         }
