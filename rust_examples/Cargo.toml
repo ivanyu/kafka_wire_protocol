@@ -1,0 +1,9 @@
+[package]
+name = "rust_examples"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+kafka-proto = { path = "../rust" }
+testcontainers = { version = "0.22.0", features = ["blocking"] }
+byteorder = "1.5.0"
