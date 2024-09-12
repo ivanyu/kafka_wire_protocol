@@ -105,4 +105,4 @@ include 'clients',
     'trogdor'
 
 project(":storage:api").name = "storage-api"
-rootProject.name = 'kafka'
+rootProject.name = 'kafka_wire_protocol_generator'

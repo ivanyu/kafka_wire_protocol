@@ -4,12 +4,12 @@ use std::net::{Shutdown, TcpStream, ToSocketAddrs};
 use byteorder::{BigEndian, ReadBytesExt, WriteBytesExt};
 use paste::paste;
 use testcontainers::core::{ContainerPort, WaitFor};
-use testcontainers::GenericImage;
 use testcontainers::runners::SyncRunner;
+use testcontainers::GenericImage;
 
-use kafka_proto::api_message_type::ApiMessageType;
-use kafka_proto::markers::{Request, Response};
-use kafka_proto::readable_writable::{Readable, Writable};
+use kafka_wire_protocol::api_message_type::ApiMessageType;
+use kafka_wire_protocol::markers::{Request, Response};
+use kafka_wire_protocol::readable_writable::{Readable, Writable};
 
 struct Connection {
     stream: TcpStream,
@@ -40,7 +40,8 @@ impl Connection {
 
         match api_message_type.request_header_version(request_api_version) {
             0 => {
-                let header = kafka_proto::schema::request_header::v0::RequestHeader::new(
+                let header = kafka_wire_protocol::schema::request_header::v0::RequestHeader
+                ::new(
                     api_message_type.api_key,
                     request_api_version,
                     self.correlation_id,
@@ -49,7 +50,8 @@ impl Connection {
             }
 
             1 => {
-                let header = kafka_proto::schema::request_header::v1::RequestHeader::new(
+                let header = kafka_wire_protocol::schema::request_header::v1::RequestHeader
+                ::new(
                     api_message_type.api_key,
                     request_api_version,
                     self.correlation_id,
@@ -59,7 +61,8 @@ impl Connection {
             }
 
             2 => {
-                let header = kafka_proto::schema::request_header::v2::RequestHeader::new(
+                let header = kafka_wire_protocol::schema::request_header::v2::RequestHeader
+                ::new(
                     api_message_type.api_key,
                     request_api_version,
                     self.correlation_id,
@@ -90,10 +93,12 @@ impl Connection {
         let mut response_cur = Cursor::new(response_buf);
         let resp_correlation_id = match api_message_type.response_header_version(request_api_version) {
             0 =>
-                kafka_proto::schema::response_header::v0::ResponseHeader::read(&mut response_cur).unwrap().correlation_id,
+                kafka_wire_protocol::schema::response_header::v0::ResponseHeader
+                ::read(&mut response_cur).unwrap().correlation_id,
 
             1 =>
-                kafka_proto::schema::response_header::v1::ResponseHeader::read(&mut response_cur).unwrap().correlation_id,
+                kafka_wire_protocol::schema::response_header::v1::ResponseHeader
+                ::read(&mut response_cur).unwrap().correlation_id,
 
             v => panic!("Unexpected version {v}")
         };
@@ -142,8 +147,8 @@ fn test_api_versions(connection: &mut Connection) {
         ($version: literal) => {
             {
                 paste! {
-                    use kafka_proto::schema::api_versions_request::[<v $version>]::*;
-                    use kafka_proto::schema::api_versions_response::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::api_versions_request::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::api_versions_response::[<v $version>]::*;
                 }
 
                 let request = ApiVersionsRequest::new();
@@ -156,8 +161,8 @@ fn test_api_versions(connection: &mut Connection) {
     macro_rules! test_api_versions_v3 {
         (3) => {
             {
-                use kafka_proto::schema::api_versions_request::v3::*;
-                use kafka_proto::schema::api_versions_response::v3::*;
+                use kafka_wire_protocol::schema::api_versions_request::v3::*;
+                use kafka_wire_protocol::schema::api_versions_response::v3::*;
 
                 let request = ApiVersionsRequest::new("client".to_string(), "123".to_string());
                 let response: ApiVersionsResponse = connection.send_request(request);
@@ -185,8 +190,8 @@ fn test_create_topics(connection: &mut Connection) {
     macro_rules! test_create_topics_v0 {
         (0) => {
             {
-                use kafka_proto::schema::create_topics_request::v0::*;
-                use kafka_proto::schema::create_topics_response::v0::*;
+                use kafka_wire_protocol::schema::create_topics_request::v0::*;
+                use kafka_wire_protocol::schema::create_topics_response::v0::*;
 
                 let request = CreateTopicsRequest::new(
                     vec![
@@ -203,8 +208,8 @@ fn test_create_topics(connection: &mut Connection) {
         ($version: literal) => {
             {
                 paste! {
-                    use kafka_proto::schema::create_topics_request::[<v $version>]::*;
-                    use kafka_proto::schema::create_topics_response::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::create_topics_request::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::create_topics_response::[<v $version>]::*;
                 }
 
                 let request = CreateTopicsRequest::new(
@@ -242,8 +247,8 @@ fn test_alter_configs(connection: &mut Connection) {
         ($version: literal) => {
             {
                 paste! {
-                    use kafka_proto::schema::alter_configs_request::[<v $version>]::*;
-                    use kafka_proto::schema::alter_configs_response::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::alter_configs_request::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::alter_configs_response::[<v $version>]::*;
                 }
 
                 let request = AlterConfigsRequest::new(vec![
@@ -275,8 +280,8 @@ fn test_describe_configs(connection: &mut Connection) {
     macro_rules! test_describe_configs_v0 {
         (0) => {
             {
-                use kafka_proto::schema::describe_configs_request::v0::*;
-                use kafka_proto::schema::describe_configs_response::v0::*;
+                use kafka_wire_protocol::schema::describe_configs_request::v0::*;
+                use kafka_wire_protocol::schema::describe_configs_response::v0::*;
 
                 let request = DescribeConfigsRequest::new(vec![
                     DescribeConfigsResource::new(2, "topic0", None)
@@ -291,8 +296,8 @@ fn test_describe_configs(connection: &mut Connection) {
         ($version: literal) => {
             {
                 paste! {
-                    use kafka_proto::schema::describe_configs_request::[<v $version>]::*;
-                    use kafka_proto::schema::describe_configs_response::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::describe_configs_request::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::describe_configs_response::[<v $version>]::*;
                 }
 
                 let request = DescribeConfigsRequest::new(vec![
@@ -308,8 +313,8 @@ fn test_describe_configs(connection: &mut Connection) {
         ($version: literal) => {
             {
                 paste! {
-                    use kafka_proto::schema::describe_configs_request::[<v $version>]::*;
-                    use kafka_proto::schema::describe_configs_response::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::describe_configs_request::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::describe_configs_response::[<v $version>]::*;
                 }
 
                 let request = DescribeConfigsRequest::new(vec![
@@ -339,8 +344,8 @@ fn test_metadata(connection: &mut Connection) {
     macro_rules! test_metadata_v0 {
         (0) => {
             {
-                use kafka_proto::schema::metadata_request::v0::*;
-                use kafka_proto::schema::metadata_response::v0::*;
+                use kafka_wire_protocol::schema::metadata_request::v0::*;
+                use kafka_wire_protocol::schema::metadata_response::v0::*;
 
                 let request = MetadataRequest::new(vec![]);
                 let response: MetadataResponse = connection.send_request(request);
@@ -353,8 +358,8 @@ fn test_metadata(connection: &mut Connection) {
         ($version: literal) => {
             {
                 paste! {
-                    use kafka_proto::schema::metadata_request::[<v $version>]::*;
-                    use kafka_proto::schema::metadata_response::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::metadata_request::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::metadata_response::[<v $version>]::*;
                 }
 
                 let request = MetadataRequest::new(None);
@@ -368,8 +373,8 @@ fn test_metadata(connection: &mut Connection) {
         ($version: literal) => {
             {
                 paste! {
-                    use kafka_proto::schema::metadata_request::[<v $version>]::*;
-                    use kafka_proto::schema::metadata_response::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::metadata_request::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::metadata_response::[<v $version>]::*;
                 }
 
                 let request = MetadataRequest::new(None, false);
@@ -383,8 +388,8 @@ fn test_metadata(connection: &mut Connection) {
         ($version: literal) => {
             {
                 paste! {
-                    use kafka_proto::schema::metadata_request::[<v $version>]::*;
-                    use kafka_proto::schema::metadata_response::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::metadata_request::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::metadata_response::[<v $version>]::*;
                 }
 
                 let request = MetadataRequest::new(None, false, true, true);
@@ -398,8 +403,8 @@ fn test_metadata(connection: &mut Connection) {
         ($version: literal) => {
             {
                 paste! {
-                    use kafka_proto::schema::metadata_request::[<v $version>]::*;
-                    use kafka_proto::schema::metadata_response::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::metadata_request::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::metadata_response::[<v $version>]::*;
                 }
 
                 let request = MetadataRequest::new(None, false, true);
