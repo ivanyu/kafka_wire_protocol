@@ -1,11 +1,11 @@
 use byteorder::{BigEndian, ReadBytesExt, WriteBytesExt};
-use kafka_proto::api_message_type::ApiMessageType;
-use kafka_proto::markers::ApiMessage;
-use kafka_proto::readable_writable::{Readable, Writable};
-use kafka_proto::schema::api_versions_request::v3::ApiVersionsRequest;
-use kafka_proto::schema::api_versions_response::v3::ApiVersionsResponse;
-use kafka_proto::schema::request_header::v2::RequestHeader;
-use kafka_proto::schema::response_header::v0::ResponseHeader;
+use kafka_wire_protocol::api_message_type::ApiMessageType;
+use kafka_wire_protocol::markers::ApiMessage;
+use kafka_wire_protocol::readable_writable::{Readable, Writable};
+use kafka_wire_protocol::schema::api_versions_request::v3::ApiVersionsRequest;
+use kafka_wire_protocol::schema::api_versions_response::v3::ApiVersionsResponse;
+use kafka_wire_protocol::schema::request_header::v2::RequestHeader;
+use kafka_wire_protocol::schema::response_header::v0::ResponseHeader;
 use std::io::{Cursor, Read, Seek, SeekFrom, Write};
 use std::net::{Shutdown, TcpStream};
 use testcontainers::core::{ContainerPort, WaitFor};

@@ -874,7 +874,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "kafka-proto"
+name = "kafka_wire_protocol"
 version = "0.1.0"
 dependencies = [
  "base64 0.22.1",
