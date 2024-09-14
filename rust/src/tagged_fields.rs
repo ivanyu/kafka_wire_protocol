@@ -11,7 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 pub struct RawTaggedField {
     pub tag: i32,
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
-    #[cfg_attr(test, serde(with="serde_bytes"))]
+    #[cfg_attr(test, serde(with = "serde_bytes"))]
     pub data: Vec<u8>,
 }
 
@@ -34,15 +34,6 @@ impl Writable for RawTaggedField {
     }
 }
 
-pub(crate) fn read_unknown_tagged_fields(input: &mut impl Read) -> Result<Vec<RawTaggedField>> {
-    let arr_len = input.read_u32_varint()?;
-    let mut vec: Vec<RawTaggedField> = Vec::with_capacity(arr_len as usize);
-    for _ in 0..arr_len {
-        vec.push(RawTaggedField::read(input)?);
-    }
-    Ok(vec)
-}
-
 pub(crate) fn read_tagged_fields(input: &mut impl Read, mut callback: impl FnMut(i32, &[u8]) -> Result<bool>) -> Result<Vec<RawTaggedField>> {
     let arr_len = input.read_u32_varint()?;
     let mut unknown_tagged_fields: Vec<RawTaggedField> = Vec::new();
@@ -53,24 +44,6 @@ pub(crate) fn read_tagged_fields(input: &mut impl Read, mut callback: impl FnMut
         }
     }
     Ok(unknown_tagged_fields)
-}
-
-pub(crate) fn write_unknown_tagged_fields(output: &mut impl Write, fields: &[RawTaggedField]) -> Result<()> {
-    for x in fields.windows(2) {
-        let tag0 = &x[0].tag;
-        let tag1 = &x[1].tag;
-        if tag0 >= tag1 {
-            return Err(Error::new(ErrorKind::Other, format!(
-                "Invalid raw tag field list: tag {tag1:?} comes after tag {tag0:?}, but is not higher than it."
-            )));
-        }
-    }
-
-    output.write_u32_varint(fields.len() as u32)?;
-    for el in fields {
-        el.write(output)?
-    }
-    Ok(())
 }
 
 pub(crate) fn write_tagged_fields(output: &mut impl Write, known_tagged_fields: &[RawTaggedField], unknown_tagged_fields: &[RawTaggedField]) -> Result<()> {
@@ -132,12 +105,16 @@ mod tests {
             RawTaggedField { tag: 1, data: vec![0, 1] },
             RawTaggedField { tag: 4, data: vec![0, 1, 2, 3, 4, 5] }
         };
+        let unknown_fields: Vec<RawTaggedField> = vec![];
 
         let mut cur = Cursor::new(Vec::<u8>::new());
-        write_unknown_tagged_fields(&mut cur, &original_fields).unwrap();
+
+        write_tagged_fields(&mut cur, &original_fields, &unknown_fields).unwrap();
 
         cur.seek(SeekFrom::Start(0)).unwrap();
-        let read_fields = read_unknown_tagged_fields(&mut cur).unwrap();
+
+        let tagged_fields_callback = |_: i32, _: &[u8]| { Ok(false) };
+        let read_fields = read_tagged_fields(&mut cur, &tagged_fields_callback).unwrap();
 
         assert_eq!(read_fields, original_fields);
     }
@@ -149,22 +126,25 @@ mod tests {
             RawTaggedField { tag: 0, data: vec![0, 1, 2, 3] },
             RawTaggedField { tag: 4, data: vec![0, 1, 2, 3, 4, 5] }
         };
+        let unknown_fields: Vec<RawTaggedField> = vec![];
 
         let mut cur = Cursor::new(Vec::<u8>::new());
-        let error = write_unknown_tagged_fields(&mut cur, &original_fields)
+        let error = write_tagged_fields(&mut cur, &original_fields, &unknown_fields)
             .expect_err("must_be_error");
         assert_eq!(error.to_string(), "Invalid raw tag field list: tag 0 comes after tag 1, but is not higher than it.");
     }
 
     #[test]
     fn test_serde_multiple_fields_empty() {
-        let original_fields = vec![];
+        let original_fields: Vec<RawTaggedField> = vec![];
+        let unknown_fields: Vec<RawTaggedField> = vec![];
 
         let mut cur = Cursor::new(Vec::<u8>::new());
-        write_unknown_tagged_fields(&mut cur, &original_fields).unwrap();
+        write_tagged_fields(&mut cur, &original_fields, &unknown_fields).unwrap();
 
         cur.seek(SeekFrom::Start(0)).unwrap();
-        let read_fields = read_unknown_tagged_fields(&mut cur).unwrap();
+        let tagged_fields_callback = |_: i32, _: &[u8]| { Ok(false) };
+        let read_fields = read_tagged_fields(&mut cur, &tagged_fields_callback).unwrap();
 
         assert_eq!(read_fields, original_fields);
     }
