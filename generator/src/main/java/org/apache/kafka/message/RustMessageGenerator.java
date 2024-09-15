@@ -12,7 +12,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static net.sourceforge.argparse4j.impl.Arguments.store;
 
@@ -51,9 +54,11 @@ public class RustMessageGenerator {
         String schemaOutputDir = outputDir + "/schema";
         Files.createDirectories(Paths.get(schemaOutputDir));
         List<String> messageTypeMods = new ArrayList<>();
-        try (DirectoryStream<Path> directoryStream = Files
-                .newDirectoryStream(Paths.get(inputDir), MessageGenerator.JSON_GLOB)) {
-            for (Path inputPath : directoryStream) {
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(inputDir), MessageGenerator.JSON_GLOB)) {
+            List<Path> sortedPaths = StreamSupport.stream(directoryStream.spliterator(), false)
+                    .sorted(Comparator.comparing(Path::toString))
+                    .collect(Collectors.toList());
+            for (Path inputPath : sortedPaths) {
                 String messageTypeMod = processJson(schemaOutputDir, inputPath, apiMessageTypeGenerator);
                 if (messageTypeMod != null) {
                     messageTypeMods.add(messageTypeMod);
