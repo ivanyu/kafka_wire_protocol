@@ -36,7 +36,7 @@ Apache Kafka's wire protocol is defined as a set of [JSON files](clients/src/mai
 
 This project contains the unaltered code of the `clients` module and the slightly altered code of `generator` module from the [Apache Kafka code base](https://github.com/apache/kafka). The additions are the following:
 
-1. The supporting Rust code and non-generated tests, located in [rust/](rust/).
+1. The Rust code (generated and handwritten), located in [rust/](rust/).
 2. The Rust examples, located in [rust_examples/](rust_examples/).
 3. [RustMessageGenerator.java](java/org/apache/kafka/message/RustMessageGenerator.java) and its supporting classes with the `Rust` prefixes, which contain the actual generation logic.
 4. The `processMessagesRust` Gradle task for running the generator.

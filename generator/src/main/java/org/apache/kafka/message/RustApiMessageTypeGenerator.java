@@ -229,6 +229,7 @@ public class RustApiMessageTypeGenerator extends ApiMessageTypeGenerator {
     }
 
     private void write(BufferedWriter writer) throws IOException {
+        RustUtils.addGeneratedHeader(writer);
         headerGenerator.buffer.write(writer);
         buffer.write(writer);
     }
