@@ -539,6 +539,7 @@ public class RustMessageDataGenerator {
     }
 
     void write(BufferedWriter writer) throws Exception {
+        RustUtils.addGeneratedHeader(writer);
         headerGenerator.buffer.write(writer);
         buffer.write(writer);
     }
