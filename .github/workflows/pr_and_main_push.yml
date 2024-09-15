@@ -1,12 +1,12 @@
-name: Pull request, push to main, and tag pipeline
+name: Pull request and push to main
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
 jobs:
-  run_tests:
-    name: Run tests
+  check:
+    name: Checks
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -17,6 +17,12 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+
+      - name: (Re-)generate
+        run: make generate
+
+      - name: Check git diff is empty
+        run: git diff --exit-code
 
       - name: Set up Rust
         uses: actions-rust-lang/setup-rust-toolchain@v1
