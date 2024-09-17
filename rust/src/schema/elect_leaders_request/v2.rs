@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ElectLeadersRequest, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ElectLeadersRequest {
@@ -21,7 +22,7 @@ pub struct ElectLeadersRequest {
     pub topic_partitions: Option<Vec<TopicPartitions>>,
     /// The time in ms to wait for the election to complete.
     pub timeout_ms: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -102,6 +103,7 @@ impl Writable for ElectLeadersRequest {
     }
 }
 
+/// TopicPartitions, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicPartitions {
@@ -111,22 +113,10 @@ pub struct TopicPartitions {
     /// The partitions of this topic whose leader should be elected.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<i32>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TopicPartitions {
-    fn api_key(&self) -> i16 {
-        43
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Request for TopicPartitions { }
 
 impl Default for TopicPartitions {
     fn default() -> Self {

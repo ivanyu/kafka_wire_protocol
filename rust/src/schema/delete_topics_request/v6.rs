@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DeleteTopicsRequest, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteTopicsRequest {
@@ -20,7 +21,7 @@ pub struct DeleteTopicsRequest {
     pub topics: Vec<DeleteTopicState>,
     /// The length of time in milliseconds to wait for the deletions to complete.
     pub timeout_ms: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -96,6 +97,7 @@ impl Writable for DeleteTopicsRequest {
     }
 }
 
+/// DeleteTopicState, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteTopicState {
@@ -105,22 +107,10 @@ pub struct DeleteTopicState {
     /// The unique topic ID
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub topic_id: Uuid,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DeleteTopicState {
-    fn api_key(&self) -> i16 {
-        20
-    }
-    
-    fn version(&self) -> i16 {
-        6
-    }
-}
-
-impl Request for DeleteTopicState { }
 
 impl Default for DeleteTopicState {
     fn default() -> Self {

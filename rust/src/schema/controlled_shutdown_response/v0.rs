@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ControlledShutdownResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ControlledShutdownResponse {
@@ -82,6 +83,7 @@ impl Writable for ControlledShutdownResponse {
     }
 }
 
+/// RemainingPartition, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct RemainingPartition {
@@ -91,18 +93,6 @@ pub struct RemainingPartition {
     /// The index of the partition.
     pub partition_index: i32,
 }
-
-impl ApiMessage for RemainingPartition {
-    fn api_key(&self) -> i16 {
-        7
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for RemainingPartition { }
 
 impl Default for RemainingPartition {
     fn default() -> Self {

@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeLogDirsResponse, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeLogDirsResponse {
@@ -21,7 +22,7 @@ pub struct DescribeLogDirsResponse {
     /// The log directories.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub results: Vec<DescribeLogDirsResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -102,6 +103,7 @@ impl Writable for DescribeLogDirsResponse {
     }
 }
 
+/// DescribeLogDirsResult, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeLogDirsResult {
@@ -113,22 +115,10 @@ pub struct DescribeLogDirsResult {
     /// Each topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<DescribeLogDirsTopic>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribeLogDirsResult {
-    fn api_key(&self) -> i16 {
-        35
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for DescribeLogDirsResult { }
 
 impl Default for DescribeLogDirsResult {
     fn default() -> Self {
@@ -194,6 +184,7 @@ impl Writable for DescribeLogDirsResult {
     }
 }
 
+/// DescribeLogDirsTopic, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeLogDirsTopic {
@@ -203,22 +194,10 @@ pub struct DescribeLogDirsTopic {
     /// 
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<DescribeLogDirsPartition>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribeLogDirsTopic {
-    fn api_key(&self) -> i16 {
-        35
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for DescribeLogDirsTopic { }
 
 impl Default for DescribeLogDirsTopic {
     fn default() -> Self {
@@ -279,6 +258,7 @@ impl Writable for DescribeLogDirsTopic {
     }
 }
 
+/// DescribeLogDirsPartition, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeLogDirsPartition {
@@ -290,22 +270,10 @@ pub struct DescribeLogDirsPartition {
     pub offset_lag: i64,
     /// True if this log is created by AlterReplicaLogDirsRequest and will replace the current log of the replica in the future.
     pub is_future_key: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribeLogDirsPartition {
-    fn api_key(&self) -> i16 {
-        35
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for DescribeLogDirsPartition { }
 
 impl Default for DescribeLogDirsPartition {
     fn default() -> Self {

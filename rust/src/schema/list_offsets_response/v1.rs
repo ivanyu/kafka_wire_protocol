@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ListOffsetsResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListOffsetsResponse {
@@ -75,6 +76,7 @@ impl Writable for ListOffsetsResponse {
     }
 }
 
+/// ListOffsetsTopicResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListOffsetsTopicResponse {
@@ -85,18 +87,6 @@ pub struct ListOffsetsTopicResponse {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<ListOffsetsPartitionResponse>,
 }
-
-impl ApiMessage for ListOffsetsTopicResponse {
-    fn api_key(&self) -> i16 {
-        2
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for ListOffsetsTopicResponse { }
 
 impl Default for ListOffsetsTopicResponse {
     fn default() -> Self {
@@ -148,6 +138,7 @@ impl Writable for ListOffsetsTopicResponse {
     }
 }
 
+/// ListOffsetsPartitionResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListOffsetsPartitionResponse {
@@ -160,18 +151,6 @@ pub struct ListOffsetsPartitionResponse {
     /// The returned offset.
     pub offset: i64,
 }
-
-impl ApiMessage for ListOffsetsPartitionResponse {
-    fn api_key(&self) -> i16 {
-        2
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for ListOffsetsPartitionResponse { }
 
 impl Default for ListOffsetsPartitionResponse {
     fn default() -> Self {

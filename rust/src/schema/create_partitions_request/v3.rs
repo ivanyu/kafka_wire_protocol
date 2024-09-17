@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// CreatePartitionsRequest, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatePartitionsRequest {
@@ -21,7 +22,7 @@ pub struct CreatePartitionsRequest {
     pub timeout_ms: i32,
     /// If true, then validate the request, but don't actually increase the number of partitions.
     pub validate_only: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -102,6 +103,7 @@ impl Writable for CreatePartitionsRequest {
     }
 }
 
+/// CreatePartitionsTopic, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatePartitionsTopic {
@@ -113,22 +115,10 @@ pub struct CreatePartitionsTopic {
     /// The new partition assignments.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_vec()"))]
     pub assignments: Option<Vec<CreatePartitionsAssignment>>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for CreatePartitionsTopic {
-    fn api_key(&self) -> i16 {
-        37
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Request for CreatePartitionsTopic { }
 
 impl Default for CreatePartitionsTopic {
     fn default() -> Self {
@@ -194,28 +184,17 @@ impl Writable for CreatePartitionsTopic {
     }
 }
 
+/// CreatePartitionsAssignment, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatePartitionsAssignment {
     /// The assigned broker IDs.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub broker_ids: Vec<i32>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for CreatePartitionsAssignment {
-    fn api_key(&self) -> i16 {
-        37
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Request for CreatePartitionsAssignment { }
 
 impl Default for CreatePartitionsAssignment {
     fn default() -> Self {

@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ListPartitionReassignmentsRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListPartitionReassignmentsRequest {
@@ -19,7 +20,7 @@ pub struct ListPartitionReassignmentsRequest {
     /// The topics to list partition reassignments for, or null to list everything.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_vec()"))]
     pub topics: Option<Vec<ListPartitionReassignmentsTopics>>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for ListPartitionReassignmentsRequest {
     }
 }
 
+/// ListPartitionReassignmentsTopics, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListPartitionReassignmentsTopics {
@@ -104,22 +106,10 @@ pub struct ListPartitionReassignmentsTopics {
     /// The partitions to list partition reassignments for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_indexes: Vec<i32>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ListPartitionReassignmentsTopics {
-    fn api_key(&self) -> i16 {
-        46
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for ListPartitionReassignmentsTopics { }
 
 impl Default for ListPartitionReassignmentsTopics {
     fn default() -> Self {

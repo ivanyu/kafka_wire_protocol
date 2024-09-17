@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// CreateDelegationTokenRequest, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreateDelegationTokenRequest {
@@ -25,7 +26,7 @@ pub struct CreateDelegationTokenRequest {
     pub renewers: Vec<CreatableRenewers>,
     /// The maximum lifetime of the token in milliseconds, or -1 to use the server side default.
     pub max_lifetime_ms: i64,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -111,6 +112,7 @@ impl Writable for CreateDelegationTokenRequest {
     }
 }
 
+/// CreatableRenewers, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatableRenewers {
@@ -120,22 +122,10 @@ pub struct CreatableRenewers {
     /// The name of the Kafka principal.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub principal_name: String,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for CreatableRenewers {
-    fn api_key(&self) -> i16 {
-        38
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Request for CreatableRenewers { }
 
 impl Default for CreatableRenewers {
     fn default() -> Self {

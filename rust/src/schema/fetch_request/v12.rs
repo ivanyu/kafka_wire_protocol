@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// FetchRequest, version 12.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct FetchRequest {
@@ -40,7 +41,7 @@ pub struct FetchRequest {
     /// Rack ID of the consumer making this request
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub rack_id: String,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -171,6 +172,7 @@ impl Writable for FetchRequest {
     }
 }
 
+/// FetchTopic, version 12.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct FetchTopic {
@@ -180,22 +182,10 @@ pub struct FetchTopic {
     /// The partitions to fetch.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<FetchPartition>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for FetchTopic {
-    fn api_key(&self) -> i16 {
-        1
-    }
-    
-    fn version(&self) -> i16 {
-        12
-    }
-}
-
-impl Request for FetchTopic { }
 
 impl Default for FetchTopic {
     fn default() -> Self {
@@ -256,6 +246,7 @@ impl Writable for FetchTopic {
     }
 }
 
+/// FetchPartition, version 12.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct FetchPartition {
@@ -271,22 +262,10 @@ pub struct FetchPartition {
     pub log_start_offset: i64,
     /// The maximum bytes to fetch from this partition.  See KIP-74 for cases where this limit may not be honored.
     pub partition_max_bytes: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for FetchPartition {
-    fn api_key(&self) -> i16 {
-        1
-    }
-    
-    fn version(&self) -> i16 {
-        12
-    }
-}
-
-impl Request for FetchPartition { }
 
 impl Default for FetchPartition {
     fn default() -> Self {
@@ -367,6 +346,7 @@ impl Writable for FetchPartition {
     }
 }
 
+/// ForgottenTopic, version 12.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ForgottenTopic {
@@ -376,22 +356,10 @@ pub struct ForgottenTopic {
     /// The partitions indexes to forget.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<i32>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ForgottenTopic {
-    fn api_key(&self) -> i16 {
-        1
-    }
-    
-    fn version(&self) -> i16 {
-        12
-    }
-}
-
-impl Request for ForgottenTopic { }
 
 impl Default for ForgottenTopic {
     fn default() -> Self {

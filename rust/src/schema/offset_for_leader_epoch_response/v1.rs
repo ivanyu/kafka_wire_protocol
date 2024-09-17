@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// OffsetForLeaderEpochResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetForLeaderEpochResponse {
@@ -75,6 +76,7 @@ impl Writable for OffsetForLeaderEpochResponse {
     }
 }
 
+/// OffsetForLeaderTopicResult, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetForLeaderTopicResult {
@@ -85,18 +87,6 @@ pub struct OffsetForLeaderTopicResult {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<EpochEndOffset>,
 }
-
-impl ApiMessage for OffsetForLeaderTopicResult {
-    fn api_key(&self) -> i16 {
-        23
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for OffsetForLeaderTopicResult { }
 
 impl Default for OffsetForLeaderTopicResult {
     fn default() -> Self {
@@ -148,6 +138,7 @@ impl Writable for OffsetForLeaderTopicResult {
     }
 }
 
+/// EpochEndOffset, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct EpochEndOffset {
@@ -160,18 +151,6 @@ pub struct EpochEndOffset {
     /// The end offset of the epoch.
     pub end_offset: i64,
 }
-
-impl ApiMessage for EpochEndOffset {
-    fn api_key(&self) -> i16 {
-        23
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for EpochEndOffset { }
 
 impl Default for EpochEndOffset {
     fn default() -> Self {

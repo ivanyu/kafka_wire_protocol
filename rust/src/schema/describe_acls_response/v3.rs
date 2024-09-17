@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeAclsResponse, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeAclsResponse {
@@ -24,7 +25,7 @@ pub struct DescribeAclsResponse {
     /// Each Resource that is referenced in an ACL.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub resources: Vec<DescribeAclsResource>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -110,6 +111,7 @@ impl Writable for DescribeAclsResponse {
     }
 }
 
+/// DescribeAclsResource, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeAclsResource {
@@ -123,22 +125,10 @@ pub struct DescribeAclsResource {
     /// The ACLs.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub acls: Vec<AclDescription>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribeAclsResource {
-    fn api_key(&self) -> i16 {
-        29
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for DescribeAclsResource { }
 
 impl Default for DescribeAclsResource {
     fn default() -> Self {
@@ -209,6 +199,7 @@ impl Writable for DescribeAclsResource {
     }
 }
 
+/// AclDescription, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AclDescription {
@@ -222,22 +213,10 @@ pub struct AclDescription {
     pub operation: i8,
     /// The ACL permission type.
     pub permission_type: i8,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for AclDescription {
-    fn api_key(&self) -> i16 {
-        29
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for AclDescription { }
 
 impl Default for AclDescription {
     fn default() -> Self {

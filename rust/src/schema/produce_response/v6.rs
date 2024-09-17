@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ProduceResponse, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ProduceResponse {
@@ -82,6 +83,7 @@ impl Writable for ProduceResponse {
     }
 }
 
+/// TopicProduceResponse, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicProduceResponse {
@@ -92,18 +94,6 @@ pub struct TopicProduceResponse {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_responses: Vec<PartitionProduceResponse>,
 }
-
-impl ApiMessage for TopicProduceResponse {
-    fn api_key(&self) -> i16 {
-        0
-    }
-    
-    fn version(&self) -> i16 {
-        6
-    }
-}
-
-impl Response for TopicProduceResponse { }
 
 impl Default for TopicProduceResponse {
     fn default() -> Self {
@@ -155,6 +145,7 @@ impl Writable for TopicProduceResponse {
     }
 }
 
+/// PartitionProduceResponse, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionProduceResponse {
@@ -169,18 +160,6 @@ pub struct PartitionProduceResponse {
     /// The log start offset.
     pub log_start_offset: i64,
 }
-
-impl ApiMessage for PartitionProduceResponse {
-    fn api_key(&self) -> i16 {
-        0
-    }
-    
-    fn version(&self) -> i16 {
-        6
-    }
-}
-
-impl Response for PartitionProduceResponse { }
 
 impl Default for PartitionProduceResponse {
     fn default() -> Self {

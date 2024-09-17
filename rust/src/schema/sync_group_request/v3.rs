@@ -11,6 +11,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::{proptest_strategies, serde_bytes};
 
+/// SyncGroupRequest, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct SyncGroupRequest {
@@ -107,6 +108,7 @@ impl Writable for SyncGroupRequest {
     }
 }
 
+/// SyncGroupRequestAssignment, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct SyncGroupRequestAssignment {
@@ -118,18 +120,6 @@ pub struct SyncGroupRequestAssignment {
     #[cfg_attr(test, serde(with="serde_bytes"))]
     pub assignment: Vec<u8>,
 }
-
-impl ApiMessage for SyncGroupRequestAssignment {
-    fn api_key(&self) -> i16 {
-        14
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Request for SyncGroupRequestAssignment { }
 
 impl Default for SyncGroupRequestAssignment {
     fn default() -> Self {

@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::{proptest_strategies, serde_bytes};
 
+/// DescribeDelegationTokenResponse, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeDelegationTokenResponse {
@@ -22,7 +23,7 @@ pub struct DescribeDelegationTokenResponse {
     pub tokens: Vec<DescribedDelegationToken>,
     /// The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota.
     pub throttle_time_ms: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -103,6 +104,7 @@ impl Writable for DescribeDelegationTokenResponse {
     }
 }
 
+/// DescribedDelegationToken, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribedDelegationToken {
@@ -128,22 +130,10 @@ pub struct DescribedDelegationToken {
     /// Those who are able to renew this token before it expires.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub renewers: Vec<DescribedDelegationTokenRenewer>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribedDelegationToken {
-    fn api_key(&self) -> i16 {
-        41
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Response for DescribedDelegationToken { }
 
 impl Default for DescribedDelegationToken {
     fn default() -> Self {
@@ -234,6 +224,7 @@ impl Writable for DescribedDelegationToken {
     }
 }
 
+/// DescribedDelegationTokenRenewer, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribedDelegationTokenRenewer {
@@ -243,22 +234,10 @@ pub struct DescribedDelegationTokenRenewer {
     /// The renewer principal name
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub principal_name: String,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribedDelegationTokenRenewer {
-    fn api_key(&self) -> i16 {
-        41
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Response for DescribedDelegationTokenRenewer { }
 
 impl Default for DescribedDelegationTokenRenewer {
     fn default() -> Self {

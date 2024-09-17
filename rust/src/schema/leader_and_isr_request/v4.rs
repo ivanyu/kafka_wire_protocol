@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// LeaderAndIsrRequest, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderAndIsrRequest {
@@ -26,7 +27,7 @@ pub struct LeaderAndIsrRequest {
     /// The current live leaders.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub live_leaders: Vec<LeaderAndIsrLiveLeader>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -117,6 +118,7 @@ impl Writable for LeaderAndIsrRequest {
     }
 }
 
+/// LeaderAndIsrTopicState, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderAndIsrTopicState {
@@ -126,22 +128,10 @@ pub struct LeaderAndIsrTopicState {
     /// The state of each partition
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_states: Vec<LeaderAndIsrPartitionState>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for LeaderAndIsrTopicState {
-    fn api_key(&self) -> i16 {
-        4
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Request for LeaderAndIsrTopicState { }
 
 impl Default for LeaderAndIsrTopicState {
     fn default() -> Self {
@@ -202,6 +192,7 @@ impl Writable for LeaderAndIsrTopicState {
     }
 }
 
+/// LeaderAndIsrLiveLeader, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderAndIsrLiveLeader {
@@ -212,22 +203,10 @@ pub struct LeaderAndIsrLiveLeader {
     pub host_name: String,
     /// The leader's port.
     pub port: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for LeaderAndIsrLiveLeader {
-    fn api_key(&self) -> i16 {
-        4
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Request for LeaderAndIsrLiveLeader { }
 
 impl Default for LeaderAndIsrLiveLeader {
     fn default() -> Self {
@@ -293,6 +272,7 @@ impl Writable for LeaderAndIsrLiveLeader {
     }
 }
 
+/// LeaderAndIsrPartitionState, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderAndIsrPartitionState {
@@ -320,22 +300,10 @@ pub struct LeaderAndIsrPartitionState {
     pub removing_replicas: Vec<i32>,
     /// Whether the replica should have existed on the broker or not.
     pub is_new: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for LeaderAndIsrPartitionState {
-    fn api_key(&self) -> i16 {
-        4
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Request for LeaderAndIsrPartitionState { }
 
 impl Default for LeaderAndIsrPartitionState {
     fn default() -> Self {

@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// UpdateRaftVoterRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdateRaftVoterRequest {
@@ -28,7 +29,7 @@ pub struct UpdateRaftVoterRequest {
     pub listeners: Vec<Listener>,
     /// The range of versions of the protocol that the replica supports
     pub kraft_version_feature: KRaftVersionFeature,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -119,6 +120,7 @@ impl Writable for UpdateRaftVoterRequest {
     }
 }
 
+/// Listener, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Listener {
@@ -130,22 +132,10 @@ pub struct Listener {
     pub host: String,
     /// The port
     pub port: u16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for Listener {
-    fn api_key(&self) -> i16 {
-        82
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for Listener { }
 
 impl Default for Listener {
     fn default() -> Self {
@@ -211,6 +201,7 @@ impl Writable for Listener {
     }
 }
 
+/// KRaftVersionFeature, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct KRaftVersionFeature {
@@ -218,22 +209,10 @@ pub struct KRaftVersionFeature {
     pub min_supported_version: i16,
     /// The maximum supported KRaft protocol version
     pub max_supported_version: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for KRaftVersionFeature {
-    fn api_key(&self) -> i16 {
-        82
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for KRaftVersionFeature { }
 
 impl Default for KRaftVersionFeature {
     fn default() -> Self {

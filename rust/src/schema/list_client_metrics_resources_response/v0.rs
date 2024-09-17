@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ListClientMetricsResourcesResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListClientMetricsResourcesResponse {
@@ -21,7 +22,7 @@ pub struct ListClientMetricsResourcesResponse {
     /// Each client metrics resource in the response.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub client_metrics_resources: Vec<ClientMetricsResource>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -102,28 +103,17 @@ impl Writable for ListClientMetricsResourcesResponse {
     }
 }
 
+/// ClientMetricsResource, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ClientMetricsResource {
     /// The resource name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ClientMetricsResource {
-    fn api_key(&self) -> i16 {
-        74
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for ClientMetricsResource { }
 
 impl Default for ClientMetricsResource {
     fn default() -> Self {

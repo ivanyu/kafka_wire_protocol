@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ListGroupsResponse, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListGroupsResponse {
@@ -21,7 +22,7 @@ pub struct ListGroupsResponse {
     /// Each group in the response.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub groups: Vec<ListedGroup>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -102,6 +103,7 @@ impl Writable for ListGroupsResponse {
     }
 }
 
+/// ListedGroup, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListedGroup {
@@ -117,22 +119,10 @@ pub struct ListedGroup {
     /// The group type name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub group_type: String,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ListedGroup {
-    fn api_key(&self) -> i16 {
-        16
-    }
-    
-    fn version(&self) -> i16 {
-        5
-    }
-}
-
-impl Response for ListedGroup { }
 
 impl Default for ListedGroup {
     fn default() -> Self {

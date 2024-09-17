@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// FetchRequest, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct FetchRequest {
@@ -103,6 +104,7 @@ impl Writable for FetchRequest {
     }
 }
 
+/// FetchTopic, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct FetchTopic {
@@ -113,18 +115,6 @@ pub struct FetchTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<FetchPartition>,
 }
-
-impl ApiMessage for FetchTopic {
-    fn api_key(&self) -> i16 {
-        1
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Request for FetchTopic { }
 
 impl Default for FetchTopic {
     fn default() -> Self {
@@ -176,6 +166,7 @@ impl Writable for FetchTopic {
     }
 }
 
+/// FetchPartition, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct FetchPartition {
@@ -186,18 +177,6 @@ pub struct FetchPartition {
     /// The maximum bytes to fetch from this partition.  See KIP-74 for cases where this limit may not be honored.
     pub partition_max_bytes: i32,
 }
-
-impl ApiMessage for FetchPartition {
-    fn api_key(&self) -> i16 {
-        1
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Request for FetchPartition { }
 
 impl Default for FetchPartition {
     fn default() -> Self {

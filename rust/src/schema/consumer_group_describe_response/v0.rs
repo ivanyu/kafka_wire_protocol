@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ConsumerGroupDescribeResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ConsumerGroupDescribeResponse {
@@ -20,7 +21,7 @@ pub struct ConsumerGroupDescribeResponse {
     /// Each described group.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub groups: Vec<DescribedGroup>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -96,6 +97,7 @@ impl Writable for ConsumerGroupDescribeResponse {
     }
 }
 
+/// DescribedGroup, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribedGroup {
@@ -122,22 +124,10 @@ pub struct DescribedGroup {
     pub members: Vec<Member>,
     /// 32-bit bitfield to represent authorized operations for this group.
     pub authorized_operations: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribedGroup {
-    fn api_key(&self) -> i16 {
-        69
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for DescribedGroup { }
 
 impl Default for DescribedGroup {
     fn default() -> Self {
@@ -233,6 +223,7 @@ impl Writable for DescribedGroup {
     }
 }
 
+/// Member, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Member {
@@ -263,22 +254,10 @@ pub struct Member {
     pub assignment: Assignment,
     /// The target assignment.
     pub target_assignment: Assignment,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for Member {
-    fn api_key(&self) -> i16 {
-        69
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for Member { }
 
 impl Default for Member {
     fn default() -> Self {
@@ -379,28 +358,17 @@ impl Writable for Member {
     }
 }
 
+/// Assignment, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Assignment {
     /// The assigned topic-partitions to the member.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topic_partitions: Vec<TopicPartitions>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for Assignment {
-    fn api_key(&self) -> i16 {
-        69
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for Assignment { }
 
 impl Default for Assignment {
     fn default() -> Self {
@@ -456,6 +424,7 @@ impl Writable for Assignment {
     }
 }
 
+/// TopicPartitions, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicPartitions {
@@ -468,22 +437,10 @@ pub struct TopicPartitions {
     /// The partitions.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<i32>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TopicPartitions {
-    fn api_key(&self) -> i16 {
-        69
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for TopicPartitions { }
 
 impl Default for TopicPartitions {
     fn default() -> Self {

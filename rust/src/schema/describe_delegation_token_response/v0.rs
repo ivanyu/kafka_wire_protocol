@@ -11,6 +11,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::{proptest_strategies, serde_bytes};
 
+/// DescribeDelegationTokenResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeDelegationTokenResponse {
@@ -90,6 +91,7 @@ impl Writable for DescribeDelegationTokenResponse {
     }
 }
 
+/// DescribedDelegationToken, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribedDelegationToken {
@@ -116,18 +118,6 @@ pub struct DescribedDelegationToken {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub renewers: Vec<DescribedDelegationTokenRenewer>,
 }
-
-impl ApiMessage for DescribedDelegationToken {
-    fn api_key(&self) -> i16 {
-        41
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for DescribedDelegationToken { }
 
 impl Default for DescribedDelegationToken {
     fn default() -> Self {
@@ -209,6 +199,7 @@ impl Writable for DescribedDelegationToken {
     }
 }
 
+/// DescribedDelegationTokenRenewer, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribedDelegationTokenRenewer {
@@ -219,18 +210,6 @@ pub struct DescribedDelegationTokenRenewer {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub principal_name: String,
 }
-
-impl ApiMessage for DescribedDelegationTokenRenewer {
-    fn api_key(&self) -> i16 {
-        41
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for DescribedDelegationTokenRenewer { }
 
 impl Default for DescribedDelegationTokenRenewer {
     fn default() -> Self {

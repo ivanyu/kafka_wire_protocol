@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ProduceResponse, version 11.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ProduceResponse {
@@ -22,7 +23,7 @@ pub struct ProduceResponse {
     /// Endpoints for all current-leaders enumerated in PartitionProduceResponses, with errors NOT_LEADER_OR_FOLLOWER.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub node_endpoints: Vec<NodeEndpoint>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -113,6 +114,7 @@ impl Writable for ProduceResponse {
     }
 }
 
+/// TopicProduceResponse, version 11.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicProduceResponse {
@@ -122,22 +124,10 @@ pub struct TopicProduceResponse {
     /// Each partition that we produced to within the topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_responses: Vec<PartitionProduceResponse>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TopicProduceResponse {
-    fn api_key(&self) -> i16 {
-        0
-    }
-    
-    fn version(&self) -> i16 {
-        11
-    }
-}
-
-impl Response for TopicProduceResponse { }
 
 impl Default for TopicProduceResponse {
     fn default() -> Self {
@@ -198,6 +188,7 @@ impl Writable for TopicProduceResponse {
     }
 }
 
+/// PartitionProduceResponse, version 11.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionProduceResponse {
@@ -219,22 +210,10 @@ pub struct PartitionProduceResponse {
     pub error_message: Option<String>,
     /// 
     pub current_leader: LeaderIdAndEpoch,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for PartitionProduceResponse {
-    fn api_key(&self) -> i16 {
-        0
-    }
-    
-    fn version(&self) -> i16 {
-        11
-    }
-}
-
-impl Response for PartitionProduceResponse { }
 
 impl Default for PartitionProduceResponse {
     fn default() -> Self {
@@ -335,6 +314,7 @@ impl Writable for PartitionProduceResponse {
     }
 }
 
+/// BatchIndexAndErrorMessage, version 11.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct BatchIndexAndErrorMessage {
@@ -343,22 +323,10 @@ pub struct BatchIndexAndErrorMessage {
     /// The error message of the record that caused the batch to be dropped
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub batch_index_error_message: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for BatchIndexAndErrorMessage {
-    fn api_key(&self) -> i16 {
-        0
-    }
-    
-    fn version(&self) -> i16 {
-        11
-    }
-}
-
-impl Response for BatchIndexAndErrorMessage { }
 
 impl Default for BatchIndexAndErrorMessage {
     fn default() -> Self {
@@ -419,6 +387,7 @@ impl Writable for BatchIndexAndErrorMessage {
     }
 }
 
+/// LeaderIdAndEpoch, version 11.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderIdAndEpoch {
@@ -426,22 +395,10 @@ pub struct LeaderIdAndEpoch {
     pub leader_id: i32,
     /// The latest known leader epoch
     pub leader_epoch: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for LeaderIdAndEpoch {
-    fn api_key(&self) -> i16 {
-        0
-    }
-    
-    fn version(&self) -> i16 {
-        11
-    }
-}
-
-impl Response for LeaderIdAndEpoch { }
 
 impl Default for LeaderIdAndEpoch {
     fn default() -> Self {
@@ -502,6 +459,7 @@ impl Writable for LeaderIdAndEpoch {
     }
 }
 
+/// NodeEndpoint, version 11.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct NodeEndpoint {
@@ -515,22 +473,10 @@ pub struct NodeEndpoint {
     /// The rack of the node, or null if it has not been assigned to a rack.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub rack: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for NodeEndpoint {
-    fn api_key(&self) -> i16 {
-        0
-    }
-    
-    fn version(&self) -> i16 {
-        11
-    }
-}
-
-impl Response for NodeEndpoint { }
 
 impl Default for NodeEndpoint {
     fn default() -> Self {

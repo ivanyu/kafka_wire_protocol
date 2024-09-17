@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ProduceResponse, version 8.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ProduceResponse {
@@ -82,6 +83,7 @@ impl Writable for ProduceResponse {
     }
 }
 
+/// TopicProduceResponse, version 8.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicProduceResponse {
@@ -92,18 +94,6 @@ pub struct TopicProduceResponse {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_responses: Vec<PartitionProduceResponse>,
 }
-
-impl ApiMessage for TopicProduceResponse {
-    fn api_key(&self) -> i16 {
-        0
-    }
-    
-    fn version(&self) -> i16 {
-        8
-    }
-}
-
-impl Response for TopicProduceResponse { }
 
 impl Default for TopicProduceResponse {
     fn default() -> Self {
@@ -155,6 +145,7 @@ impl Writable for TopicProduceResponse {
     }
 }
 
+/// PartitionProduceResponse, version 8.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionProduceResponse {
@@ -175,18 +166,6 @@ pub struct PartitionProduceResponse {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
 }
-
-impl ApiMessage for PartitionProduceResponse {
-    fn api_key(&self) -> i16 {
-        0
-    }
-    
-    fn version(&self) -> i16 {
-        8
-    }
-}
-
-impl Response for PartitionProduceResponse { }
 
 impl Default for PartitionProduceResponse {
     fn default() -> Self {
@@ -263,6 +242,7 @@ impl Writable for PartitionProduceResponse {
     }
 }
 
+/// BatchIndexAndErrorMessage, version 8.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct BatchIndexAndErrorMessage {
@@ -272,18 +252,6 @@ pub struct BatchIndexAndErrorMessage {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub batch_index_error_message: Option<String>,
 }
-
-impl ApiMessage for BatchIndexAndErrorMessage {
-    fn api_key(&self) -> i16 {
-        0
-    }
-    
-    fn version(&self) -> i16 {
-        8
-    }
-}
-
-impl Response for BatchIndexAndErrorMessage { }
 
 impl Default for BatchIndexAndErrorMessage {
     fn default() -> Self {

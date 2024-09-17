@@ -11,13 +11,14 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// WriteTxnMarkersResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct WriteTxnMarkersResponse {
     /// The results for writing makers.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub markers: Vec<WritableTxnMarkerResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -88,6 +89,7 @@ impl Writable for WriteTxnMarkersResponse {
     }
 }
 
+/// WritableTxnMarkerResult, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct WritableTxnMarkerResult {
@@ -96,22 +98,10 @@ pub struct WritableTxnMarkerResult {
     /// The results by topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<WritableTxnMarkerTopicResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for WritableTxnMarkerResult {
-    fn api_key(&self) -> i16 {
-        27
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for WritableTxnMarkerResult { }
 
 impl Default for WritableTxnMarkerResult {
     fn default() -> Self {
@@ -172,6 +162,7 @@ impl Writable for WritableTxnMarkerResult {
     }
 }
 
+/// WritableTxnMarkerTopicResult, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct WritableTxnMarkerTopicResult {
@@ -181,22 +172,10 @@ pub struct WritableTxnMarkerTopicResult {
     /// The results by partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<WritableTxnMarkerPartitionResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for WritableTxnMarkerTopicResult {
-    fn api_key(&self) -> i16 {
-        27
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for WritableTxnMarkerTopicResult { }
 
 impl Default for WritableTxnMarkerTopicResult {
     fn default() -> Self {
@@ -257,6 +236,7 @@ impl Writable for WritableTxnMarkerTopicResult {
     }
 }
 
+/// WritableTxnMarkerPartitionResult, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct WritableTxnMarkerPartitionResult {
@@ -264,22 +244,10 @@ pub struct WritableTxnMarkerPartitionResult {
     pub partition_index: i32,
     /// The error code, or 0 if there was no error.
     pub error_code: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for WritableTxnMarkerPartitionResult {
-    fn api_key(&self) -> i16 {
-        27
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for WritableTxnMarkerPartitionResult { }
 
 impl Default for WritableTxnMarkerPartitionResult {
     fn default() -> Self {

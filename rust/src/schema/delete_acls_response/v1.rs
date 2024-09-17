@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DeleteAclsResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteAclsResponse {
@@ -82,6 +83,7 @@ impl Writable for DeleteAclsResponse {
     }
 }
 
+/// DeleteAclsFilterResult, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteAclsFilterResult {
@@ -94,18 +96,6 @@ pub struct DeleteAclsFilterResult {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub matching_acls: Vec<DeleteAclsMatchingAcl>,
 }
-
-impl ApiMessage for DeleteAclsFilterResult {
-    fn api_key(&self) -> i16 {
-        31
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for DeleteAclsFilterResult { }
 
 impl Default for DeleteAclsFilterResult {
     fn default() -> Self {
@@ -162,6 +152,7 @@ impl Writable for DeleteAclsFilterResult {
     }
 }
 
+/// DeleteAclsMatchingAcl, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteAclsMatchingAcl {
@@ -188,18 +179,6 @@ pub struct DeleteAclsMatchingAcl {
     /// The ACL permission type.
     pub permission_type: i8,
 }
-
-impl ApiMessage for DeleteAclsMatchingAcl {
-    fn api_key(&self) -> i16 {
-        31
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for DeleteAclsMatchingAcl { }
 
 impl Default for DeleteAclsMatchingAcl {
     fn default() -> Self {

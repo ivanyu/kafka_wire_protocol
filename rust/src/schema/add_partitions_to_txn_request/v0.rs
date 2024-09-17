@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AddPartitionsToTxnRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AddPartitionsToTxnRequest {
@@ -97,6 +98,7 @@ impl Writable for AddPartitionsToTxnRequest {
     }
 }
 
+/// AddPartitionsToTxnTopic, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AddPartitionsToTxnTopic {
@@ -107,18 +109,6 @@ pub struct AddPartitionsToTxnTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<i32>,
 }
-
-impl ApiMessage for AddPartitionsToTxnTopic {
-    fn api_key(&self) -> i16 {
-        24
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for AddPartitionsToTxnTopic { }
 
 impl Default for AddPartitionsToTxnTopic {
     fn default() -> Self {

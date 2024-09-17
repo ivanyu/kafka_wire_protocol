@@ -11,6 +11,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::{proptest_strategies, serde_bytes};
 
+/// DescribeGroupsResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeGroupsResponse {
@@ -83,6 +84,7 @@ impl Writable for DescribeGroupsResponse {
     }
 }
 
+/// DescribedGroup, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribedGroup {
@@ -104,18 +106,6 @@ pub struct DescribedGroup {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub members: Vec<DescribedGroupMember>,
 }
-
-impl ApiMessage for DescribedGroup {
-    fn api_key(&self) -> i16 {
-        15
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for DescribedGroup { }
 
 impl Default for DescribedGroup {
     fn default() -> Self {
@@ -187,6 +177,7 @@ impl Writable for DescribedGroup {
     }
 }
 
+/// DescribedGroupMember, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribedGroupMember {
@@ -208,18 +199,6 @@ pub struct DescribedGroupMember {
     #[cfg_attr(test, serde(with="serde_bytes"))]
     pub member_assignment: Vec<u8>,
 }
-
-impl ApiMessage for DescribedGroupMember {
-    fn api_key(&self) -> i16 {
-        15
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for DescribedGroupMember { }
 
 impl Default for DescribedGroupMember {
     fn default() -> Self {

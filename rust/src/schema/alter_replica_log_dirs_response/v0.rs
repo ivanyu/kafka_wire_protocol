@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AlterReplicaLogDirsResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterReplicaLogDirsResponse {
@@ -82,6 +83,7 @@ impl Writable for AlterReplicaLogDirsResponse {
     }
 }
 
+/// AlterReplicaLogDirTopicResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterReplicaLogDirTopicResult {
@@ -92,18 +94,6 @@ pub struct AlterReplicaLogDirTopicResult {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<AlterReplicaLogDirPartitionResult>,
 }
-
-impl ApiMessage for AlterReplicaLogDirTopicResult {
-    fn api_key(&self) -> i16 {
-        34
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for AlterReplicaLogDirTopicResult { }
 
 impl Default for AlterReplicaLogDirTopicResult {
     fn default() -> Self {
@@ -155,6 +145,7 @@ impl Writable for AlterReplicaLogDirTopicResult {
     }
 }
 
+/// AlterReplicaLogDirPartitionResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterReplicaLogDirPartitionResult {
@@ -163,18 +154,6 @@ pub struct AlterReplicaLogDirPartitionResult {
     /// The error code, or 0 if there was no error.
     pub error_code: i16,
 }
-
-impl ApiMessage for AlterReplicaLogDirPartitionResult {
-    fn api_key(&self) -> i16 {
-        34
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for AlterReplicaLogDirPartitionResult { }
 
 impl Default for AlterReplicaLogDirPartitionResult {
     fn default() -> Self {

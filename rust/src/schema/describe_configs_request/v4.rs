@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeConfigsRequest, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeConfigsRequest {
@@ -21,7 +22,7 @@ pub struct DescribeConfigsRequest {
     pub include_synonyms: bool,
     /// True if we should include configuration documentation.
     pub include_documentation: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -102,6 +103,7 @@ impl Writable for DescribeConfigsRequest {
     }
 }
 
+/// DescribeConfigsResource, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeConfigsResource {
@@ -113,22 +115,10 @@ pub struct DescribeConfigsResource {
     /// The configuration keys to list, or null to list all configuration keys.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_vec()"))]
     pub configuration_keys: Option<Vec<String>>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribeConfigsResource {
-    fn api_key(&self) -> i16 {
-        32
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Request for DescribeConfigsResource { }
 
 impl Default for DescribeConfigsResource {
     fn default() -> Self {

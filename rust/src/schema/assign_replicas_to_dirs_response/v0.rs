@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AssignReplicasToDirsResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AssignReplicasToDirsResponse {
@@ -22,7 +23,7 @@ pub struct AssignReplicasToDirsResponse {
     /// 
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub directories: Vec<DirectoryData>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -103,6 +104,7 @@ impl Writable for AssignReplicasToDirsResponse {
     }
 }
 
+/// DirectoryData, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DirectoryData {
@@ -112,22 +114,10 @@ pub struct DirectoryData {
     /// 
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DirectoryData {
-    fn api_key(&self) -> i16 {
-        73
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for DirectoryData { }
 
 impl Default for DirectoryData {
     fn default() -> Self {
@@ -188,6 +178,7 @@ impl Writable for DirectoryData {
     }
 }
 
+/// TopicData, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicData {
@@ -197,22 +188,10 @@ pub struct TopicData {
     /// 
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TopicData {
-    fn api_key(&self) -> i16 {
-        73
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for TopicData { }
 
 impl Default for TopicData {
     fn default() -> Self {
@@ -273,6 +252,7 @@ impl Writable for TopicData {
     }
 }
 
+/// PartitionData, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionData {
@@ -280,22 +260,10 @@ pub struct PartitionData {
     pub partition_index: i32,
     /// The partition level error code
     pub error_code: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for PartitionData {
-    fn api_key(&self) -> i16 {
-        73
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for PartitionData { }
 
 impl Default for PartitionData {
     fn default() -> Self {

@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ApiVersionsResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ApiVersionsResponse {
@@ -89,6 +90,7 @@ impl Writable for ApiVersionsResponse {
     }
 }
 
+/// ApiVersion, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ApiVersion {
@@ -99,18 +101,6 @@ pub struct ApiVersion {
     /// The maximum supported version, inclusive.
     pub max_version: i16,
 }
-
-impl ApiMessage for ApiVersion {
-    fn api_key(&self) -> i16 {
-        18
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for ApiVersion { }
 
 impl Default for ApiVersion {
     fn default() -> Self {

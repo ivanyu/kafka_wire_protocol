@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::{proptest_strategies, serde_bytes};
 
+/// RenewDelegationTokenRequest, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct RenewDelegationTokenRequest {
@@ -20,7 +21,7 @@ pub struct RenewDelegationTokenRequest {
     pub hmac: Vec<u8>,
     /// The renewal time period in milliseconds.
     pub renew_period_ms: i64,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }

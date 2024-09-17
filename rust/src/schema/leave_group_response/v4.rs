@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// LeaveGroupResponse, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaveGroupResponse {
@@ -21,7 +22,7 @@ pub struct LeaveGroupResponse {
     /// List of leaving member responses.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub members: Vec<MemberResponse>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -102,6 +103,7 @@ impl Writable for LeaveGroupResponse {
     }
 }
 
+/// MemberResponse, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MemberResponse {
@@ -113,22 +115,10 @@ pub struct MemberResponse {
     pub group_instance_id: Option<String>,
     /// The error code, or 0 if there was no error.
     pub error_code: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for MemberResponse {
-    fn api_key(&self) -> i16 {
-        13
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Response for MemberResponse { }
 
 impl Default for MemberResponse {
     fn default() -> Self {

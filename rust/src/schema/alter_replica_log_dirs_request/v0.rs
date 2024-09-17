@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AlterReplicaLogDirsRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterReplicaLogDirsRequest {
@@ -75,6 +76,7 @@ impl Writable for AlterReplicaLogDirsRequest {
     }
 }
 
+/// AlterReplicaLogDir, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterReplicaLogDir {
@@ -85,18 +87,6 @@ pub struct AlterReplicaLogDir {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<AlterReplicaLogDirTopic>,
 }
-
-impl ApiMessage for AlterReplicaLogDir {
-    fn api_key(&self) -> i16 {
-        34
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for AlterReplicaLogDir { }
 
 impl Default for AlterReplicaLogDir {
     fn default() -> Self {
@@ -148,6 +138,7 @@ impl Writable for AlterReplicaLogDir {
     }
 }
 
+/// AlterReplicaLogDirTopic, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterReplicaLogDirTopic {
@@ -158,18 +149,6 @@ pub struct AlterReplicaLogDirTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<i32>,
 }
-
-impl ApiMessage for AlterReplicaLogDirTopic {
-    fn api_key(&self) -> i16 {
-        34
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for AlterReplicaLogDirTopic { }
 
 impl Default for AlterReplicaLogDirTopic {
     fn default() -> Self {

@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ElectLeadersRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ElectLeadersRequest {
@@ -89,6 +90,7 @@ impl Writable for ElectLeadersRequest {
     }
 }
 
+/// TopicPartitions, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicPartitions {
@@ -99,18 +101,6 @@ pub struct TopicPartitions {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<i32>,
 }
-
-impl ApiMessage for TopicPartitions {
-    fn api_key(&self) -> i16 {
-        43
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for TopicPartitions { }
 
 impl Default for TopicPartitions {
     fn default() -> Self {

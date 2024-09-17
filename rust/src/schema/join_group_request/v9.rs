@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::{proptest_strategies, serde_bytes};
 
+/// JoinGroupRequest, version 9.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct JoinGroupRequest {
@@ -37,7 +38,7 @@ pub struct JoinGroupRequest {
     /// The reason why the member (re-)joins the group.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub reason: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -143,6 +144,7 @@ impl Writable for JoinGroupRequest {
     }
 }
 
+/// JoinGroupRequestProtocol, version 9.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct JoinGroupRequestProtocol {
@@ -153,22 +155,10 @@ pub struct JoinGroupRequestProtocol {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::bytes()"))]
     #[cfg_attr(test, serde(with="serde_bytes"))]
     pub metadata: Vec<u8>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for JoinGroupRequestProtocol {
-    fn api_key(&self) -> i16 {
-        11
-    }
-    
-    fn version(&self) -> i16 {
-        9
-    }
-}
-
-impl Request for JoinGroupRequestProtocol { }
 
 impl Default for JoinGroupRequestProtocol {
     fn default() -> Self {

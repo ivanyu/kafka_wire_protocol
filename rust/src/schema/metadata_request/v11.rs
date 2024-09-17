@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// MetadataRequest, version 11.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MetadataRequest {
@@ -22,7 +23,7 @@ pub struct MetadataRequest {
     pub allow_auto_topic_creation: bool,
     /// Whether to include topic authorized operations.
     pub include_topic_authorized_operations: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -103,6 +104,7 @@ impl Writable for MetadataRequest {
     }
 }
 
+/// MetadataRequestTopic, version 11.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MetadataRequestTopic {
@@ -112,22 +114,10 @@ pub struct MetadataRequestTopic {
     /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub name: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for MetadataRequestTopic {
-    fn api_key(&self) -> i16 {
-        3
-    }
-    
-    fn version(&self) -> i16 {
-        11
-    }
-}
-
-impl Request for MetadataRequestTopic { }
 
 impl Default for MetadataRequestTopic {
     fn default() -> Self {

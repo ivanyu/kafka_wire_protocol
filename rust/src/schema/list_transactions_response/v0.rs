@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ListTransactionsResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListTransactionsResponse {
@@ -24,7 +25,7 @@ pub struct ListTransactionsResponse {
     /// 
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub transaction_states: Vec<TransactionState>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -110,6 +111,7 @@ impl Writable for ListTransactionsResponse {
     }
 }
 
+/// TransactionState, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TransactionState {
@@ -121,22 +123,10 @@ pub struct TransactionState {
     /// The current transaction state of the producer
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub transaction_state: String,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TransactionState {
-    fn api_key(&self) -> i16 {
-        66
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for TransactionState { }
 
 impl Default for TransactionState {
     fn default() -> Self {

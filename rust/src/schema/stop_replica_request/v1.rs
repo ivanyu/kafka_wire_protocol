@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// StopReplicaRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct StopReplicaRequest {
@@ -103,6 +104,7 @@ impl Writable for StopReplicaRequest {
     }
 }
 
+/// StopReplicaTopicV1, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct StopReplicaTopicV1 {
@@ -113,18 +115,6 @@ pub struct StopReplicaTopicV1 {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_indexes: Vec<i32>,
 }
-
-impl ApiMessage for StopReplicaTopicV1 {
-    fn api_key(&self) -> i16 {
-        5
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for StopReplicaTopicV1 { }
 
 impl Default for StopReplicaTopicV1 {
     fn default() -> Self {

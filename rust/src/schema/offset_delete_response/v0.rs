@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// OffsetDeleteResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetDeleteResponse {
@@ -89,6 +90,7 @@ impl Writable for OffsetDeleteResponse {
     }
 }
 
+/// OffsetDeleteResponseTopic, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetDeleteResponseTopic {
@@ -99,18 +101,6 @@ pub struct OffsetDeleteResponseTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<OffsetDeleteResponsePartition>,
 }
-
-impl ApiMessage for OffsetDeleteResponseTopic {
-    fn api_key(&self) -> i16 {
-        47
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for OffsetDeleteResponseTopic { }
 
 impl Default for OffsetDeleteResponseTopic {
     fn default() -> Self {
@@ -162,6 +152,7 @@ impl Writable for OffsetDeleteResponseTopic {
     }
 }
 
+/// OffsetDeleteResponsePartition, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetDeleteResponsePartition {
@@ -170,18 +161,6 @@ pub struct OffsetDeleteResponsePartition {
     /// The error code, or 0 if there was no error.
     pub error_code: i16,
 }
-
-impl ApiMessage for OffsetDeleteResponsePartition {
-    fn api_key(&self) -> i16 {
-        47
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for OffsetDeleteResponsePartition { }
 
 impl Default for OffsetDeleteResponsePartition {
     fn default() -> Self {

@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// CreateAclsRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreateAclsRequest {
@@ -75,6 +76,7 @@ impl Writable for CreateAclsRequest {
     }
 }
 
+/// AclCreation, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AclCreation {
@@ -96,18 +98,6 @@ pub struct AclCreation {
     /// The permission type for the ACL (allow, deny, etc.).
     pub permission_type: i8,
 }
-
-impl ApiMessage for AclCreation {
-    fn api_key(&self) -> i16 {
-        30
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for AclCreation { }
 
 impl Default for AclCreation {
     fn default() -> Self {

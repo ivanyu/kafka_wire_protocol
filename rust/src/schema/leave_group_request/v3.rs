@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// LeaveGroupRequest, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaveGroupRequest {
@@ -83,6 +84,7 @@ impl Writable for LeaveGroupRequest {
     }
 }
 
+/// MemberIdentity, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MemberIdentity {
@@ -93,18 +95,6 @@ pub struct MemberIdentity {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub group_instance_id: Option<String>,
 }
-
-impl ApiMessage for MemberIdentity {
-    fn api_key(&self) -> i16 {
-        13
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Request for MemberIdentity { }
 
 impl Default for MemberIdentity {
     fn default() -> Self {

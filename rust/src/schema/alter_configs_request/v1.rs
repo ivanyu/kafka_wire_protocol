@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AlterConfigsRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterConfigsRequest {
@@ -82,6 +83,7 @@ impl Writable for AlterConfigsRequest {
     }
 }
 
+/// AlterConfigsResource, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterConfigsResource {
@@ -94,18 +96,6 @@ pub struct AlterConfigsResource {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub configs: Vec<AlterableConfig>,
 }
-
-impl ApiMessage for AlterConfigsResource {
-    fn api_key(&self) -> i16 {
-        33
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for AlterConfigsResource { }
 
 impl Default for AlterConfigsResource {
     fn default() -> Self {
@@ -162,6 +152,7 @@ impl Writable for AlterConfigsResource {
     }
 }
 
+/// AlterableConfig, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterableConfig {
@@ -172,18 +163,6 @@ pub struct AlterableConfig {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub value: Option<String>,
 }
-
-impl ApiMessage for AlterableConfig {
-    fn api_key(&self) -> i16 {
-        33
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for AlterableConfig { }
 
 impl Default for AlterableConfig {
     fn default() -> Self {

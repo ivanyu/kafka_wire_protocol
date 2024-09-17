@@ -11,6 +11,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::{proptest_strategies, serde_bytes};
 
+/// JoinGroupRequest, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct JoinGroupRequest {
@@ -122,6 +123,7 @@ impl Writable for JoinGroupRequest {
     }
 }
 
+/// JoinGroupRequestProtocol, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct JoinGroupRequestProtocol {
@@ -133,18 +135,6 @@ pub struct JoinGroupRequestProtocol {
     #[cfg_attr(test, serde(with="serde_bytes"))]
     pub metadata: Vec<u8>,
 }
-
-impl ApiMessage for JoinGroupRequestProtocol {
-    fn api_key(&self) -> i16 {
-        11
-    }
-    
-    fn version(&self) -> i16 {
-        5
-    }
-}
-
-impl Request for JoinGroupRequestProtocol { }
 
 impl Default for JoinGroupRequestProtocol {
     fn default() -> Self {

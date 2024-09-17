@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// CreatePartitionsRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatePartitionsRequest {
@@ -89,6 +90,7 @@ impl Writable for CreatePartitionsRequest {
     }
 }
 
+/// CreatePartitionsTopic, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatePartitionsTopic {
@@ -101,18 +103,6 @@ pub struct CreatePartitionsTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_vec()"))]
     pub assignments: Option<Vec<CreatePartitionsAssignment>>,
 }
-
-impl ApiMessage for CreatePartitionsTopic {
-    fn api_key(&self) -> i16 {
-        37
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for CreatePartitionsTopic { }
 
 impl Default for CreatePartitionsTopic {
     fn default() -> Self {
@@ -169,6 +159,7 @@ impl Writable for CreatePartitionsTopic {
     }
 }
 
+/// CreatePartitionsAssignment, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatePartitionsAssignment {
@@ -176,18 +167,6 @@ pub struct CreatePartitionsAssignment {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub broker_ids: Vec<i32>,
 }
-
-impl ApiMessage for CreatePartitionsAssignment {
-    fn api_key(&self) -> i16 {
-        37
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for CreatePartitionsAssignment { }
 
 impl Default for CreatePartitionsAssignment {
     fn default() -> Self {

@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DeleteRecordsResponse, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteRecordsResponse {
@@ -19,7 +20,7 @@ pub struct DeleteRecordsResponse {
     /// Each topic that we wanted to delete records from.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<DeleteRecordsTopicResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for DeleteRecordsResponse {
     }
 }
 
+/// DeleteRecordsTopicResult, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteRecordsTopicResult {
@@ -104,22 +106,10 @@ pub struct DeleteRecordsTopicResult {
     /// Each partition that we wanted to delete records from.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<DeleteRecordsPartitionResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DeleteRecordsTopicResult {
-    fn api_key(&self) -> i16 {
-        21
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Response for DeleteRecordsTopicResult { }
 
 impl Default for DeleteRecordsTopicResult {
     fn default() -> Self {
@@ -180,6 +170,7 @@ impl Writable for DeleteRecordsTopicResult {
     }
 }
 
+/// DeleteRecordsPartitionResult, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteRecordsPartitionResult {
@@ -189,22 +180,10 @@ pub struct DeleteRecordsPartitionResult {
     pub low_watermark: i64,
     /// The deletion error code, or 0 if the deletion succeeded.
     pub error_code: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DeleteRecordsPartitionResult {
-    fn api_key(&self) -> i16 {
-        21
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Response for DeleteRecordsPartitionResult { }
 
 impl Default for DeleteRecordsPartitionResult {
     fn default() -> Self {

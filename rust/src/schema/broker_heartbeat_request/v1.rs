@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// BrokerHeartbeatRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct BrokerHeartbeatRequest {
@@ -28,7 +29,7 @@ pub struct BrokerHeartbeatRequest {
     /// Log directories that failed and went offline.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec_elem::<Uuid>(proptest_strategies::uuid())"))]
     pub offline_log_dirs: Vec<Uuid>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }

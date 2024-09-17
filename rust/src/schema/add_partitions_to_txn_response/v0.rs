@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AddPartitionsToTxnResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AddPartitionsToTxnResponse {
@@ -82,6 +83,7 @@ impl Writable for AddPartitionsToTxnResponse {
     }
 }
 
+/// AddPartitionsToTxnPartitionResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AddPartitionsToTxnPartitionResult {
@@ -90,18 +92,6 @@ pub struct AddPartitionsToTxnPartitionResult {
     /// The response error code.
     pub partition_error_code: i16,
 }
-
-impl ApiMessage for AddPartitionsToTxnPartitionResult {
-    fn api_key(&self) -> i16 {
-        24
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for AddPartitionsToTxnPartitionResult { }
 
 impl Default for AddPartitionsToTxnPartitionResult {
     fn default() -> Self {
@@ -153,6 +143,7 @@ impl Writable for AddPartitionsToTxnPartitionResult {
     }
 }
 
+/// AddPartitionsToTxnTopicResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AddPartitionsToTxnTopicResult {
@@ -163,18 +154,6 @@ pub struct AddPartitionsToTxnTopicResult {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub results_by_partition: Vec<AddPartitionsToTxnPartitionResult>,
 }
-
-impl ApiMessage for AddPartitionsToTxnTopicResult {
-    fn api_key(&self) -> i16 {
-        24
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for AddPartitionsToTxnTopicResult { }
 
 impl Default for AddPartitionsToTxnTopicResult {
     fn default() -> Self {

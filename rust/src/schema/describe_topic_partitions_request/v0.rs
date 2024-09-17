@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeTopicPartitionsRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeTopicPartitionsRequest {
@@ -21,7 +22,7 @@ pub struct DescribeTopicPartitionsRequest {
     pub response_partition_limit: i32,
     /// The first topic and partition index to fetch details for.
     pub cursor: Option<Cursor>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -102,28 +103,17 @@ impl Writable for DescribeTopicPartitionsRequest {
     }
 }
 
+/// TopicRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicRequest {
     /// The topic name
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TopicRequest {
-    fn api_key(&self) -> i16 {
-        75
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for TopicRequest { }
 
 impl Default for TopicRequest {
     fn default() -> Self {
@@ -179,6 +169,7 @@ impl Writable for TopicRequest {
     }
 }
 
+/// Cursor, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Cursor {
@@ -187,22 +178,10 @@ pub struct Cursor {
     pub topic_name: String,
     /// The partition index to start with
     pub partition_index: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for Cursor {
-    fn api_key(&self) -> i16 {
-        75
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for Cursor { }
 
 impl Default for Cursor {
     fn default() -> Self {

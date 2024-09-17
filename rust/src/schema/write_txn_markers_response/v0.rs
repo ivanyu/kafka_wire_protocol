@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// WriteTxnMarkersResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct WriteTxnMarkersResponse {
@@ -75,6 +76,7 @@ impl Writable for WriteTxnMarkersResponse {
     }
 }
 
+/// WritableTxnMarkerResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct WritableTxnMarkerResult {
@@ -84,18 +86,6 @@ pub struct WritableTxnMarkerResult {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<WritableTxnMarkerTopicResult>,
 }
-
-impl ApiMessage for WritableTxnMarkerResult {
-    fn api_key(&self) -> i16 {
-        27
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for WritableTxnMarkerResult { }
 
 impl Default for WritableTxnMarkerResult {
     fn default() -> Self {
@@ -147,6 +137,7 @@ impl Writable for WritableTxnMarkerResult {
     }
 }
 
+/// WritableTxnMarkerTopicResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct WritableTxnMarkerTopicResult {
@@ -157,18 +148,6 @@ pub struct WritableTxnMarkerTopicResult {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<WritableTxnMarkerPartitionResult>,
 }
-
-impl ApiMessage for WritableTxnMarkerTopicResult {
-    fn api_key(&self) -> i16 {
-        27
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for WritableTxnMarkerTopicResult { }
 
 impl Default for WritableTxnMarkerTopicResult {
     fn default() -> Self {
@@ -220,6 +199,7 @@ impl Writable for WritableTxnMarkerTopicResult {
     }
 }
 
+/// WritableTxnMarkerPartitionResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct WritableTxnMarkerPartitionResult {
@@ -228,18 +208,6 @@ pub struct WritableTxnMarkerPartitionResult {
     /// The error code, or 0 if there was no error.
     pub error_code: i16,
 }
-
-impl ApiMessage for WritableTxnMarkerPartitionResult {
-    fn api_key(&self) -> i16 {
-        27
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for WritableTxnMarkerPartitionResult { }
 
 impl Default for WritableTxnMarkerPartitionResult {
     fn default() -> Self {

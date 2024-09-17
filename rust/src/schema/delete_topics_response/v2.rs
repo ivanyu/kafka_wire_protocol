@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DeleteTopicsResponse, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteTopicsResponse {
@@ -82,6 +83,7 @@ impl Writable for DeleteTopicsResponse {
     }
 }
 
+/// DeletableTopicResult, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeletableTopicResult {
@@ -91,18 +93,6 @@ pub struct DeletableTopicResult {
     /// The deletion error, or 0 if the deletion succeeded.
     pub error_code: i16,
 }
-
-impl ApiMessage for DeletableTopicResult {
-    fn api_key(&self) -> i16 {
-        20
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Response for DeletableTopicResult { }
 
 impl Default for DeletableTopicResult {
     fn default() -> Self {

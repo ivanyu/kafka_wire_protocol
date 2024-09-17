@@ -10,6 +10,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// UnregisterBrokerResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UnregisterBrokerResponse {
@@ -20,7 +21,7 @@ pub struct UnregisterBrokerResponse {
     /// The top-level error message, or `null` if there was no top-level error.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }

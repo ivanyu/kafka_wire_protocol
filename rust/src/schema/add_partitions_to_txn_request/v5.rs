@@ -11,13 +11,14 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AddPartitionsToTxnRequest, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AddPartitionsToTxnRequest {
     /// List of transactions to add partitions to.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub transactions: Vec<AddPartitionsToTxnTransaction>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -88,6 +89,7 @@ impl Writable for AddPartitionsToTxnRequest {
     }
 }
 
+/// AddPartitionsToTxnTransaction, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AddPartitionsToTxnTransaction {
@@ -103,22 +105,10 @@ pub struct AddPartitionsToTxnTransaction {
     /// The partitions to add to the transaction.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<AddPartitionsToTxnTopic>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for AddPartitionsToTxnTransaction {
-    fn api_key(&self) -> i16 {
-        24
-    }
-    
-    fn version(&self) -> i16 {
-        5
-    }
-}
-
-impl Request for AddPartitionsToTxnTransaction { }
 
 impl Default for AddPartitionsToTxnTransaction {
     fn default() -> Self {
@@ -194,6 +184,7 @@ impl Writable for AddPartitionsToTxnTransaction {
     }
 }
 
+/// AddPartitionsToTxnTopic, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AddPartitionsToTxnTopic {
@@ -203,22 +194,10 @@ pub struct AddPartitionsToTxnTopic {
     /// The partition indexes to add to the transaction
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<i32>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for AddPartitionsToTxnTopic {
-    fn api_key(&self) -> i16 {
-        24
-    }
-    
-    fn version(&self) -> i16 {
-        5
-    }
-}
-
-impl Request for AddPartitionsToTxnTopic { }
 
 impl Default for AddPartitionsToTxnTopic {
     fn default() -> Self {

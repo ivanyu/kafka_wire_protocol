@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DeleteAclsRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteAclsRequest {
@@ -75,6 +76,7 @@ impl Writable for DeleteAclsRequest {
     }
 }
 
+/// DeleteAclsFilter, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteAclsFilter {
@@ -94,18 +96,6 @@ pub struct DeleteAclsFilter {
     /// The permission type.
     pub permission_type: i8,
 }
-
-impl ApiMessage for DeleteAclsFilter {
-    fn api_key(&self) -> i16 {
-        31
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for DeleteAclsFilter { }
 
 impl Default for DeleteAclsFilter {
     fn default() -> Self {

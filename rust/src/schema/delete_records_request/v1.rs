@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DeleteRecordsRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteRecordsRequest {
@@ -82,6 +83,7 @@ impl Writable for DeleteRecordsRequest {
     }
 }
 
+/// DeleteRecordsTopic, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteRecordsTopic {
@@ -92,18 +94,6 @@ pub struct DeleteRecordsTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<DeleteRecordsPartition>,
 }
-
-impl ApiMessage for DeleteRecordsTopic {
-    fn api_key(&self) -> i16 {
-        21
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for DeleteRecordsTopic { }
 
 impl Default for DeleteRecordsTopic {
     fn default() -> Self {
@@ -155,6 +145,7 @@ impl Writable for DeleteRecordsTopic {
     }
 }
 
+/// DeleteRecordsPartition, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteRecordsPartition {
@@ -163,18 +154,6 @@ pub struct DeleteRecordsPartition {
     /// The deletion offset.
     pub offset: i64,
 }
-
-impl ApiMessage for DeleteRecordsPartition {
-    fn api_key(&self) -> i16 {
-        21
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for DeleteRecordsPartition { }
 
 impl Default for DeleteRecordsPartition {
     fn default() -> Self {

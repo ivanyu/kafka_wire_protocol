@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// LeaveGroupRequest, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaveGroupRequest {
@@ -20,7 +21,7 @@ pub struct LeaveGroupRequest {
     /// List of leaving member identities.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub members: Vec<MemberIdentity>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -96,6 +97,7 @@ impl Writable for LeaveGroupRequest {
     }
 }
 
+/// MemberIdentity, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MemberIdentity {
@@ -105,22 +107,10 @@ pub struct MemberIdentity {
     /// The group instance ID to remove from the group.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub group_instance_id: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for MemberIdentity {
-    fn api_key(&self) -> i16 {
-        13
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Request for MemberIdentity { }
 
 impl Default for MemberIdentity {
     fn default() -> Self {

@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DeleteTopicsResponse, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteTopicsResponse {
@@ -19,7 +20,7 @@ pub struct DeleteTopicsResponse {
     /// The results for each topic we tried to delete.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub responses: Vec<DeletableTopicResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for DeleteTopicsResponse {
     }
 }
 
+/// DeletableTopicResult, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeletableTopicResult {
@@ -103,22 +105,10 @@ pub struct DeletableTopicResult {
     pub name: String,
     /// The deletion error, or 0 if the deletion succeeded.
     pub error_code: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DeletableTopicResult {
-    fn api_key(&self) -> i16 {
-        20
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Response for DeletableTopicResult { }
 
 impl Default for DeletableTopicResult {
     fn default() -> Self {

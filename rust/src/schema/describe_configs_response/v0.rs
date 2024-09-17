@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeConfigsResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeConfigsResponse {
@@ -82,6 +83,7 @@ impl Writable for DescribeConfigsResponse {
     }
 }
 
+/// DescribeConfigsResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeConfigsResult {
@@ -99,18 +101,6 @@ pub struct DescribeConfigsResult {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub configs: Vec<DescribeConfigsResourceResult>,
 }
-
-impl ApiMessage for DescribeConfigsResult {
-    fn api_key(&self) -> i16 {
-        32
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for DescribeConfigsResult { }
 
 impl Default for DescribeConfigsResult {
     fn default() -> Self {
@@ -177,6 +167,7 @@ impl Writable for DescribeConfigsResult {
     }
 }
 
+/// DescribeConfigsResourceResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeConfigsResourceResult {
@@ -193,18 +184,6 @@ pub struct DescribeConfigsResourceResult {
     /// True if this configuration is sensitive.
     pub is_sensitive: bool,
 }
-
-impl ApiMessage for DescribeConfigsResourceResult {
-    fn api_key(&self) -> i16 {
-        32
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for DescribeConfigsResourceResult { }
 
 impl Default for DescribeConfigsResourceResult {
     fn default() -> Self {

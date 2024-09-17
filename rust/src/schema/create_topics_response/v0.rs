@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// CreateTopicsResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreateTopicsResponse {
@@ -75,6 +76,7 @@ impl Writable for CreateTopicsResponse {
     }
 }
 
+/// CreatableTopicResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatableTopicResult {
@@ -84,18 +86,6 @@ pub struct CreatableTopicResult {
     /// The error code, or 0 if there was no error.
     pub error_code: i16,
 }
-
-impl ApiMessage for CreatableTopicResult {
-    fn api_key(&self) -> i16 {
-        19
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for CreatableTopicResult { }
 
 impl Default for CreatableTopicResult {
     fn default() -> Self {

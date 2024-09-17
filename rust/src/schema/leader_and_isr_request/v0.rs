@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// LeaderAndIsrRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderAndIsrRequest {
@@ -97,6 +98,7 @@ impl Writable for LeaderAndIsrRequest {
     }
 }
 
+/// LeaderAndIsrLiveLeader, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderAndIsrLiveLeader {
@@ -108,18 +110,6 @@ pub struct LeaderAndIsrLiveLeader {
     /// The leader's port.
     pub port: i32,
 }
-
-impl ApiMessage for LeaderAndIsrLiveLeader {
-    fn api_key(&self) -> i16 {
-        4
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for LeaderAndIsrLiveLeader { }
 
 impl Default for LeaderAndIsrLiveLeader {
     fn default() -> Self {
@@ -176,6 +166,7 @@ impl Writable for LeaderAndIsrLiveLeader {
     }
 }
 
+/// LeaderAndIsrPartitionState, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderAndIsrPartitionState {
@@ -199,18 +190,6 @@ pub struct LeaderAndIsrPartitionState {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub replicas: Vec<i32>,
 }
-
-impl ApiMessage for LeaderAndIsrPartitionState {
-    fn api_key(&self) -> i16 {
-        4
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for LeaderAndIsrPartitionState { }
 
 impl Default for LeaderAndIsrPartitionState {
     fn default() -> Self {

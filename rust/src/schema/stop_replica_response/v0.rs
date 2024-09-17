@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// StopReplicaResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct StopReplicaResponse {
@@ -82,6 +83,7 @@ impl Writable for StopReplicaResponse {
     }
 }
 
+/// StopReplicaPartitionError, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct StopReplicaPartitionError {
@@ -93,18 +95,6 @@ pub struct StopReplicaPartitionError {
     /// The partition error code, or 0 if there was no partition error.
     pub error_code: i16,
 }
-
-impl ApiMessage for StopReplicaPartitionError {
-    fn api_key(&self) -> i16 {
-        5
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for StopReplicaPartitionError { }
 
 impl Default for StopReplicaPartitionError {
     fn default() -> Self {

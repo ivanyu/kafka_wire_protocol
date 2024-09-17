@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ConsumerGroupHeartbeatResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ConsumerGroupHeartbeatResponse {
@@ -31,7 +32,7 @@ pub struct ConsumerGroupHeartbeatResponse {
     pub heartbeat_interval_ms: i32,
     /// null if not provided; the assignment otherwise.
     pub assignment: Option<Assignment>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -132,28 +133,17 @@ impl Writable for ConsumerGroupHeartbeatResponse {
     }
 }
 
+/// Assignment, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Assignment {
     /// The partitions assigned to the member that can be used immediately.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topic_partitions: Vec<TopicPartitions>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for Assignment {
-    fn api_key(&self) -> i16 {
-        68
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for Assignment { }
 
 impl Default for Assignment {
     fn default() -> Self {
@@ -209,6 +199,7 @@ impl Writable for Assignment {
     }
 }
 
+/// TopicPartitions, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicPartitions {
@@ -218,22 +209,10 @@ pub struct TopicPartitions {
     /// The partitions.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<i32>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TopicPartitions {
-    fn api_key(&self) -> i16 {
-        68
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for TopicPartitions { }
 
 impl Default for TopicPartitions {
     fn default() -> Self {

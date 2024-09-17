@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// OffsetFetchRequest, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetFetchRequest {
@@ -83,6 +84,7 @@ impl Writable for OffsetFetchRequest {
     }
 }
 
+/// OffsetFetchRequestTopic, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetFetchRequestTopic {
@@ -93,18 +95,6 @@ pub struct OffsetFetchRequestTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_indexes: Vec<i32>,
 }
-
-impl ApiMessage for OffsetFetchRequestTopic {
-    fn api_key(&self) -> i16 {
-        9
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Request for OffsetFetchRequestTopic { }
 
 impl Default for OffsetFetchRequestTopic {
     fn default() -> Self {

@@ -22,6 +22,7 @@ public class RustApiMessageTypeGenerator extends ApiMessageTypeGenerator {
     }
 
     private void generate() throws IOException {
+        buffer.printf("/// The utility for getting info about header versions and API keys.%n");
         buffer.printf("pub struct ApiMessageType {%n");
         buffer.incrementIndent();
         buffer.printf("pub name: &'static str,%n");
@@ -81,6 +82,7 @@ public class RustApiMessageTypeGenerator extends ApiMessageTypeGenerator {
     }
 
     private void generateHeaderVersion(String type) throws IOException {
+        buffer.printf("/// Get %s header version for the message version.%n", type);
         buffer.printf("pub fn %s_header_version(&self, _version: i16) -> i16 {%n", type);
         buffer.incrementIndent();
         buffer.printf("match self.api_key {%n");

@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeProducersResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeProducersResponse {
@@ -19,7 +20,7 @@ pub struct DescribeProducersResponse {
     /// Each topic in the response.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicResponse>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for DescribeProducersResponse {
     }
 }
 
+/// TopicResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicResponse {
@@ -104,22 +106,10 @@ pub struct TopicResponse {
     /// Each partition in the response.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionResponse>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TopicResponse {
-    fn api_key(&self) -> i16 {
-        61
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for TopicResponse { }
 
 impl Default for TopicResponse {
     fn default() -> Self {
@@ -180,6 +170,7 @@ impl Writable for TopicResponse {
     }
 }
 
+/// PartitionResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionResponse {
@@ -193,22 +184,10 @@ pub struct PartitionResponse {
     /// 
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub active_producers: Vec<ProducerState>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for PartitionResponse {
-    fn api_key(&self) -> i16 {
-        61
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for PartitionResponse { }
 
 impl Default for PartitionResponse {
     fn default() -> Self {
@@ -279,6 +258,7 @@ impl Writable for PartitionResponse {
     }
 }
 
+/// ProducerState, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ProducerState {
@@ -294,22 +274,10 @@ pub struct ProducerState {
     pub coordinator_epoch: i32,
     /// 
     pub current_txn_start_offset: i64,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ProducerState {
-    fn api_key(&self) -> i16 {
-        61
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for ProducerState { }
 
 impl Default for ProducerState {
     fn default() -> Self {

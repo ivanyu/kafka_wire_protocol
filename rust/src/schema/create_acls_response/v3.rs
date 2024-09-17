@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// CreateAclsResponse, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreateAclsResponse {
@@ -19,7 +20,7 @@ pub struct CreateAclsResponse {
     /// The results for each ACL creation.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub results: Vec<AclCreationResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for CreateAclsResponse {
     }
 }
 
+/// AclCreationResult, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AclCreationResult {
@@ -103,22 +105,10 @@ pub struct AclCreationResult {
     /// The result message, or null if there was no error.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for AclCreationResult {
-    fn api_key(&self) -> i16 {
-        30
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for AclCreationResult { }
 
 impl Default for AclCreationResult {
     fn default() -> Self {

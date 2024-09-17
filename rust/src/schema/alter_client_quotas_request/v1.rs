@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AlterClientQuotasRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterClientQuotasRequest {
@@ -19,7 +20,7 @@ pub struct AlterClientQuotasRequest {
     pub entries: Vec<EntryData>,
     /// Whether the alteration should be validated, but not performed.
     pub validate_only: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for AlterClientQuotasRequest {
     }
 }
 
+/// EntryData, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct EntryData {
@@ -104,22 +106,10 @@ pub struct EntryData {
     /// An individual quota configuration entry to alter.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub ops: Vec<OpData>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for EntryData {
-    fn api_key(&self) -> i16 {
-        49
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for EntryData { }
 
 impl Default for EntryData {
     fn default() -> Self {
@@ -180,6 +170,7 @@ impl Writable for EntryData {
     }
 }
 
+/// EntityData, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct EntityData {
@@ -189,22 +180,10 @@ pub struct EntityData {
     /// The name of the entity, or null if the default.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub entity_name: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for EntityData {
-    fn api_key(&self) -> i16 {
-        49
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for EntityData { }
 
 impl Default for EntityData {
     fn default() -> Self {
@@ -265,6 +244,7 @@ impl Writable for EntityData {
     }
 }
 
+/// OpData, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OpData {
@@ -275,22 +255,10 @@ pub struct OpData {
     pub value: f64,
     /// Whether the quota configuration value should be removed, otherwise set.
     pub remove: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for OpData {
-    fn api_key(&self) -> i16 {
-        49
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for OpData { }
 
 impl Default for OpData {
     fn default() -> Self {

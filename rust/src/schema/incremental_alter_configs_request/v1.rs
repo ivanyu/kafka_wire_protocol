@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// IncrementalAlterConfigsRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct IncrementalAlterConfigsRequest {
@@ -19,7 +20,7 @@ pub struct IncrementalAlterConfigsRequest {
     pub resources: Vec<AlterConfigsResource>,
     /// True if we should validate the request, but not change the configurations.
     pub validate_only: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for IncrementalAlterConfigsRequest {
     }
 }
 
+/// AlterConfigsResource, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterConfigsResource {
@@ -106,22 +108,10 @@ pub struct AlterConfigsResource {
     /// The configurations.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub configs: Vec<AlterableConfig>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for AlterConfigsResource {
-    fn api_key(&self) -> i16 {
-        44
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for AlterConfigsResource { }
 
 impl Default for AlterConfigsResource {
     fn default() -> Self {
@@ -187,6 +177,7 @@ impl Writable for AlterConfigsResource {
     }
 }
 
+/// AlterableConfig, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterableConfig {
@@ -198,22 +189,10 @@ pub struct AlterableConfig {
     /// The value to set for the configuration key.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub value: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for AlterableConfig {
-    fn api_key(&self) -> i16 {
-        44
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for AlterableConfig { }
 
 impl Default for AlterableConfig {
     fn default() -> Self {

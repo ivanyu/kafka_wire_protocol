@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AlterClientQuotasRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterClientQuotasRequest {
@@ -82,6 +83,7 @@ impl Writable for AlterClientQuotasRequest {
     }
 }
 
+/// EntryData, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct EntryData {
@@ -92,18 +94,6 @@ pub struct EntryData {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub ops: Vec<OpData>,
 }
-
-impl ApiMessage for EntryData {
-    fn api_key(&self) -> i16 {
-        49
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for EntryData { }
 
 impl Default for EntryData {
     fn default() -> Self {
@@ -155,6 +145,7 @@ impl Writable for EntryData {
     }
 }
 
+/// EntityData, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct EntityData {
@@ -165,18 +156,6 @@ pub struct EntityData {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub entity_name: Option<String>,
 }
-
-impl ApiMessage for EntityData {
-    fn api_key(&self) -> i16 {
-        49
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for EntityData { }
 
 impl Default for EntityData {
     fn default() -> Self {
@@ -228,6 +207,7 @@ impl Writable for EntityData {
     }
 }
 
+/// OpData, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OpData {
@@ -239,18 +219,6 @@ pub struct OpData {
     /// Whether the quota configuration value should be removed, otherwise set.
     pub remove: bool,
 }
-
-impl ApiMessage for OpData {
-    fn api_key(&self) -> i16 {
-        49
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for OpData { }
 
 impl Default for OpData {
     fn default() -> Self {

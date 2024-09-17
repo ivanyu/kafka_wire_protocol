@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// LeaveGroupResponse, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaveGroupResponse {
@@ -89,6 +90,7 @@ impl Writable for LeaveGroupResponse {
     }
 }
 
+/// MemberResponse, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MemberResponse {
@@ -101,18 +103,6 @@ pub struct MemberResponse {
     /// The error code, or 0 if there was no error.
     pub error_code: i16,
 }
-
-impl ApiMessage for MemberResponse {
-    fn api_key(&self) -> i16 {
-        13
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for MemberResponse { }
 
 impl Default for MemberResponse {
     fn default() -> Self {

@@ -11,13 +11,14 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeDelegationTokenRequest, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeDelegationTokenRequest {
     /// Each owner that we want to describe delegation tokens for, or null to describe all tokens.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_vec()"))]
     pub owners: Option<Vec<DescribeDelegationTokenOwner>>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -88,6 +89,7 @@ impl Writable for DescribeDelegationTokenRequest {
     }
 }
 
+/// DescribeDelegationTokenOwner, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeDelegationTokenOwner {
@@ -97,22 +99,10 @@ pub struct DescribeDelegationTokenOwner {
     /// The owner principal name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub principal_name: String,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribeDelegationTokenOwner {
-    fn api_key(&self) -> i16 {
-        41
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Request for DescribeDelegationTokenOwner { }
 
 impl Default for DescribeDelegationTokenOwner {
     fn default() -> Self {

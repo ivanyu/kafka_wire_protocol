@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AlterReplicaLogDirsResponse, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterReplicaLogDirsResponse {
@@ -19,7 +20,7 @@ pub struct AlterReplicaLogDirsResponse {
     /// The results for each topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub results: Vec<AlterReplicaLogDirTopicResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for AlterReplicaLogDirsResponse {
     }
 }
 
+/// AlterReplicaLogDirTopicResult, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterReplicaLogDirTopicResult {
@@ -104,22 +106,10 @@ pub struct AlterReplicaLogDirTopicResult {
     /// The results for each partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<AlterReplicaLogDirPartitionResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for AlterReplicaLogDirTopicResult {
-    fn api_key(&self) -> i16 {
-        34
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Response for AlterReplicaLogDirTopicResult { }
 
 impl Default for AlterReplicaLogDirTopicResult {
     fn default() -> Self {
@@ -180,6 +170,7 @@ impl Writable for AlterReplicaLogDirTopicResult {
     }
 }
 
+/// AlterReplicaLogDirPartitionResult, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterReplicaLogDirPartitionResult {
@@ -187,22 +178,10 @@ pub struct AlterReplicaLogDirPartitionResult {
     pub partition_index: i32,
     /// The error code, or 0 if there was no error.
     pub error_code: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for AlterReplicaLogDirPartitionResult {
-    fn api_key(&self) -> i16 {
-        34
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Response for AlterReplicaLogDirPartitionResult { }
 
 impl Default for AlterReplicaLogDirPartitionResult {
     fn default() -> Self {
