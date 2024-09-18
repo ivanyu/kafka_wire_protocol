@@ -27,7 +27,7 @@ pub struct BrokerRegistrationRequest {
     /// The listeners of this broker
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub listeners: Vec<Listener>,
-    /// The features on this broker
+    /// The features on this broker. Note: in v0-v3, features with MinSupportedVersion = 0 show up with MinSupportedVersion = 1.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub features: Vec<Feature>,
     /// The rack which this broker is in.

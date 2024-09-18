@@ -4,7 +4,7 @@ Apache Kafka protocol implementations generated for different programming langua
 
 The library contains the protocol messages and some convenience code, but this is not a complete client (or server) implementation. 
 
-Message versions up to Kafka 3.8.0 are supported at the moment. The unsupported message types are `ProduceRequest`, `FetchResponse`, and `FetchSnapshotResponse`.
+Message versions up to Kafka 3.9.0 are supported at the moment. The unsupported message types are `ProduceRequest`, `FetchResponse`, `FetchSnapshotResponse`, and `ShareFetchResponse`.
 
 ## Usage
 
