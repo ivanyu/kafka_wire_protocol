@@ -11,13 +11,14 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeLogDirsRequest, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeLogDirsRequest {
     /// Each topic that we want to describe log directories for, or null for all topics.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_vec()"))]
     pub topics: Option<Vec<DescribableLogDirTopic>>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -88,6 +89,7 @@ impl Writable for DescribeLogDirsRequest {
     }
 }
 
+/// DescribableLogDirTopic, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribableLogDirTopic {
@@ -97,22 +99,10 @@ pub struct DescribableLogDirTopic {
     /// The partition indexes.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<i32>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribableLogDirTopic {
-    fn api_key(&self) -> i16 {
-        35
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Request for DescribableLogDirTopic { }
 
 impl Default for DescribableLogDirTopic {
     fn default() -> Self {

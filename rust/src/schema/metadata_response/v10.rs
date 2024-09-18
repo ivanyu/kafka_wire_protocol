@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// MetadataResponse, version 10.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MetadataResponse {
@@ -30,7 +31,7 @@ pub struct MetadataResponse {
     pub topics: Vec<MetadataResponseTopic>,
     /// 32-bit bitfield to represent authorized operations for this cluster.
     pub cluster_authorized_operations: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -126,6 +127,7 @@ impl Writable for MetadataResponse {
     }
 }
 
+/// MetadataResponseBroker, version 10.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MetadataResponseBroker {
@@ -139,22 +141,10 @@ pub struct MetadataResponseBroker {
     /// The rack of the broker, or null if it has not been assigned to a rack.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub rack: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for MetadataResponseBroker {
-    fn api_key(&self) -> i16 {
-        3
-    }
-    
-    fn version(&self) -> i16 {
-        10
-    }
-}
-
-impl Response for MetadataResponseBroker { }
 
 impl Default for MetadataResponseBroker {
     fn default() -> Self {
@@ -225,6 +215,7 @@ impl Writable for MetadataResponseBroker {
     }
 }
 
+/// MetadataResponseTopic, version 10.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MetadataResponseTopic {
@@ -243,22 +234,10 @@ pub struct MetadataResponseTopic {
     pub partitions: Vec<MetadataResponsePartition>,
     /// 32-bit bitfield to represent authorized operations for this topic.
     pub topic_authorized_operations: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for MetadataResponseTopic {
-    fn api_key(&self) -> i16 {
-        3
-    }
-    
-    fn version(&self) -> i16 {
-        10
-    }
-}
-
-impl Response for MetadataResponseTopic { }
 
 impl Default for MetadataResponseTopic {
     fn default() -> Self {
@@ -339,6 +318,7 @@ impl Writable for MetadataResponseTopic {
     }
 }
 
+/// MetadataResponsePartition, version 10.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MetadataResponsePartition {
@@ -359,22 +339,10 @@ pub struct MetadataResponsePartition {
     /// The set of offline replicas of this partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub offline_replicas: Vec<i32>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for MetadataResponsePartition {
-    fn api_key(&self) -> i16 {
-        3
-    }
-    
-    fn version(&self) -> i16 {
-        10
-    }
-}
-
-impl Response for MetadataResponsePartition { }
 
 impl Default for MetadataResponsePartition {
     fn default() -> Self {

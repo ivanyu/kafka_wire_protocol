@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AlterPartitionReassignmentsRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterPartitionReassignmentsRequest {
@@ -19,7 +20,7 @@ pub struct AlterPartitionReassignmentsRequest {
     /// The topics to reassign.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<ReassignableTopic>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for AlterPartitionReassignmentsRequest {
     }
 }
 
+/// ReassignableTopic, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ReassignableTopic {
@@ -104,22 +106,10 @@ pub struct ReassignableTopic {
     /// The partitions to reassign.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<ReassignablePartition>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ReassignableTopic {
-    fn api_key(&self) -> i16 {
-        45
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for ReassignableTopic { }
 
 impl Default for ReassignableTopic {
     fn default() -> Self {
@@ -180,6 +170,7 @@ impl Writable for ReassignableTopic {
     }
 }
 
+/// ReassignablePartition, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ReassignablePartition {
@@ -188,22 +179,10 @@ pub struct ReassignablePartition {
     /// The replicas to place the partitions on, or null to cancel a pending reassignment for this partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_vec()"))]
     pub replicas: Option<Vec<i32>>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ReassignablePartition {
-    fn api_key(&self) -> i16 {
-        45
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for ReassignablePartition { }
 
 impl Default for ReassignablePartition {
     fn default() -> Self {

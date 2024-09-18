@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeLogDirsResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeLogDirsResponse {
@@ -82,6 +83,7 @@ impl Writable for DescribeLogDirsResponse {
     }
 }
 
+/// DescribeLogDirsResult, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeLogDirsResult {
@@ -94,18 +96,6 @@ pub struct DescribeLogDirsResult {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<DescribeLogDirsTopic>,
 }
-
-impl ApiMessage for DescribeLogDirsResult {
-    fn api_key(&self) -> i16 {
-        35
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for DescribeLogDirsResult { }
 
 impl Default for DescribeLogDirsResult {
     fn default() -> Self {
@@ -162,6 +152,7 @@ impl Writable for DescribeLogDirsResult {
     }
 }
 
+/// DescribeLogDirsTopic, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeLogDirsTopic {
@@ -172,18 +163,6 @@ pub struct DescribeLogDirsTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<DescribeLogDirsPartition>,
 }
-
-impl ApiMessage for DescribeLogDirsTopic {
-    fn api_key(&self) -> i16 {
-        35
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for DescribeLogDirsTopic { }
 
 impl Default for DescribeLogDirsTopic {
     fn default() -> Self {
@@ -235,6 +214,7 @@ impl Writable for DescribeLogDirsTopic {
     }
 }
 
+/// DescribeLogDirsPartition, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeLogDirsPartition {
@@ -247,18 +227,6 @@ pub struct DescribeLogDirsPartition {
     /// True if this log is created by AlterReplicaLogDirsRequest and will replace the current log of the replica in the future.
     pub is_future_key: bool,
 }
-
-impl ApiMessage for DescribeLogDirsPartition {
-    fn api_key(&self) -> i16 {
-        35
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for DescribeLogDirsPartition { }
 
 impl Default for DescribeLogDirsPartition {
     fn default() -> Self {

@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// OffsetFetchRequest, version 7.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetFetchRequest {
@@ -22,7 +23,7 @@ pub struct OffsetFetchRequest {
     pub topics: Option<Vec<OffsetFetchRequestTopic>>,
     /// Whether broker should hold on returning unstable offsets but set a retriable error code for the partitions.
     pub require_stable: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -103,6 +104,7 @@ impl Writable for OffsetFetchRequest {
     }
 }
 
+/// OffsetFetchRequestTopic, version 7.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetFetchRequestTopic {
@@ -112,22 +114,10 @@ pub struct OffsetFetchRequestTopic {
     /// The partition indexes we would like to fetch offsets for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_indexes: Vec<i32>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for OffsetFetchRequestTopic {
-    fn api_key(&self) -> i16 {
-        9
-    }
-    
-    fn version(&self) -> i16 {
-        7
-    }
-}
-
-impl Request for OffsetFetchRequestTopic { }
 
 impl Default for OffsetFetchRequestTopic {
     fn default() -> Self {

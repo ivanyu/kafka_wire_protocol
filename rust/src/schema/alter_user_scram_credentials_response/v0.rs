@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AlterUserScramCredentialsResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterUserScramCredentialsResponse {
@@ -19,7 +20,7 @@ pub struct AlterUserScramCredentialsResponse {
     /// The results for deletions and alterations, one per affected user.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub results: Vec<AlterUserScramCredentialsResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for AlterUserScramCredentialsResponse {
     }
 }
 
+/// AlterUserScramCredentialsResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterUserScramCredentialsResult {
@@ -106,22 +108,10 @@ pub struct AlterUserScramCredentialsResult {
     /// The error message, if any.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for AlterUserScramCredentialsResult {
-    fn api_key(&self) -> i16 {
-        51
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for AlterUserScramCredentialsResult { }
 
 impl Default for AlterUserScramCredentialsResult {
     fn default() -> Self {

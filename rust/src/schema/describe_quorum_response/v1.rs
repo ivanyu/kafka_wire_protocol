@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeQuorumResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeQuorumResponse {
@@ -19,7 +20,7 @@ pub struct DescribeQuorumResponse {
     /// 
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for DescribeQuorumResponse {
     }
 }
 
+/// TopicData, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicData {
@@ -104,22 +106,10 @@ pub struct TopicData {
     /// 
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TopicData {
-    fn api_key(&self) -> i16 {
-        55
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for TopicData { }
 
 impl Default for TopicData {
     fn default() -> Self {
@@ -180,6 +170,7 @@ impl Writable for TopicData {
     }
 }
 
+/// PartitionData, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionData {
@@ -199,22 +190,10 @@ pub struct PartitionData {
     /// 
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub observers: Vec<ReplicaState>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for PartitionData {
-    fn api_key(&self) -> i16 {
-        55
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for PartitionData { }
 
 impl Default for PartitionData {
     fn default() -> Self {
@@ -300,6 +279,7 @@ impl Writable for PartitionData {
     }
 }
 
+/// ReplicaState, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ReplicaState {
@@ -311,22 +291,10 @@ pub struct ReplicaState {
     pub last_fetch_timestamp: i64,
     /// The leader wall clock append time of the offset for which the follower made the most recent fetch request. This is reported as the current time for the leader and -1 if unknown for a voter
     pub last_caught_up_timestamp: i64,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ReplicaState {
-    fn api_key(&self) -> i16 {
-        55
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for ReplicaState { }
 
 impl Default for ReplicaState {
     fn default() -> Self {

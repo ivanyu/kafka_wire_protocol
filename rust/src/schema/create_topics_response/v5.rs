@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// CreateTopicsResponse, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreateTopicsResponse {
@@ -19,7 +20,7 @@ pub struct CreateTopicsResponse {
     /// Results for each topic we tried to create.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<CreatableTopicResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for CreateTopicsResponse {
     }
 }
 
+/// CreatableTopicResult, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatableTopicResult {
@@ -115,22 +117,10 @@ pub struct CreatableTopicResult {
     /// Configuration of the topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_vec()"))]
     pub configs: Option<Vec<CreatableTopicConfigs>>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for CreatableTopicResult {
-    fn api_key(&self) -> i16 {
-        19
-    }
-    
-    fn version(&self) -> i16 {
-        5
-    }
-}
-
-impl Response for CreatableTopicResult { }
 
 impl Default for CreatableTopicResult {
     fn default() -> Self {
@@ -226,6 +216,7 @@ impl Writable for CreatableTopicResult {
     }
 }
 
+/// CreatableTopicConfigs, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatableTopicConfigs {
@@ -241,22 +232,10 @@ pub struct CreatableTopicConfigs {
     pub config_source: i8,
     /// True if this configuration is sensitive.
     pub is_sensitive: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for CreatableTopicConfigs {
-    fn api_key(&self) -> i16 {
-        19
-    }
-    
-    fn version(&self) -> i16 {
-        5
-    }
-}
-
-impl Response for CreatableTopicConfigs { }
 
 impl Default for CreatableTopicConfigs {
     fn default() -> Self {

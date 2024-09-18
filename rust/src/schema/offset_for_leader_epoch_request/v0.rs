@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// OffsetForLeaderEpochRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetForLeaderEpochRequest {
@@ -75,6 +76,7 @@ impl Writable for OffsetForLeaderEpochRequest {
     }
 }
 
+/// OffsetForLeaderTopic, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetForLeaderTopic {
@@ -85,18 +87,6 @@ pub struct OffsetForLeaderTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<OffsetForLeaderPartition>,
 }
-
-impl ApiMessage for OffsetForLeaderTopic {
-    fn api_key(&self) -> i16 {
-        23
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for OffsetForLeaderTopic { }
 
 impl Default for OffsetForLeaderTopic {
     fn default() -> Self {
@@ -148,6 +138,7 @@ impl Writable for OffsetForLeaderTopic {
     }
 }
 
+/// OffsetForLeaderPartition, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetForLeaderPartition {
@@ -156,18 +147,6 @@ pub struct OffsetForLeaderPartition {
     /// The epoch to look up an offset for.
     pub leader_epoch: i32,
 }
-
-impl ApiMessage for OffsetForLeaderPartition {
-    fn api_key(&self) -> i16 {
-        23
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for OffsetForLeaderPartition { }
 
 impl Default for OffsetForLeaderPartition {
     fn default() -> Self {

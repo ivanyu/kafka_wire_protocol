@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// CreatePartitionsResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatePartitionsResponse {
@@ -82,6 +83,7 @@ impl Writable for CreatePartitionsResponse {
     }
 }
 
+/// CreatePartitionsTopicResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatePartitionsTopicResult {
@@ -94,18 +96,6 @@ pub struct CreatePartitionsTopicResult {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
 }
-
-impl ApiMessage for CreatePartitionsTopicResult {
-    fn api_key(&self) -> i16 {
-        37
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for CreatePartitionsTopicResult { }
 
 impl Default for CreatePartitionsTopicResult {
     fn default() -> Self {

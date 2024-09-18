@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// OffsetFetchResponse, version 7.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetFetchResponse {
@@ -21,7 +22,7 @@ pub struct OffsetFetchResponse {
     pub topics: Vec<OffsetFetchResponseTopic>,
     /// The top-level error code, or 0 if there was no error.
     pub error_code: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -102,6 +103,7 @@ impl Writable for OffsetFetchResponse {
     }
 }
 
+/// OffsetFetchResponseTopic, version 7.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetFetchResponseTopic {
@@ -111,22 +113,10 @@ pub struct OffsetFetchResponseTopic {
     /// The responses per partition
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<OffsetFetchResponsePartition>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for OffsetFetchResponseTopic {
-    fn api_key(&self) -> i16 {
-        9
-    }
-    
-    fn version(&self) -> i16 {
-        7
-    }
-}
-
-impl Response for OffsetFetchResponseTopic { }
 
 impl Default for OffsetFetchResponseTopic {
     fn default() -> Self {
@@ -187,6 +177,7 @@ impl Writable for OffsetFetchResponseTopic {
     }
 }
 
+/// OffsetFetchResponsePartition, version 7.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetFetchResponsePartition {
@@ -201,22 +192,10 @@ pub struct OffsetFetchResponsePartition {
     pub metadata: Option<String>,
     /// The error code, or 0 if there was no error.
     pub error_code: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for OffsetFetchResponsePartition {
-    fn api_key(&self) -> i16 {
-        9
-    }
-    
-    fn version(&self) -> i16 {
-        7
-    }
-}
-
-impl Response for OffsetFetchResponsePartition { }
 
 impl Default for OffsetFetchResponsePartition {
     fn default() -> Self {

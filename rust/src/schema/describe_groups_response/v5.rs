@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::{proptest_strategies, serde_bytes};
 
+/// DescribeGroupsResponse, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeGroupsResponse {
@@ -20,7 +21,7 @@ pub struct DescribeGroupsResponse {
     /// Each described group.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub groups: Vec<DescribedGroup>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -96,6 +97,7 @@ impl Writable for DescribeGroupsResponse {
     }
 }
 
+/// DescribedGroup, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribedGroup {
@@ -118,22 +120,10 @@ pub struct DescribedGroup {
     pub members: Vec<DescribedGroupMember>,
     /// 32-bit bitfield to represent authorized operations for this group.
     pub authorized_operations: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribedGroup {
-    fn api_key(&self) -> i16 {
-        15
-    }
-    
-    fn version(&self) -> i16 {
-        5
-    }
-}
-
-impl Response for DescribedGroup { }
 
 impl Default for DescribedGroup {
     fn default() -> Self {
@@ -219,6 +209,7 @@ impl Writable for DescribedGroup {
     }
 }
 
+/// DescribedGroupMember, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribedGroupMember {
@@ -242,22 +233,10 @@ pub struct DescribedGroupMember {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::bytes()"))]
     #[cfg_attr(test, serde(with="serde_bytes"))]
     pub member_assignment: Vec<u8>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribedGroupMember {
-    fn api_key(&self) -> i16 {
-        15
-    }
-    
-    fn version(&self) -> i16 {
-        5
-    }
-}
-
-impl Response for DescribedGroupMember { }
 
 impl Default for DescribedGroupMember {
     fn default() -> Self {

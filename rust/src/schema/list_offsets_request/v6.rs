@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ListOffsetsRequest, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListOffsetsRequest {
@@ -21,7 +22,7 @@ pub struct ListOffsetsRequest {
     /// Each topic in the request.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<ListOffsetsTopic>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -102,6 +103,7 @@ impl Writable for ListOffsetsRequest {
     }
 }
 
+/// ListOffsetsTopic, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListOffsetsTopic {
@@ -111,22 +113,10 @@ pub struct ListOffsetsTopic {
     /// Each partition in the request.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<ListOffsetsPartition>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ListOffsetsTopic {
-    fn api_key(&self) -> i16 {
-        2
-    }
-    
-    fn version(&self) -> i16 {
-        6
-    }
-}
-
-impl Request for ListOffsetsTopic { }
 
 impl Default for ListOffsetsTopic {
     fn default() -> Self {
@@ -187,6 +177,7 @@ impl Writable for ListOffsetsTopic {
     }
 }
 
+/// ListOffsetsPartition, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListOffsetsPartition {
@@ -196,22 +187,10 @@ pub struct ListOffsetsPartition {
     pub current_leader_epoch: i32,
     /// The current timestamp.
     pub timestamp: i64,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ListOffsetsPartition {
-    fn api_key(&self) -> i16 {
-        2
-    }
-    
-    fn version(&self) -> i16 {
-        6
-    }
-}
-
-impl Request for ListOffsetsPartition { }
 
 impl Default for ListOffsetsPartition {
     fn default() -> Self {

@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DeleteRecordsResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteRecordsResponse {
@@ -82,6 +83,7 @@ impl Writable for DeleteRecordsResponse {
     }
 }
 
+/// DeleteRecordsTopicResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteRecordsTopicResult {
@@ -92,18 +94,6 @@ pub struct DeleteRecordsTopicResult {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<DeleteRecordsPartitionResult>,
 }
-
-impl ApiMessage for DeleteRecordsTopicResult {
-    fn api_key(&self) -> i16 {
-        21
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for DeleteRecordsTopicResult { }
 
 impl Default for DeleteRecordsTopicResult {
     fn default() -> Self {
@@ -155,6 +145,7 @@ impl Writable for DeleteRecordsTopicResult {
     }
 }
 
+/// DeleteRecordsPartitionResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteRecordsPartitionResult {
@@ -165,18 +156,6 @@ pub struct DeleteRecordsPartitionResult {
     /// The deletion error code, or 0 if the deletion succeeded.
     pub error_code: i16,
 }
-
-impl ApiMessage for DeleteRecordsPartitionResult {
-    fn api_key(&self) -> i16 {
-        21
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for DeleteRecordsPartitionResult { }
 
 impl Default for DeleteRecordsPartitionResult {
     fn default() -> Self {

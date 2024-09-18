@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 use crate::markers::{ApiMessage, Header};
 use crate::readable_writable::{Readable, Writable};
 
+/// ResponseHeader, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ResponseHeader {

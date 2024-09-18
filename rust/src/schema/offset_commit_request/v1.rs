@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// OffsetCommitRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetCommitRequest {
@@ -98,6 +99,7 @@ impl Writable for OffsetCommitRequest {
     }
 }
 
+/// OffsetCommitRequestTopic, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetCommitRequestTopic {
@@ -108,18 +110,6 @@ pub struct OffsetCommitRequestTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<OffsetCommitRequestPartition>,
 }
-
-impl ApiMessage for OffsetCommitRequestTopic {
-    fn api_key(&self) -> i16 {
-        8
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for OffsetCommitRequestTopic { }
 
 impl Default for OffsetCommitRequestTopic {
     fn default() -> Self {
@@ -171,6 +161,7 @@ impl Writable for OffsetCommitRequestTopic {
     }
 }
 
+/// OffsetCommitRequestPartition, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetCommitRequestPartition {
@@ -184,18 +175,6 @@ pub struct OffsetCommitRequestPartition {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub committed_metadata: Option<String>,
 }
-
-impl ApiMessage for OffsetCommitRequestPartition {
-    fn api_key(&self) -> i16 {
-        8
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for OffsetCommitRequestPartition { }
 
 impl Default for OffsetCommitRequestPartition {
     fn default() -> Self {

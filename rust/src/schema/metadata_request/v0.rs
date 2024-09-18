@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// MetadataRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MetadataRequest {
@@ -75,6 +76,7 @@ impl Writable for MetadataRequest {
     }
 }
 
+/// MetadataRequestTopic, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MetadataRequestTopic {
@@ -82,18 +84,6 @@ pub struct MetadataRequestTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
 }
-
-impl ApiMessage for MetadataRequestTopic {
-    fn api_key(&self) -> i16 {
-        3
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for MetadataRequestTopic { }
 
 impl Default for MetadataRequestTopic {
     fn default() -> Self {

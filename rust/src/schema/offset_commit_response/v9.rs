@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// OffsetCommitResponse, version 9.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetCommitResponse {
@@ -19,7 +20,7 @@ pub struct OffsetCommitResponse {
     /// The responses for each topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<OffsetCommitResponseTopic>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for OffsetCommitResponse {
     }
 }
 
+/// OffsetCommitResponseTopic, version 9.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetCommitResponseTopic {
@@ -104,22 +106,10 @@ pub struct OffsetCommitResponseTopic {
     /// The responses for each partition in the topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<OffsetCommitResponsePartition>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for OffsetCommitResponseTopic {
-    fn api_key(&self) -> i16 {
-        8
-    }
-    
-    fn version(&self) -> i16 {
-        9
-    }
-}
-
-impl Response for OffsetCommitResponseTopic { }
 
 impl Default for OffsetCommitResponseTopic {
     fn default() -> Self {
@@ -180,6 +170,7 @@ impl Writable for OffsetCommitResponseTopic {
     }
 }
 
+/// OffsetCommitResponsePartition, version 9.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetCommitResponsePartition {
@@ -187,22 +178,10 @@ pub struct OffsetCommitResponsePartition {
     pub partition_index: i32,
     /// The error code, or 0 if there was no error.
     pub error_code: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for OffsetCommitResponsePartition {
-    fn api_key(&self) -> i16 {
-        8
-    }
-    
-    fn version(&self) -> i16 {
-        9
-    }
-}
-
-impl Response for OffsetCommitResponsePartition { }
 
 impl Default for OffsetCommitResponsePartition {
     fn default() -> Self {

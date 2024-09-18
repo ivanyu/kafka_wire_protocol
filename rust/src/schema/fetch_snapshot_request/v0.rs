@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// FetchSnapshotRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct FetchSnapshotRequest {
@@ -24,7 +25,7 @@ pub struct FetchSnapshotRequest {
     /// The topics to fetch
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicSnapshot>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -120,6 +121,7 @@ impl Writable for FetchSnapshotRequest {
     }
 }
 
+/// TopicSnapshot, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicSnapshot {
@@ -129,22 +131,10 @@ pub struct TopicSnapshot {
     /// The partitions to fetch
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionSnapshot>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TopicSnapshot {
-    fn api_key(&self) -> i16 {
-        59
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for TopicSnapshot { }
 
 impl Default for TopicSnapshot {
     fn default() -> Self {
@@ -205,6 +195,7 @@ impl Writable for TopicSnapshot {
     }
 }
 
+/// PartitionSnapshot, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionSnapshot {
@@ -216,22 +207,10 @@ pub struct PartitionSnapshot {
     pub snapshot_id: SnapshotId,
     /// The byte position within the snapshot to start fetching from
     pub position: i64,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for PartitionSnapshot {
-    fn api_key(&self) -> i16 {
-        59
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for PartitionSnapshot { }
 
 impl Default for PartitionSnapshot {
     fn default() -> Self {
@@ -302,6 +281,7 @@ impl Writable for PartitionSnapshot {
     }
 }
 
+/// SnapshotId, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct SnapshotId {
@@ -309,22 +289,10 @@ pub struct SnapshotId {
     pub end_offset: i64,
     /// 
     pub epoch: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for SnapshotId {
-    fn api_key(&self) -> i16 {
-        59
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for SnapshotId { }
 
 impl Default for SnapshotId {
     fn default() -> Self {

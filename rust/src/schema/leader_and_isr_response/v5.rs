@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// LeaderAndIsrResponse, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderAndIsrResponse {
@@ -20,7 +21,7 @@ pub struct LeaderAndIsrResponse {
     /// Each topic
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<LeaderAndIsrTopicError>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -96,6 +97,7 @@ impl Writable for LeaderAndIsrResponse {
     }
 }
 
+/// LeaderAndIsrTopicError, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderAndIsrTopicError {
@@ -105,22 +107,10 @@ pub struct LeaderAndIsrTopicError {
     /// Each partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_errors: Vec<LeaderAndIsrPartitionError>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for LeaderAndIsrTopicError {
-    fn api_key(&self) -> i16 {
-        4
-    }
-    
-    fn version(&self) -> i16 {
-        5
-    }
-}
-
-impl Response for LeaderAndIsrTopicError { }
 
 impl Default for LeaderAndIsrTopicError {
     fn default() -> Self {
@@ -181,6 +171,7 @@ impl Writable for LeaderAndIsrTopicError {
     }
 }
 
+/// LeaderAndIsrPartitionError, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderAndIsrPartitionError {
@@ -188,22 +179,10 @@ pub struct LeaderAndIsrPartitionError {
     pub partition_index: i32,
     /// The partition error code, or 0 if there was no error.
     pub error_code: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for LeaderAndIsrPartitionError {
-    fn api_key(&self) -> i16 {
-        4
-    }
-    
-    fn version(&self) -> i16 {
-        5
-    }
-}
-
-impl Response for LeaderAndIsrPartitionError { }
 
 impl Default for LeaderAndIsrPartitionError {
     fn default() -> Self {

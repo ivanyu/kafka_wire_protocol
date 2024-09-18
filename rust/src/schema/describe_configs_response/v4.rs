@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeConfigsResponse, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeConfigsResponse {
@@ -19,7 +20,7 @@ pub struct DescribeConfigsResponse {
     /// The results for each resource.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub results: Vec<DescribeConfigsResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for DescribeConfigsResponse {
     }
 }
 
+/// DescribeConfigsResult, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeConfigsResult {
@@ -111,22 +113,10 @@ pub struct DescribeConfigsResult {
     /// Each listed configuration.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub configs: Vec<DescribeConfigsResourceResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribeConfigsResult {
-    fn api_key(&self) -> i16 {
-        32
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Response for DescribeConfigsResult { }
 
 impl Default for DescribeConfigsResult {
     fn default() -> Self {
@@ -202,6 +192,7 @@ impl Writable for DescribeConfigsResult {
     }
 }
 
+/// DescribeConfigsResourceResult, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeConfigsResourceResult {
@@ -225,22 +216,10 @@ pub struct DescribeConfigsResourceResult {
     /// The configuration documentation.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub documentation: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribeConfigsResourceResult {
-    fn api_key(&self) -> i16 {
-        32
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Response for DescribeConfigsResourceResult { }
 
 impl Default for DescribeConfigsResourceResult {
     fn default() -> Self {
@@ -331,6 +310,7 @@ impl Writable for DescribeConfigsResourceResult {
     }
 }
 
+/// DescribeConfigsSynonym, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeConfigsSynonym {
@@ -342,22 +322,10 @@ pub struct DescribeConfigsSynonym {
     pub value: Option<String>,
     /// The synonym source.
     pub source: i8,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribeConfigsSynonym {
-    fn api_key(&self) -> i16 {
-        32
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Response for DescribeConfigsSynonym { }
 
 impl Default for DescribeConfigsSynonym {
     fn default() -> Self {

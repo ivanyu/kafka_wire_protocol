@@ -11,6 +11,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::{proptest_strategies, serde_bytes};
 
+/// JoinGroupResponse, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct JoinGroupResponse {
@@ -121,6 +122,7 @@ impl Writable for JoinGroupResponse {
     }
 }
 
+/// JoinGroupResponseMember, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct JoinGroupResponseMember {
@@ -132,18 +134,6 @@ pub struct JoinGroupResponseMember {
     #[cfg_attr(test, serde(with="serde_bytes"))]
     pub metadata: Vec<u8>,
 }
-
-impl ApiMessage for JoinGroupResponseMember {
-    fn api_key(&self) -> i16 {
-        11
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Response for JoinGroupResponseMember { }
 
 impl Default for JoinGroupResponseMember {
     fn default() -> Self {

@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeConfigsRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeConfigsRequest {
@@ -82,6 +83,7 @@ impl Writable for DescribeConfigsRequest {
     }
 }
 
+/// DescribeConfigsResource, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeConfigsResource {
@@ -94,18 +96,6 @@ pub struct DescribeConfigsResource {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_vec()"))]
     pub configuration_keys: Option<Vec<String>>,
 }
-
-impl ApiMessage for DescribeConfigsResource {
-    fn api_key(&self) -> i16 {
-        32
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for DescribeConfigsResource { }
 
 impl Default for DescribeConfigsResource {
     fn default() -> Self {

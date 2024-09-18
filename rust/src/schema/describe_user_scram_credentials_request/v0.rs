@@ -11,13 +11,14 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeUserScramCredentialsRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeUserScramCredentialsRequest {
     /// The users to describe, or null/empty to describe all users.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_vec()"))]
     pub users: Option<Vec<UserName>>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -88,28 +89,17 @@ impl Writable for DescribeUserScramCredentialsRequest {
     }
 }
 
+/// UserName, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UserName {
     /// The user name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for UserName {
-    fn api_key(&self) -> i16 {
-        50
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for UserName { }
 
 impl Default for UserName {
     fn default() -> Self {

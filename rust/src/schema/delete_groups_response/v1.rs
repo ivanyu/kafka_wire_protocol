@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DeleteGroupsResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteGroupsResponse {
@@ -82,6 +83,7 @@ impl Writable for DeleteGroupsResponse {
     }
 }
 
+/// DeletableGroupResult, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeletableGroupResult {
@@ -91,18 +93,6 @@ pub struct DeletableGroupResult {
     /// The deletion error, or 0 if the deletion succeeded.
     pub error_code: i16,
 }
-
-impl ApiMessage for DeletableGroupResult {
-    fn api_key(&self) -> i16 {
-        42
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for DeletableGroupResult { }
 
 impl Default for DeletableGroupResult {
     fn default() -> Self {

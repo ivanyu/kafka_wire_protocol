@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AlterPartitionReassignmentsResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterPartitionReassignmentsResponse {
@@ -24,7 +25,7 @@ pub struct AlterPartitionReassignmentsResponse {
     /// The responses to topics to reassign.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub responses: Vec<ReassignableTopicResponse>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -110,6 +111,7 @@ impl Writable for AlterPartitionReassignmentsResponse {
     }
 }
 
+/// ReassignableTopicResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ReassignableTopicResponse {
@@ -119,22 +121,10 @@ pub struct ReassignableTopicResponse {
     /// The responses to partitions to reassign
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<ReassignablePartitionResponse>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ReassignableTopicResponse {
-    fn api_key(&self) -> i16 {
-        45
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for ReassignableTopicResponse { }
 
 impl Default for ReassignableTopicResponse {
     fn default() -> Self {
@@ -195,6 +185,7 @@ impl Writable for ReassignableTopicResponse {
     }
 }
 
+/// ReassignablePartitionResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ReassignablePartitionResponse {
@@ -205,22 +196,10 @@ pub struct ReassignablePartitionResponse {
     /// The error message for this partition, or null if there was no error.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ReassignablePartitionResponse {
-    fn api_key(&self) -> i16 {
-        45
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for ReassignablePartitionResponse { }
 
 impl Default for ReassignablePartitionResponse {
     fn default() -> Self {

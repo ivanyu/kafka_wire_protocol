@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// LeaderChangeMessage, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderChangeMessage {
@@ -24,7 +25,7 @@ pub struct LeaderChangeMessage {
     /// The voters who voted for the leader at the time of election
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub granting_voters: Vec<Voter>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -110,27 +111,16 @@ impl Writable for LeaderChangeMessage {
     }
 }
 
+/// Voter, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Voter {
     /// 
     pub voter_id: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for Voter {
-    fn api_key(&self) -> i16 {
-        -1
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Data for Voter { }
 
 impl Default for Voter {
     fn default() -> Self {

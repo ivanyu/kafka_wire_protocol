@@ -13,3 +13,7 @@ src/schema/mod.rs:
 .PHONY: test
 test: generate java_tester
 	cd rust; cargo test
+
+.PHONY: doc
+doc:
+	cd rust; cargo doc

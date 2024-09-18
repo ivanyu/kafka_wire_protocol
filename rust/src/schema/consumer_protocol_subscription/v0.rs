@@ -11,6 +11,7 @@ use crate::markers::{ApiMessage, Data};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::{proptest_strategies, serde_option_bytes};
 
+/// ConsumerProtocolSubscription, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ConsumerProtocolSubscription {

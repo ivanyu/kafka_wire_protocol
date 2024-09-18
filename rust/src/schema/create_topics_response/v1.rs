@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// CreateTopicsResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreateTopicsResponse {
@@ -75,6 +76,7 @@ impl Writable for CreateTopicsResponse {
     }
 }
 
+/// CreatableTopicResult, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatableTopicResult {
@@ -87,18 +89,6 @@ pub struct CreatableTopicResult {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
 }
-
-impl ApiMessage for CreatableTopicResult {
-    fn api_key(&self) -> i16 {
-        19
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for CreatableTopicResult { }
 
 impl Default for CreatableTopicResult {
     fn default() -> Self {

@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ElectLeadersResponse, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ElectLeadersResponse {
@@ -21,7 +22,7 @@ pub struct ElectLeadersResponse {
     /// The election results, or an empty array if the requester did not have permission and the request asks for all partitions.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub replica_election_results: Vec<ReplicaElectionResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -102,6 +103,7 @@ impl Writable for ElectLeadersResponse {
     }
 }
 
+/// ReplicaElectionResult, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ReplicaElectionResult {
@@ -111,22 +113,10 @@ pub struct ReplicaElectionResult {
     /// The results for each partition
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_result: Vec<PartitionResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ReplicaElectionResult {
-    fn api_key(&self) -> i16 {
-        43
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Response for ReplicaElectionResult { }
 
 impl Default for ReplicaElectionResult {
     fn default() -> Self {
@@ -187,6 +177,7 @@ impl Writable for ReplicaElectionResult {
     }
 }
 
+/// PartitionResult, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionResult {
@@ -197,22 +188,10 @@ pub struct PartitionResult {
     /// The result message, or null if there was no error.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for PartitionResult {
-    fn api_key(&self) -> i16 {
-        43
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Response for PartitionResult { }
 
 impl Default for PartitionResult {
     fn default() -> Self {

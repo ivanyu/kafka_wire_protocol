@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// OffsetCommitRequest, version 8.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetCommitRequest {
@@ -28,7 +29,7 @@ pub struct OffsetCommitRequest {
     /// The topics to commit offsets for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<OffsetCommitRequestTopic>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -119,6 +120,7 @@ impl Writable for OffsetCommitRequest {
     }
 }
 
+/// OffsetCommitRequestTopic, version 8.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetCommitRequestTopic {
@@ -128,22 +130,10 @@ pub struct OffsetCommitRequestTopic {
     /// Each partition to commit offsets for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<OffsetCommitRequestPartition>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for OffsetCommitRequestTopic {
-    fn api_key(&self) -> i16 {
-        8
-    }
-    
-    fn version(&self) -> i16 {
-        8
-    }
-}
-
-impl Request for OffsetCommitRequestTopic { }
 
 impl Default for OffsetCommitRequestTopic {
     fn default() -> Self {
@@ -204,6 +194,7 @@ impl Writable for OffsetCommitRequestTopic {
     }
 }
 
+/// OffsetCommitRequestPartition, version 8.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetCommitRequestPartition {
@@ -216,22 +207,10 @@ pub struct OffsetCommitRequestPartition {
     /// Any associated metadata the client wants to keep.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub committed_metadata: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for OffsetCommitRequestPartition {
-    fn api_key(&self) -> i16 {
-        8
-    }
-    
-    fn version(&self) -> i16 {
-        8
-    }
-}
-
-impl Request for OffsetCommitRequestPartition { }
 
 impl Default for OffsetCommitRequestPartition {
     fn default() -> Self {

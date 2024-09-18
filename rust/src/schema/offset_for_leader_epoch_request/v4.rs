@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// OffsetForLeaderEpochRequest, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetForLeaderEpochRequest {
@@ -19,7 +20,7 @@ pub struct OffsetForLeaderEpochRequest {
     /// Each topic to get offsets for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<OffsetForLeaderTopic>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for OffsetForLeaderEpochRequest {
     }
 }
 
+/// OffsetForLeaderTopic, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetForLeaderTopic {
@@ -104,22 +106,10 @@ pub struct OffsetForLeaderTopic {
     /// Each partition to get offsets for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<OffsetForLeaderPartition>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for OffsetForLeaderTopic {
-    fn api_key(&self) -> i16 {
-        23
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Request for OffsetForLeaderTopic { }
 
 impl Default for OffsetForLeaderTopic {
     fn default() -> Self {
@@ -180,6 +170,7 @@ impl Writable for OffsetForLeaderTopic {
     }
 }
 
+/// OffsetForLeaderPartition, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetForLeaderPartition {
@@ -189,22 +180,10 @@ pub struct OffsetForLeaderPartition {
     pub current_leader_epoch: i32,
     /// The epoch to look up an offset for.
     pub leader_epoch: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for OffsetForLeaderPartition {
-    fn api_key(&self) -> i16 {
-        23
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Request for OffsetForLeaderPartition { }
 
 impl Default for OffsetForLeaderPartition {
     fn default() -> Self {

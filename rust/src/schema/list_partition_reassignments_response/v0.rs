@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ListPartitionReassignmentsResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListPartitionReassignmentsResponse {
@@ -24,7 +25,7 @@ pub struct ListPartitionReassignmentsResponse {
     /// The ongoing reassignments for each topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<OngoingTopicReassignment>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -110,6 +111,7 @@ impl Writable for ListPartitionReassignmentsResponse {
     }
 }
 
+/// OngoingTopicReassignment, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OngoingTopicReassignment {
@@ -119,22 +121,10 @@ pub struct OngoingTopicReassignment {
     /// The ongoing reassignments for each partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<OngoingPartitionReassignment>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for OngoingTopicReassignment {
-    fn api_key(&self) -> i16 {
-        46
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for OngoingTopicReassignment { }
 
 impl Default for OngoingTopicReassignment {
     fn default() -> Self {
@@ -195,6 +185,7 @@ impl Writable for OngoingTopicReassignment {
     }
 }
 
+/// OngoingPartitionReassignment, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OngoingPartitionReassignment {
@@ -209,22 +200,10 @@ pub struct OngoingPartitionReassignment {
     /// The set of replicas we are currently removing.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub removing_replicas: Vec<i32>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for OngoingPartitionReassignment {
-    fn api_key(&self) -> i16 {
-        46
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for OngoingPartitionReassignment { }
 
 impl Default for OngoingPartitionReassignment {
     fn default() -> Self {

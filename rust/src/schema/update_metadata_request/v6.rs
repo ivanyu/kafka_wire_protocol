@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// UpdateMetadataRequest, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdateMetadataRequest {
@@ -26,7 +27,7 @@ pub struct UpdateMetadataRequest {
     /// 
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub live_brokers: Vec<UpdateMetadataBroker>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -117,6 +118,7 @@ impl Writable for UpdateMetadataRequest {
     }
 }
 
+/// UpdateMetadataTopicState, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdateMetadataTopicState {
@@ -126,22 +128,10 @@ pub struct UpdateMetadataTopicState {
     /// The partition that we would like to update.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_states: Vec<UpdateMetadataPartitionState>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for UpdateMetadataTopicState {
-    fn api_key(&self) -> i16 {
-        6
-    }
-    
-    fn version(&self) -> i16 {
-        6
-    }
-}
-
-impl Request for UpdateMetadataTopicState { }
 
 impl Default for UpdateMetadataTopicState {
     fn default() -> Self {
@@ -202,6 +192,7 @@ impl Writable for UpdateMetadataTopicState {
     }
 }
 
+/// UpdateMetadataBroker, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdateMetadataBroker {
@@ -213,22 +204,10 @@ pub struct UpdateMetadataBroker {
     /// The rack which this broker belongs to.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub rack: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for UpdateMetadataBroker {
-    fn api_key(&self) -> i16 {
-        6
-    }
-    
-    fn version(&self) -> i16 {
-        6
-    }
-}
-
-impl Request for UpdateMetadataBroker { }
 
 impl Default for UpdateMetadataBroker {
     fn default() -> Self {
@@ -294,6 +273,7 @@ impl Writable for UpdateMetadataBroker {
     }
 }
 
+/// UpdateMetadataEndpoint, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdateMetadataEndpoint {
@@ -307,22 +287,10 @@ pub struct UpdateMetadataEndpoint {
     pub listener: String,
     /// The security protocol type.
     pub security_protocol: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for UpdateMetadataEndpoint {
-    fn api_key(&self) -> i16 {
-        6
-    }
-    
-    fn version(&self) -> i16 {
-        6
-    }
-}
-
-impl Request for UpdateMetadataEndpoint { }
 
 impl Default for UpdateMetadataEndpoint {
     fn default() -> Self {
@@ -393,6 +361,7 @@ impl Writable for UpdateMetadataEndpoint {
     }
 }
 
+/// UpdateMetadataPartitionState, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdateMetadataPartitionState {
@@ -415,22 +384,10 @@ pub struct UpdateMetadataPartitionState {
     /// The replicas of this partition which are offline.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub offline_replicas: Vec<i32>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for UpdateMetadataPartitionState {
-    fn api_key(&self) -> i16 {
-        6
-    }
-    
-    fn version(&self) -> i16 {
-        6
-    }
-}
-
-impl Request for UpdateMetadataPartitionState { }
 
 impl Default for UpdateMetadataPartitionState {
     fn default() -> Self {

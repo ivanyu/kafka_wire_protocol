@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ElectLeadersResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ElectLeadersResponse {
@@ -89,6 +90,7 @@ impl Writable for ElectLeadersResponse {
     }
 }
 
+/// ReplicaElectionResult, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ReplicaElectionResult {
@@ -99,18 +101,6 @@ pub struct ReplicaElectionResult {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_result: Vec<PartitionResult>,
 }
-
-impl ApiMessage for ReplicaElectionResult {
-    fn api_key(&self) -> i16 {
-        43
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for ReplicaElectionResult { }
 
 impl Default for ReplicaElectionResult {
     fn default() -> Self {
@@ -162,6 +152,7 @@ impl Writable for ReplicaElectionResult {
     }
 }
 
+/// PartitionResult, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionResult {
@@ -173,18 +164,6 @@ pub struct PartitionResult {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
 }
-
-impl ApiMessage for PartitionResult {
-    fn api_key(&self) -> i16 {
-        43
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for PartitionResult { }
 
 impl Default for PartitionResult {
     fn default() -> Self {

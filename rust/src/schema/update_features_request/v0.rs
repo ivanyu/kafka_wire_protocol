@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// UpdateFeaturesRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdateFeaturesRequest {
@@ -19,7 +20,7 @@ pub struct UpdateFeaturesRequest {
     /// The list of updates to finalized features.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub feature_updates: Vec<FeatureUpdateKey>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for UpdateFeaturesRequest {
     }
 }
 
+/// FeatureUpdateKey, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct FeatureUpdateKey {
@@ -105,22 +107,10 @@ pub struct FeatureUpdateKey {
     pub max_version_level: i16,
     /// DEPRECATED in version 1 (see DowngradeType). When set to true, the finalized feature version level is allowed to be downgraded/deleted. The downgrade request will fail if the new maximum version level is a value that's not lower than the existing maximum finalized version level.
     pub allow_downgrade: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for FeatureUpdateKey {
-    fn api_key(&self) -> i16 {
-        57
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for FeatureUpdateKey { }
 
 impl Default for FeatureUpdateKey {
     fn default() -> Self {

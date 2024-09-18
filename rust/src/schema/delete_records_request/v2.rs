@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DeleteRecordsRequest, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteRecordsRequest {
@@ -19,7 +20,7 @@ pub struct DeleteRecordsRequest {
     pub topics: Vec<DeleteRecordsTopic>,
     /// How long to wait for the deletion to complete, in milliseconds.
     pub timeout_ms: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for DeleteRecordsRequest {
     }
 }
 
+/// DeleteRecordsTopic, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteRecordsTopic {
@@ -104,22 +106,10 @@ pub struct DeleteRecordsTopic {
     /// Each partition that we want to delete records from.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<DeleteRecordsPartition>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DeleteRecordsTopic {
-    fn api_key(&self) -> i16 {
-        21
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Request for DeleteRecordsTopic { }
 
 impl Default for DeleteRecordsTopic {
     fn default() -> Self {
@@ -180,6 +170,7 @@ impl Writable for DeleteRecordsTopic {
     }
 }
 
+/// DeleteRecordsPartition, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteRecordsPartition {
@@ -187,22 +178,10 @@ pub struct DeleteRecordsPartition {
     pub partition_index: i32,
     /// The deletion offset.
     pub offset: i64,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DeleteRecordsPartition {
-    fn api_key(&self) -> i16 {
-        21
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Request for DeleteRecordsPartition { }
 
 impl Default for DeleteRecordsPartition {
     fn default() -> Self {

@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeUserScramCredentialsResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeUserScramCredentialsResponse {
@@ -24,7 +25,7 @@ pub struct DescribeUserScramCredentialsResponse {
     /// The results for descriptions, one per user.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub results: Vec<DescribeUserScramCredentialsResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -110,6 +111,7 @@ impl Writable for DescribeUserScramCredentialsResponse {
     }
 }
 
+/// DescribeUserScramCredentialsResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeUserScramCredentialsResult {
@@ -124,22 +126,10 @@ pub struct DescribeUserScramCredentialsResult {
     /// The mechanism and related information associated with the user's SCRAM credentials.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub credential_infos: Vec<CredentialInfo>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribeUserScramCredentialsResult {
-    fn api_key(&self) -> i16 {
-        50
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for DescribeUserScramCredentialsResult { }
 
 impl Default for DescribeUserScramCredentialsResult {
     fn default() -> Self {
@@ -210,6 +200,7 @@ impl Writable for DescribeUserScramCredentialsResult {
     }
 }
 
+/// CredentialInfo, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CredentialInfo {
@@ -217,22 +208,10 @@ pub struct CredentialInfo {
     pub mechanism: i8,
     /// The number of iterations used in the SCRAM credential.
     pub iterations: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for CredentialInfo {
-    fn api_key(&self) -> i16 {
-        50
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for CredentialInfo { }
 
 impl Default for CredentialInfo {
     fn default() -> Self {

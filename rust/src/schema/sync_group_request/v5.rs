@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::{proptest_strategies, serde_bytes};
 
+/// SyncGroupRequest, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct SyncGroupRequest {
@@ -35,7 +36,7 @@ pub struct SyncGroupRequest {
     /// Each assignment.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub assignments: Vec<SyncGroupRequestAssignment>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -136,6 +137,7 @@ impl Writable for SyncGroupRequest {
     }
 }
 
+/// SyncGroupRequestAssignment, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct SyncGroupRequestAssignment {
@@ -146,22 +148,10 @@ pub struct SyncGroupRequestAssignment {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::bytes()"))]
     #[cfg_attr(test, serde(with="serde_bytes"))]
     pub assignment: Vec<u8>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for SyncGroupRequestAssignment {
-    fn api_key(&self) -> i16 {
-        14
-    }
-    
-    fn version(&self) -> i16 {
-        5
-    }
-}
-
-impl Request for SyncGroupRequestAssignment { }
 
 impl Default for SyncGroupRequestAssignment {
     fn default() -> Self {

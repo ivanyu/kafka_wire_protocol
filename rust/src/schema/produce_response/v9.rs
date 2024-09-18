@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ProduceResponse, version 9.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ProduceResponse {
@@ -19,7 +20,7 @@ pub struct ProduceResponse {
     pub responses: Vec<TopicProduceResponse>,
     /// The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota.
     pub throttle_time_ms: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for ProduceResponse {
     }
 }
 
+/// TopicProduceResponse, version 9.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicProduceResponse {
@@ -104,22 +106,10 @@ pub struct TopicProduceResponse {
     /// Each partition that we produced to within the topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_responses: Vec<PartitionProduceResponse>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TopicProduceResponse {
-    fn api_key(&self) -> i16 {
-        0
-    }
-    
-    fn version(&self) -> i16 {
-        9
-    }
-}
-
-impl Response for TopicProduceResponse { }
 
 impl Default for TopicProduceResponse {
     fn default() -> Self {
@@ -180,6 +170,7 @@ impl Writable for TopicProduceResponse {
     }
 }
 
+/// PartitionProduceResponse, version 9.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionProduceResponse {
@@ -199,22 +190,10 @@ pub struct PartitionProduceResponse {
     /// The global error message summarizing the common root cause of the records that caused the batch to be dropped
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for PartitionProduceResponse {
-    fn api_key(&self) -> i16 {
-        0
-    }
-    
-    fn version(&self) -> i16 {
-        9
-    }
-}
-
-impl Response for PartitionProduceResponse { }
 
 impl Default for PartitionProduceResponse {
     fn default() -> Self {
@@ -300,6 +279,7 @@ impl Writable for PartitionProduceResponse {
     }
 }
 
+/// BatchIndexAndErrorMessage, version 9.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct BatchIndexAndErrorMessage {
@@ -308,22 +288,10 @@ pub struct BatchIndexAndErrorMessage {
     /// The error message of the record that caused the batch to be dropped
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub batch_index_error_message: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for BatchIndexAndErrorMessage {
-    fn api_key(&self) -> i16 {
-        0
-    }
-    
-    fn version(&self) -> i16 {
-        9
-    }
-}
-
-impl Response for BatchIndexAndErrorMessage { }
 
 impl Default for BatchIndexAndErrorMessage {
     fn default() -> Self {

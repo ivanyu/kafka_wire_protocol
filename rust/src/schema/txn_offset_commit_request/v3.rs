@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// TxnOffsetCommitRequest, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TxnOffsetCommitRequest {
@@ -35,7 +36,7 @@ pub struct TxnOffsetCommitRequest {
     /// Each topic that we want to commit offsets for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TxnOffsetCommitRequestTopic>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -141,6 +142,7 @@ impl Writable for TxnOffsetCommitRequest {
     }
 }
 
+/// TxnOffsetCommitRequestTopic, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TxnOffsetCommitRequestTopic {
@@ -150,22 +152,10 @@ pub struct TxnOffsetCommitRequestTopic {
     /// The partitions inside the topic that we want to commit offsets for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<TxnOffsetCommitRequestPartition>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TxnOffsetCommitRequestTopic {
-    fn api_key(&self) -> i16 {
-        28
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Request for TxnOffsetCommitRequestTopic { }
 
 impl Default for TxnOffsetCommitRequestTopic {
     fn default() -> Self {
@@ -226,6 +216,7 @@ impl Writable for TxnOffsetCommitRequestTopic {
     }
 }
 
+/// TxnOffsetCommitRequestPartition, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TxnOffsetCommitRequestPartition {
@@ -238,22 +229,10 @@ pub struct TxnOffsetCommitRequestPartition {
     /// Any associated metadata the client wants to keep.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub committed_metadata: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TxnOffsetCommitRequestPartition {
-    fn api_key(&self) -> i16 {
-        28
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Request for TxnOffsetCommitRequestPartition { }
 
 impl Default for TxnOffsetCommitRequestPartition {
     fn default() -> Self {

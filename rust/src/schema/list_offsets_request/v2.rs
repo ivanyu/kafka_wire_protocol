@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ListOffsetsRequest, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListOffsetsRequest {
@@ -89,6 +90,7 @@ impl Writable for ListOffsetsRequest {
     }
 }
 
+/// ListOffsetsTopic, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListOffsetsTopic {
@@ -99,18 +101,6 @@ pub struct ListOffsetsTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<ListOffsetsPartition>,
 }
-
-impl ApiMessage for ListOffsetsTopic {
-    fn api_key(&self) -> i16 {
-        2
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Request for ListOffsetsTopic { }
 
 impl Default for ListOffsetsTopic {
     fn default() -> Self {
@@ -162,6 +152,7 @@ impl Writable for ListOffsetsTopic {
     }
 }
 
+/// ListOffsetsPartition, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListOffsetsPartition {
@@ -170,18 +161,6 @@ pub struct ListOffsetsPartition {
     /// The current timestamp.
     pub timestamp: i64,
 }
-
-impl ApiMessage for ListOffsetsPartition {
-    fn api_key(&self) -> i16 {
-        2
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Request for ListOffsetsPartition { }
 
 impl Default for ListOffsetsPartition {
     fn default() -> Self {

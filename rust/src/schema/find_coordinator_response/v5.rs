@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// FindCoordinatorResponse, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct FindCoordinatorResponse {
@@ -19,7 +20,7 @@ pub struct FindCoordinatorResponse {
     /// Each coordinator result in the response
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub coordinators: Vec<Coordinator>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for FindCoordinatorResponse {
     }
 }
 
+/// Coordinator, version 5.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Coordinator {
@@ -113,22 +115,10 @@ pub struct Coordinator {
     /// The error message, or null if there was no error.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for Coordinator {
-    fn api_key(&self) -> i16 {
-        10
-    }
-    
-    fn version(&self) -> i16 {
-        5
-    }
-}
-
-impl Response for Coordinator { }
 
 impl Default for Coordinator {
     fn default() -> Self {

@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// OffsetForLeaderEpochResponse, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetForLeaderEpochResponse {
@@ -19,7 +20,7 @@ pub struct OffsetForLeaderEpochResponse {
     /// Each topic we fetched offsets for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<OffsetForLeaderTopicResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for OffsetForLeaderEpochResponse {
     }
 }
 
+/// OffsetForLeaderTopicResult, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetForLeaderTopicResult {
@@ -104,22 +106,10 @@ pub struct OffsetForLeaderTopicResult {
     /// Each partition in the topic we fetched offsets for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<EpochEndOffset>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for OffsetForLeaderTopicResult {
-    fn api_key(&self) -> i16 {
-        23
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Response for OffsetForLeaderTopicResult { }
 
 impl Default for OffsetForLeaderTopicResult {
     fn default() -> Self {
@@ -180,6 +170,7 @@ impl Writable for OffsetForLeaderTopicResult {
     }
 }
 
+/// EpochEndOffset, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct EpochEndOffset {
@@ -191,22 +182,10 @@ pub struct EpochEndOffset {
     pub leader_epoch: i32,
     /// The end offset of the epoch.
     pub end_offset: i64,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for EpochEndOffset {
-    fn api_key(&self) -> i16 {
-        23
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Response for EpochEndOffset { }
 
 impl Default for EpochEndOffset {
     fn default() -> Self {

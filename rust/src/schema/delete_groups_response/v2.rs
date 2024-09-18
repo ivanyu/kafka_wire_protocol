@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DeleteGroupsResponse, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteGroupsResponse {
@@ -19,7 +20,7 @@ pub struct DeleteGroupsResponse {
     /// The deletion results
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub results: Vec<DeletableGroupResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for DeleteGroupsResponse {
     }
 }
 
+/// DeletableGroupResult, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeletableGroupResult {
@@ -103,22 +105,10 @@ pub struct DeletableGroupResult {
     pub group_id: String,
     /// The deletion error, or 0 if the deletion succeeded.
     pub error_code: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DeletableGroupResult {
-    fn api_key(&self) -> i16 {
-        42
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Response for DeletableGroupResult { }
 
 impl Default for DeletableGroupResult {
     fn default() -> Self {

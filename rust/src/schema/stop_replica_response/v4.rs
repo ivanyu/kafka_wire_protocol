@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// StopReplicaResponse, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct StopReplicaResponse {
@@ -19,7 +20,7 @@ pub struct StopReplicaResponse {
     /// The responses for each partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_errors: Vec<StopReplicaPartitionError>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for StopReplicaResponse {
     }
 }
 
+/// StopReplicaPartitionError, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct StopReplicaPartitionError {
@@ -105,22 +107,10 @@ pub struct StopReplicaPartitionError {
     pub partition_index: i32,
     /// The partition error code, or 0 if there was no partition error.
     pub error_code: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for StopReplicaPartitionError {
-    fn api_key(&self) -> i16 {
-        5
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Response for StopReplicaPartitionError { }
 
 impl Default for StopReplicaPartitionError {
     fn default() -> Self {

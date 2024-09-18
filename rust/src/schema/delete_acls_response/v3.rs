@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DeleteAclsResponse, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteAclsResponse {
@@ -19,7 +20,7 @@ pub struct DeleteAclsResponse {
     /// The results for each filter.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub filter_results: Vec<DeleteAclsFilterResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for DeleteAclsResponse {
     }
 }
 
+/// DeleteAclsFilterResult, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteAclsFilterResult {
@@ -106,22 +108,10 @@ pub struct DeleteAclsFilterResult {
     /// The ACLs which matched this filter.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub matching_acls: Vec<DeleteAclsMatchingAcl>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DeleteAclsFilterResult {
-    fn api_key(&self) -> i16 {
-        31
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for DeleteAclsFilterResult { }
 
 impl Default for DeleteAclsFilterResult {
     fn default() -> Self {
@@ -187,6 +177,7 @@ impl Writable for DeleteAclsFilterResult {
     }
 }
 
+/// DeleteAclsMatchingAcl, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteAclsMatchingAcl {
@@ -212,22 +203,10 @@ pub struct DeleteAclsMatchingAcl {
     pub operation: i8,
     /// The ACL permission type.
     pub permission_type: i8,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DeleteAclsMatchingAcl {
-    fn api_key(&self) -> i16 {
-        31
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for DeleteAclsMatchingAcl { }
 
 impl Default for DeleteAclsMatchingAcl {
     fn default() -> Self {

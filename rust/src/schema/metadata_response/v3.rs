@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// MetadataResponse, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MetadataResponse {
@@ -105,6 +106,7 @@ impl Writable for MetadataResponse {
     }
 }
 
+/// MetadataResponseBroker, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MetadataResponseBroker {
@@ -119,18 +121,6 @@ pub struct MetadataResponseBroker {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub rack: Option<String>,
 }
-
-impl ApiMessage for MetadataResponseBroker {
-    fn api_key(&self) -> i16 {
-        3
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for MetadataResponseBroker { }
 
 impl Default for MetadataResponseBroker {
     fn default() -> Self {
@@ -192,6 +182,7 @@ impl Writable for MetadataResponseBroker {
     }
 }
 
+/// MetadataResponseTopic, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MetadataResponseTopic {
@@ -206,18 +197,6 @@ pub struct MetadataResponseTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<MetadataResponsePartition>,
 }
-
-impl ApiMessage for MetadataResponseTopic {
-    fn api_key(&self) -> i16 {
-        3
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for MetadataResponseTopic { }
 
 impl Default for MetadataResponseTopic {
     fn default() -> Self {
@@ -279,6 +258,7 @@ impl Writable for MetadataResponseTopic {
     }
 }
 
+/// MetadataResponsePartition, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct MetadataResponsePartition {
@@ -295,18 +275,6 @@ pub struct MetadataResponsePartition {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub isr_nodes: Vec<i32>,
 }
-
-impl ApiMessage for MetadataResponsePartition {
-    fn api_key(&self) -> i16 {
-        3
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for MetadataResponsePartition { }
 
 impl Default for MetadataResponsePartition {
     fn default() -> Self {

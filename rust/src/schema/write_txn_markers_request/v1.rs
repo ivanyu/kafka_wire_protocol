@@ -11,13 +11,14 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// WriteTxnMarkersRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct WriteTxnMarkersRequest {
     /// The transaction markers to be written.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub markers: Vec<WritableTxnMarker>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -88,6 +89,7 @@ impl Writable for WriteTxnMarkersRequest {
     }
 }
 
+/// WritableTxnMarker, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct WritableTxnMarker {
@@ -102,22 +104,10 @@ pub struct WritableTxnMarker {
     pub topics: Vec<WritableTxnMarkerTopic>,
     /// Epoch associated with the transaction state partition hosted by this transaction coordinator
     pub coordinator_epoch: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for WritableTxnMarker {
-    fn api_key(&self) -> i16 {
-        27
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for WritableTxnMarker { }
 
 impl Default for WritableTxnMarker {
     fn default() -> Self {
@@ -193,6 +183,7 @@ impl Writable for WritableTxnMarker {
     }
 }
 
+/// WritableTxnMarkerTopic, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct WritableTxnMarkerTopic {
@@ -202,22 +193,10 @@ pub struct WritableTxnMarkerTopic {
     /// The indexes of the partitions to write transaction markers for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_indexes: Vec<i32>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for WritableTxnMarkerTopic {
-    fn api_key(&self) -> i16 {
-        27
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for WritableTxnMarkerTopic { }
 
 impl Default for WritableTxnMarkerTopic {
     fn default() -> Self {

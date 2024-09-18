@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ListGroupsResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListGroupsResponse {
@@ -82,6 +83,7 @@ impl Writable for ListGroupsResponse {
     }
 }
 
+/// ListedGroup, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListedGroup {
@@ -92,18 +94,6 @@ pub struct ListedGroup {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub protocol_type: String,
 }
-
-impl ApiMessage for ListedGroup {
-    fn api_key(&self) -> i16 {
-        16
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for ListedGroup { }
 
 impl Default for ListedGroup {
     fn default() -> Self {

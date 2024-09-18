@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeClientQuotasRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeClientQuotasRequest {
@@ -82,6 +83,7 @@ impl Writable for DescribeClientQuotasRequest {
     }
 }
 
+/// ComponentData, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ComponentData {
@@ -94,18 +96,6 @@ pub struct ComponentData {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub match_: Option<String>,
 }
-
-impl ApiMessage for ComponentData {
-    fn api_key(&self) -> i16 {
-        48
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for ComponentData { }
 
 impl Default for ComponentData {
     fn default() -> Self {

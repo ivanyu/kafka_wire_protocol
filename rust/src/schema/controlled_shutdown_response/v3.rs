@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ControlledShutdownResponse, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ControlledShutdownResponse {
@@ -19,7 +20,7 @@ pub struct ControlledShutdownResponse {
     /// The partitions that the broker still leads.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub remaining_partitions: Vec<RemainingPartition>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for ControlledShutdownResponse {
     }
 }
 
+/// RemainingPartition, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct RemainingPartition {
@@ -103,22 +105,10 @@ pub struct RemainingPartition {
     pub topic_name: String,
     /// The index of the partition.
     pub partition_index: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for RemainingPartition {
-    fn api_key(&self) -> i16 {
-        7
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for RemainingPartition { }
 
 impl Default for RemainingPartition {
     fn default() -> Self {

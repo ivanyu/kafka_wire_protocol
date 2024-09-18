@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// TxnOffsetCommitResponse, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TxnOffsetCommitResponse {
@@ -19,7 +20,7 @@ pub struct TxnOffsetCommitResponse {
     /// The responses for each topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TxnOffsetCommitResponseTopic>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for TxnOffsetCommitResponse {
     }
 }
 
+/// TxnOffsetCommitResponseTopic, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TxnOffsetCommitResponseTopic {
@@ -104,22 +106,10 @@ pub struct TxnOffsetCommitResponseTopic {
     /// The responses for each partition in the topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<TxnOffsetCommitResponsePartition>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TxnOffsetCommitResponseTopic {
-    fn api_key(&self) -> i16 {
-        28
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for TxnOffsetCommitResponseTopic { }
 
 impl Default for TxnOffsetCommitResponseTopic {
     fn default() -> Self {
@@ -180,6 +170,7 @@ impl Writable for TxnOffsetCommitResponseTopic {
     }
 }
 
+/// TxnOffsetCommitResponsePartition, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TxnOffsetCommitResponsePartition {
@@ -187,22 +178,10 @@ pub struct TxnOffsetCommitResponsePartition {
     pub partition_index: i32,
     /// The error code, or 0 if there was no error.
     pub error_code: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TxnOffsetCommitResponsePartition {
-    fn api_key(&self) -> i16 {
-        28
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for TxnOffsetCommitResponsePartition { }
 
 impl Default for TxnOffsetCommitResponsePartition {
     fn default() -> Self {

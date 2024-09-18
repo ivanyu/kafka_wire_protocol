@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::{proptest_strategies, serde_bytes};
 
+/// AlterUserScramCredentialsRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterUserScramCredentialsRequest {
@@ -21,7 +22,7 @@ pub struct AlterUserScramCredentialsRequest {
     /// The SCRAM credentials to update/insert.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub upsertions: Vec<ScramCredentialUpsertion>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -97,6 +98,7 @@ impl Writable for AlterUserScramCredentialsRequest {
     }
 }
 
+/// ScramCredentialDeletion, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ScramCredentialDeletion {
@@ -105,22 +107,10 @@ pub struct ScramCredentialDeletion {
     pub name: String,
     /// The SCRAM mechanism.
     pub mechanism: i8,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ScramCredentialDeletion {
-    fn api_key(&self) -> i16 {
-        51
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for ScramCredentialDeletion { }
 
 impl Default for ScramCredentialDeletion {
     fn default() -> Self {
@@ -181,6 +171,7 @@ impl Writable for ScramCredentialDeletion {
     }
 }
 
+/// ScramCredentialUpsertion, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ScramCredentialUpsertion {
@@ -199,22 +190,10 @@ pub struct ScramCredentialUpsertion {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::bytes()"))]
     #[cfg_attr(test, serde(with="serde_bytes"))]
     pub salted_password: Vec<u8>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ScramCredentialUpsertion {
-    fn api_key(&self) -> i16 {
-        51
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for ScramCredentialUpsertion { }
 
 impl Default for ScramCredentialUpsertion {
     fn default() -> Self {

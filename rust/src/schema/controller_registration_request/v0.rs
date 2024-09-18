@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ControllerRegistrationRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ControllerRegistrationRequest {
@@ -28,7 +29,7 @@ pub struct ControllerRegistrationRequest {
     /// The features on this controller
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub features: Vec<Feature>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -119,6 +120,7 @@ impl Writable for ControllerRegistrationRequest {
     }
 }
 
+/// Listener, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Listener {
@@ -132,22 +134,10 @@ pub struct Listener {
     pub port: u16,
     /// The security protocol.
     pub security_protocol: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for Listener {
-    fn api_key(&self) -> i16 {
-        70
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for Listener { }
 
 impl Default for Listener {
     fn default() -> Self {
@@ -218,6 +208,7 @@ impl Writable for Listener {
     }
 }
 
+/// Feature, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Feature {
@@ -228,22 +219,10 @@ pub struct Feature {
     pub min_supported_version: i16,
     /// The maximum supported feature level.
     pub max_supported_version: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for Feature {
-    fn api_key(&self) -> i16 {
-        70
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for Feature { }
 
 impl Default for Feature {
     fn default() -> Self {

@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// BrokerRegistrationRequest, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct BrokerRegistrationRequest {
@@ -37,7 +38,7 @@ pub struct BrokerRegistrationRequest {
     /// Log directories configured in this broker which are available.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec_elem::<Uuid>(proptest_strategies::uuid())"))]
     pub log_dirs: Vec<Uuid>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -143,6 +144,7 @@ impl Writable for BrokerRegistrationRequest {
     }
 }
 
+/// Listener, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Listener {
@@ -156,22 +158,10 @@ pub struct Listener {
     pub port: u16,
     /// The security protocol.
     pub security_protocol: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for Listener {
-    fn api_key(&self) -> i16 {
-        62
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Request for Listener { }
 
 impl Default for Listener {
     fn default() -> Self {
@@ -242,6 +232,7 @@ impl Writable for Listener {
     }
 }
 
+/// Feature, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Feature {
@@ -252,22 +243,10 @@ pub struct Feature {
     pub min_supported_version: i16,
     /// The maximum supported feature level.
     pub max_supported_version: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for Feature {
-    fn api_key(&self) -> i16 {
-        62
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Request for Feature { }
 
 impl Default for Feature {
     fn default() -> Self {

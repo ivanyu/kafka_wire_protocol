@@ -11,6 +11,7 @@ use crate::markers::{ApiMessage, Data};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::{proptest_strategies, serde_option_bytes};
 
+/// ConsumerProtocolSubscription, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ConsumerProtocolSubscription {
@@ -93,6 +94,7 @@ impl Writable for ConsumerProtocolSubscription {
     }
 }
 
+/// TopicPartition, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicPartition {
@@ -103,18 +105,6 @@ pub struct TopicPartition {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<i32>,
 }
-
-impl ApiMessage for TopicPartition {
-    fn api_key(&self) -> i16 {
-        -1
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Data for TopicPartition { }
 
 impl Default for TopicPartition {
     fn default() -> Self {

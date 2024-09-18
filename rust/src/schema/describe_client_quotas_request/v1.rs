@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeClientQuotasRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeClientQuotasRequest {
@@ -19,7 +20,7 @@ pub struct DescribeClientQuotasRequest {
     pub components: Vec<ComponentData>,
     /// Whether the match is strict, i.e. should exclude entities with unspecified entity types.
     pub strict: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for DescribeClientQuotasRequest {
     }
 }
 
+/// ComponentData, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ComponentData {
@@ -106,22 +108,10 @@ pub struct ComponentData {
     /// The string to match against, or null if unused for the match type.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub match_: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ComponentData {
-    fn api_key(&self) -> i16 {
-        48
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for ComponentData { }
 
 impl Default for ComponentData {
     fn default() -> Self {

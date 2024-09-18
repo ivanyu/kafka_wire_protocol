@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// UpdateFeaturesResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdateFeaturesResponse {
@@ -24,7 +25,7 @@ pub struct UpdateFeaturesResponse {
     /// Results for each feature update.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub results: Vec<UpdatableFeatureResult>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -110,6 +111,7 @@ impl Writable for UpdateFeaturesResponse {
     }
 }
 
+/// UpdatableFeatureResult, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdatableFeatureResult {
@@ -121,22 +123,10 @@ pub struct UpdatableFeatureResult {
     /// The feature update error, or `null` if the feature update succeeded.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for UpdatableFeatureResult {
-    fn api_key(&self) -> i16 {
-        57
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for UpdatableFeatureResult { }
 
 impl Default for UpdatableFeatureResult {
     fn default() -> Self {

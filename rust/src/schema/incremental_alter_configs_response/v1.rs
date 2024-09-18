@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// IncrementalAlterConfigsResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct IncrementalAlterConfigsResponse {
@@ -19,7 +20,7 @@ pub struct IncrementalAlterConfigsResponse {
     /// The responses for each resource.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub responses: Vec<AlterConfigsResourceResponse>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -95,6 +96,7 @@ impl Writable for IncrementalAlterConfigsResponse {
     }
 }
 
+/// AlterConfigsResourceResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterConfigsResourceResponse {
@@ -108,22 +110,10 @@ pub struct AlterConfigsResourceResponse {
     /// The resource name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub resource_name: String,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for AlterConfigsResourceResponse {
-    fn api_key(&self) -> i16 {
-        44
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for AlterConfigsResourceResponse { }
 
 impl Default for AlterConfigsResourceResponse {
     fn default() -> Self {

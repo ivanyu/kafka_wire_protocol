@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::{proptest_strategies, serde_bytes};
 
+/// JoinGroupResponse, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct JoinGroupResponse {
@@ -33,7 +34,7 @@ pub struct JoinGroupResponse {
     /// 
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub members: Vec<JoinGroupResponseMember>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -134,6 +135,7 @@ impl Writable for JoinGroupResponse {
     }
 }
 
+/// JoinGroupResponseMember, version 6.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct JoinGroupResponseMember {
@@ -147,22 +149,10 @@ pub struct JoinGroupResponseMember {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::bytes()"))]
     #[cfg_attr(test, serde(with="serde_bytes"))]
     pub metadata: Vec<u8>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for JoinGroupResponseMember {
-    fn api_key(&self) -> i16 {
-        11
-    }
-    
-    fn version(&self) -> i16 {
-        6
-    }
-}
-
-impl Response for JoinGroupResponseMember { }
 
 impl Default for JoinGroupResponseMember {
     fn default() -> Self {

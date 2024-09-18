@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AlterPartitionResponse, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterPartitionResponse {
@@ -22,7 +23,7 @@ pub struct AlterPartitionResponse {
     /// 
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -103,6 +104,7 @@ impl Writable for AlterPartitionResponse {
     }
 }
 
+/// TopicData, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicData {
@@ -112,22 +114,10 @@ pub struct TopicData {
     /// 
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for TopicData {
-    fn api_key(&self) -> i16 {
-        56
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Response for TopicData { }
 
 impl Default for TopicData {
     fn default() -> Self {
@@ -188,6 +178,7 @@ impl Writable for TopicData {
     }
 }
 
+/// PartitionData, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionData {
@@ -206,22 +197,10 @@ pub struct PartitionData {
     pub leader_recovery_state: i8,
     /// The current epoch for the partition for KRaft controllers. The current ZK version for the legacy controllers.
     pub partition_epoch: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for PartitionData {
-    fn api_key(&self) -> i16 {
-        56
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Response for PartitionData { }
 
 impl Default for PartitionData {
     fn default() -> Self {

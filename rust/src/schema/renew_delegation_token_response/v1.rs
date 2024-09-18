@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 
+/// RenewDelegationTokenResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct RenewDelegationTokenResponse {

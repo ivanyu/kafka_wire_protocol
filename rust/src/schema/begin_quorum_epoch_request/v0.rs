@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// BeginQuorumEpochRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct BeginQuorumEpochRequest {
@@ -83,6 +84,7 @@ impl Writable for BeginQuorumEpochRequest {
     }
 }
 
+/// TopicData, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicData {
@@ -93,18 +95,6 @@ pub struct TopicData {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
 }
-
-impl ApiMessage for TopicData {
-    fn api_key(&self) -> i16 {
-        53
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for TopicData { }
 
 impl Default for TopicData {
     fn default() -> Self {
@@ -156,6 +146,7 @@ impl Writable for TopicData {
     }
 }
 
+/// PartitionData, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionData {
@@ -166,18 +157,6 @@ pub struct PartitionData {
     /// The epoch of the newly elected leader
     pub leader_epoch: i32,
 }
-
-impl ApiMessage for PartitionData {
-    fn api_key(&self) -> i16 {
-        53
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for PartitionData { }
 
 impl Default for PartitionData {
     fn default() -> Self {

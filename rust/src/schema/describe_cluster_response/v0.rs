@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeClusterResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeClusterResponse {
@@ -31,7 +32,7 @@ pub struct DescribeClusterResponse {
     pub brokers: Vec<DescribeClusterBroker>,
     /// 32-bit bitfield to represent authorized operations for this cluster.
     pub cluster_authorized_operations: i32,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -132,6 +133,7 @@ impl Writable for DescribeClusterResponse {
     }
 }
 
+/// DescribeClusterBroker, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeClusterBroker {
@@ -145,22 +147,10 @@ pub struct DescribeClusterBroker {
     /// The rack of the broker, or null if it has not been assigned to a rack.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub rack: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for DescribeClusterBroker {
-    fn api_key(&self) -> i16 {
-        60
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for DescribeClusterBroker { }
 
 impl Default for DescribeClusterBroker {
     fn default() -> Self {

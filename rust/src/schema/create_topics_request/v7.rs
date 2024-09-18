@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// CreateTopicsRequest, version 7.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreateTopicsRequest {
@@ -21,7 +22,7 @@ pub struct CreateTopicsRequest {
     pub timeout_ms: i32,
     /// If true, check that the topics can be created as specified, but don't create anything.
     pub validate_only: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -102,6 +103,7 @@ impl Writable for CreateTopicsRequest {
     }
 }
 
+/// CreatableTopic, version 7.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatableTopic {
@@ -118,22 +120,10 @@ pub struct CreatableTopic {
     /// The custom topic configurations to set.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub configs: Vec<CreateableTopicConfig>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for CreatableTopic {
-    fn api_key(&self) -> i16 {
-        19
-    }
-    
-    fn version(&self) -> i16 {
-        7
-    }
-}
-
-impl Request for CreatableTopic { }
 
 impl Default for CreatableTopic {
     fn default() -> Self {
@@ -209,6 +199,7 @@ impl Writable for CreatableTopic {
     }
 }
 
+/// CreatableReplicaAssignment, version 7.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatableReplicaAssignment {
@@ -217,22 +208,10 @@ pub struct CreatableReplicaAssignment {
     /// The brokers to place the partition on.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub broker_ids: Vec<i32>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for CreatableReplicaAssignment {
-    fn api_key(&self) -> i16 {
-        19
-    }
-    
-    fn version(&self) -> i16 {
-        7
-    }
-}
-
-impl Request for CreatableReplicaAssignment { }
 
 impl Default for CreatableReplicaAssignment {
     fn default() -> Self {
@@ -293,6 +272,7 @@ impl Writable for CreatableReplicaAssignment {
     }
 }
 
+/// CreateableTopicConfig, version 7.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreateableTopicConfig {
@@ -302,22 +282,10 @@ pub struct CreateableTopicConfig {
     /// The configuration value.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub value: Option<String>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for CreateableTopicConfig {
-    fn api_key(&self) -> i16 {
-        19
-    }
-    
-    fn version(&self) -> i16 {
-        7
-    }
-}
-
-impl Request for CreateableTopicConfig { }
 
 impl Default for CreateableTopicConfig {
     fn default() -> Self {

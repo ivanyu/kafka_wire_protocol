@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeLogDirsRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeLogDirsRequest {
@@ -75,6 +76,7 @@ impl Writable for DescribeLogDirsRequest {
     }
 }
 
+/// DescribableLogDirTopic, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribableLogDirTopic {
@@ -85,18 +87,6 @@ pub struct DescribableLogDirTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<i32>,
 }
-
-impl ApiMessage for DescribableLogDirTopic {
-    fn api_key(&self) -> i16 {
-        35
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for DescribableLogDirTopic { }
 
 impl Default for DescribableLogDirTopic {
     fn default() -> Self {

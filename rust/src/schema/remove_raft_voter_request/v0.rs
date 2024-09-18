@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// RemoveRaftVoterRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct RemoveRaftVoterRequest {
@@ -22,7 +23,7 @@ pub struct RemoveRaftVoterRequest {
     /// The directory id of the voter getting removed from the topic partition
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub voter_directory_id: Uuid,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }

@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// UpdateMetadataRequest, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdateMetadataRequest {
@@ -97,6 +98,7 @@ impl Writable for UpdateMetadataRequest {
     }
 }
 
+/// UpdateMetadataBroker, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdateMetadataBroker {
@@ -106,18 +108,6 @@ pub struct UpdateMetadataBroker {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub endpoints: Vec<UpdateMetadataEndpoint>,
 }
-
-impl ApiMessage for UpdateMetadataBroker {
-    fn api_key(&self) -> i16 {
-        6
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for UpdateMetadataBroker { }
 
 impl Default for UpdateMetadataBroker {
     fn default() -> Self {
@@ -169,6 +159,7 @@ impl Writable for UpdateMetadataBroker {
     }
 }
 
+/// UpdateMetadataEndpoint, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdateMetadataEndpoint {
@@ -180,18 +171,6 @@ pub struct UpdateMetadataEndpoint {
     /// The security protocol type.
     pub security_protocol: i16,
 }
-
-impl ApiMessage for UpdateMetadataEndpoint {
-    fn api_key(&self) -> i16 {
-        6
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for UpdateMetadataEndpoint { }
 
 impl Default for UpdateMetadataEndpoint {
     fn default() -> Self {
@@ -248,6 +227,7 @@ impl Writable for UpdateMetadataEndpoint {
     }
 }
 
+/// UpdateMetadataPartitionState, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdateMetadataPartitionState {
@@ -271,18 +251,6 @@ pub struct UpdateMetadataPartitionState {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub replicas: Vec<i32>,
 }
-
-impl ApiMessage for UpdateMetadataPartitionState {
-    fn api_key(&self) -> i16 {
-        6
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Request for UpdateMetadataPartitionState { }
 
 impl Default for UpdateMetadataPartitionState {
     fn default() -> Self {

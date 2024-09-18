@@ -55,6 +55,7 @@ public class RustMessageDataGenerator {
         headerGenerator.addImport("serde::Deserialize");
         headerGenerator.addImportTest("proptest_derive::Arbitrary");
 
+        buffer.printf("/// %s, version %d.%n", className, version);
         buffer.printf("#[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]%n");
         buffer.printf("#[cfg_attr(test, derive(Arbitrary))]%n");
         buffer.printf("pub struct %s {%n", className);
@@ -64,51 +65,52 @@ public class RustMessageDataGenerator {
         buffer.printf("}%n");
         buffer.printf("%n");
 
-        switch (message.type()) {
-            case REQUEST:
-                headerGenerator.addImport("crate::markers::ApiMessage");
-                headerGenerator.addImport("crate::markers::Request");
+        if (isTopLevel) {
+            switch (message.type()) {
+                case REQUEST:
+                    headerGenerator.addImport("crate::markers::ApiMessage");
+                    headerGenerator.addImport("crate::markers::Request");
 
-                generateApiMessageImpl(className);
-                buffer.printf("%n");
+                    generateApiMessageImpl(className);
+                    buffer.printf("%n");
 
-                buffer.printf("impl Request for %s { }%n%n", className);
-                break;
+                    buffer.printf("impl Request for %s { }%n%n", className);
+                    break;
 
-            case RESPONSE:
-                headerGenerator.addImport("crate::markers::ApiMessage");
-                headerGenerator.addImport("crate::markers::Response");
+                case RESPONSE:
+                    headerGenerator.addImport("crate::markers::ApiMessage");
+                    headerGenerator.addImport("crate::markers::Response");
 
-                generateApiMessageImpl(className);
-                buffer.printf("%n");
+                    generateApiMessageImpl(className);
+                    buffer.printf("%n");
 
-                buffer.printf("impl Response for %s { }%n%n", className);
-                break;
+                    buffer.printf("impl Response for %s { }%n%n", className);
+                    break;
 
-            case HEADER:
-                headerGenerator.addImport("crate::markers::ApiMessage");
-                headerGenerator.addImport("crate::markers::Header");
+                case HEADER:
+                    headerGenerator.addImport("crate::markers::ApiMessage");
+                    headerGenerator.addImport("crate::markers::Header");
 
-                generateApiMessageImpl(className);
-                buffer.printf("%n");
+                    generateApiMessageImpl(className);
+                    buffer.printf("%n");
 
-                buffer.printf("impl Header for %s { }%n%n", className);
-                break;
+                    buffer.printf("impl Header for %s { }%n%n", className);
+                    break;
 
-            case METADATA:
-                throw new Exception("not expected");
+                case METADATA:
+                    throw new Exception("not expected");
 
-            case DATA:
-                headerGenerator.addImport("crate::markers::ApiMessage");
-                headerGenerator.addImport("crate::markers::Data");
+                case DATA:
+                    headerGenerator.addImport("crate::markers::ApiMessage");
+                    headerGenerator.addImport("crate::markers::Data");
 
-                generateApiMessageImpl(className);
-                buffer.printf("%n");
+                    generateApiMessageImpl(className);
+                    buffer.printf("%n");
 
-                buffer.printf("impl Data for %s { }%n%n", className);
-                break;
+                    buffer.printf("impl Data for %s { }%n%n", className);
+                    break;
+            }
         }
-
         generateClassDefault(className, struct);
         buffer.printf("%n");
         generateClassConstructor(className, struct);
@@ -209,7 +211,7 @@ public class RustMessageDataGenerator {
         if (hasTaggedFields()) {
             headerGenerator.addImport("crate::tagged_fields::RawTaggedField");
             headerGenerator.addImportTest("crate::test_utils::proptest_strategies");
-            buffer.printf("/// Unknown tagged fields%n");
+            buffer.printf("/// Unknown tagged fields.%n");
             buffer.printf("#[cfg_attr(test, proptest(strategy = \"proptest_strategies::unknown_tagged_fields()\"))]%n");
             buffer.printf("pub _unknown_tagged_fields: Vec<RawTaggedField>,%n");
         }

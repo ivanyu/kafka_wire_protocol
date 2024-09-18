@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// LeaderAndIsrResponse, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderAndIsrResponse {
@@ -82,6 +83,7 @@ impl Writable for LeaderAndIsrResponse {
     }
 }
 
+/// LeaderAndIsrPartitionError, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderAndIsrPartitionError {
@@ -93,18 +95,6 @@ pub struct LeaderAndIsrPartitionError {
     /// The partition error code, or 0 if there was no error.
     pub error_code: i16,
 }
-
-impl ApiMessage for LeaderAndIsrPartitionError {
-    fn api_key(&self) -> i16 {
-        4
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for LeaderAndIsrPartitionError { }
 
 impl Default for LeaderAndIsrPartitionError {
     fn default() -> Self {

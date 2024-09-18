@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// StopReplicaRequest, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct StopReplicaRequest {
@@ -25,7 +26,7 @@ pub struct StopReplicaRequest {
     /// Each topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topic_states: Vec<StopReplicaTopicState>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -116,6 +117,7 @@ impl Writable for StopReplicaRequest {
     }
 }
 
+/// StopReplicaTopicState, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct StopReplicaTopicState {
@@ -125,22 +127,10 @@ pub struct StopReplicaTopicState {
     /// The state of each partition
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_states: Vec<StopReplicaPartitionState>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for StopReplicaTopicState {
-    fn api_key(&self) -> i16 {
-        5
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Request for StopReplicaTopicState { }
 
 impl Default for StopReplicaTopicState {
     fn default() -> Self {
@@ -201,6 +191,7 @@ impl Writable for StopReplicaTopicState {
     }
 }
 
+/// StopReplicaPartitionState, version 4.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct StopReplicaPartitionState {
@@ -210,22 +201,10 @@ pub struct StopReplicaPartitionState {
     pub leader_epoch: i32,
     /// Whether this partition should be deleted.
     pub delete_partition: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for StopReplicaPartitionState {
-    fn api_key(&self) -> i16 {
-        5
-    }
-    
-    fn version(&self) -> i16 {
-        4
-    }
-}
-
-impl Request for StopReplicaPartitionState { }
 
 impl Default for StopReplicaPartitionState {
     fn default() -> Self {

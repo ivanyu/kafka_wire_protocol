@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// OffsetDeleteRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetDeleteRequest {
@@ -83,6 +84,7 @@ impl Writable for OffsetDeleteRequest {
     }
 }
 
+/// OffsetDeleteRequestTopic, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetDeleteRequestTopic {
@@ -93,18 +95,6 @@ pub struct OffsetDeleteRequestTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<OffsetDeleteRequestPartition>,
 }
-
-impl ApiMessage for OffsetDeleteRequestTopic {
-    fn api_key(&self) -> i16 {
-        47
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for OffsetDeleteRequestTopic { }
 
 impl Default for OffsetDeleteRequestTopic {
     fn default() -> Self {
@@ -156,24 +146,13 @@ impl Writable for OffsetDeleteRequestTopic {
     }
 }
 
+/// OffsetDeleteRequestPartition, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetDeleteRequestPartition {
     /// The partition index.
     pub partition_index: i32,
 }
-
-impl ApiMessage for OffsetDeleteRequestPartition {
-    fn api_key(&self) -> i16 {
-        47
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for OffsetDeleteRequestPartition { }
 
 impl Default for OffsetDeleteRequestPartition {
     fn default() -> Self {

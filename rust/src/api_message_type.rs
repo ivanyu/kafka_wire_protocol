@@ -1,5 +1,6 @@
 // This file was generated. Do not edit.
 
+/// The utility for getting info about header versions and API keys.
 pub struct ApiMessageType {
     pub name: &'static str,
     pub api_key: i16,
@@ -91,6 +92,7 @@ impl ApiMessageType {
     pub const REMOVE_RAFT_VOTER: ApiMessageType = ApiMessageType { name: "RemoveRaftVoter", api_key: 81, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const UPDATE_RAFT_VOTER: ApiMessageType = ApiMessageType { name: "UpdateRaftVoter", api_key: 82, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     
+    /// Get request header version for the message version.
     pub fn request_header_version(&self, _version: i16) -> i16 {
         match self.api_key {
             0 => {  // Produce
@@ -420,6 +422,7 @@ impl ApiMessageType {
         }
     }
     
+    /// Get response header version for the message version.
     pub fn response_header_version(&self, _version: i16) -> i16 {
         match self.api_key {
             0 => {  // Produce

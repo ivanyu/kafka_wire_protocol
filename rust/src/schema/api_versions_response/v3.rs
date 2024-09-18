@@ -11,6 +11,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// ApiVersionsResponse, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ApiVersionsResponse {
@@ -31,7 +32,7 @@ pub struct ApiVersionsResponse {
     pub finalized_features: Vec<FinalizedFeatureKey>,
     /// Set by a KRaft controller if the required configurations for ZK migration are present
     pub zk_migration_ready: bool,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -169,6 +170,7 @@ impl Writable for ApiVersionsResponse {
     }
 }
 
+/// ApiVersion, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ApiVersion {
@@ -178,22 +180,10 @@ pub struct ApiVersion {
     pub min_version: i16,
     /// The maximum supported version, inclusive.
     pub max_version: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for ApiVersion {
-    fn api_key(&self) -> i16 {
-        18
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for ApiVersion { }
 
 impl Default for ApiVersion {
     fn default() -> Self {
@@ -259,6 +249,7 @@ impl Writable for ApiVersion {
     }
 }
 
+/// SupportedFeatureKey, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct SupportedFeatureKey {
@@ -269,22 +260,10 @@ pub struct SupportedFeatureKey {
     pub min_version: i16,
     /// The maximum supported version for the feature.
     pub max_version: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for SupportedFeatureKey {
-    fn api_key(&self) -> i16 {
-        18
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for SupportedFeatureKey { }
 
 impl Default for SupportedFeatureKey {
     fn default() -> Self {
@@ -350,6 +329,7 @@ impl Writable for SupportedFeatureKey {
     }
 }
 
+/// FinalizedFeatureKey, version 3.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct FinalizedFeatureKey {
@@ -360,22 +340,10 @@ pub struct FinalizedFeatureKey {
     pub max_version_level: i16,
     /// The cluster-wide finalized min version level for the feature.
     pub min_version_level: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for FinalizedFeatureKey {
-    fn api_key(&self) -> i16 {
-        18
-    }
-    
-    fn version(&self) -> i16 {
-        3
-    }
-}
-
-impl Response for FinalizedFeatureKey { }
 
 impl Default for FinalizedFeatureKey {
     fn default() -> Self {

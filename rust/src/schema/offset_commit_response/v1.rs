@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// OffsetCommitResponse, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetCommitResponse {
@@ -75,6 +76,7 @@ impl Writable for OffsetCommitResponse {
     }
 }
 
+/// OffsetCommitResponseTopic, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetCommitResponseTopic {
@@ -85,18 +87,6 @@ pub struct OffsetCommitResponseTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<OffsetCommitResponsePartition>,
 }
-
-impl ApiMessage for OffsetCommitResponseTopic {
-    fn api_key(&self) -> i16 {
-        8
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for OffsetCommitResponseTopic { }
 
 impl Default for OffsetCommitResponseTopic {
     fn default() -> Self {
@@ -148,6 +138,7 @@ impl Writable for OffsetCommitResponseTopic {
     }
 }
 
+/// OffsetCommitResponsePartition, version 1.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetCommitResponsePartition {
@@ -156,18 +147,6 @@ pub struct OffsetCommitResponsePartition {
     /// The error code, or 0 if there was no error.
     pub error_code: i16,
 }
-
-impl ApiMessage for OffsetCommitResponsePartition {
-    fn api_key(&self) -> i16 {
-        8
-    }
-    
-    fn version(&self) -> i16 {
-        1
-    }
-}
-
-impl Response for OffsetCommitResponsePartition { }
 
 impl Default for OffsetCommitResponsePartition {
     fn default() -> Self {

@@ -12,6 +12,7 @@ use crate::readable_writable::{Readable, Writable};
 use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fields};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// VotersRecord, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct VotersRecord {
@@ -20,7 +21,7 @@ pub struct VotersRecord {
     /// 
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub voters: Vec<Voter>,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
@@ -96,6 +97,7 @@ impl Writable for VotersRecord {
     }
 }
 
+/// Voter, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Voter {
@@ -109,22 +111,10 @@ pub struct Voter {
     pub endpoints: Vec<Endpoint>,
     /// The range of versions of the protocol that the replica supports
     pub kraft_version_feature: KRaftVersionFeature,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for Voter {
-    fn api_key(&self) -> i16 {
-        -1
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Data for Voter { }
 
 impl Default for Voter {
     fn default() -> Self {
@@ -195,6 +185,7 @@ impl Writable for Voter {
     }
 }
 
+/// Endpoint, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Endpoint {
@@ -206,22 +197,10 @@ pub struct Endpoint {
     pub host: String,
     /// The port
     pub port: u16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for Endpoint {
-    fn api_key(&self) -> i16 {
-        -1
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Data for Endpoint { }
 
 impl Default for Endpoint {
     fn default() -> Self {
@@ -287,6 +266,7 @@ impl Writable for Endpoint {
     }
 }
 
+/// KRaftVersionFeature, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct KRaftVersionFeature {
@@ -294,22 +274,10 @@ pub struct KRaftVersionFeature {
     pub min_supported_version: i16,
     /// The maximum supported KRaft protocol version
     pub max_supported_version: i16,
-    /// Unknown tagged fields
+    /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
-
-impl ApiMessage for KRaftVersionFeature {
-    fn api_key(&self) -> i16 {
-        -1
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Data for KRaftVersionFeature { }
 
 impl Default for KRaftVersionFeature {
     fn default() -> Self {

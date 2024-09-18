@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// DescribeDelegationTokenRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeDelegationTokenRequest {
@@ -75,6 +76,7 @@ impl Writable for DescribeDelegationTokenRequest {
     }
 }
 
+/// DescribeDelegationTokenOwner, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeDelegationTokenOwner {
@@ -85,18 +87,6 @@ pub struct DescribeDelegationTokenOwner {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub principal_name: String,
 }
-
-impl ApiMessage for DescribeDelegationTokenOwner {
-    fn api_key(&self) -> i16 {
-        41
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for DescribeDelegationTokenOwner { }
 
 impl Default for DescribeDelegationTokenOwner {
     fn default() -> Self {

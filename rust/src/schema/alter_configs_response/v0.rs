@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Response};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// AlterConfigsResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterConfigsResponse {
@@ -82,6 +83,7 @@ impl Writable for AlterConfigsResponse {
     }
 }
 
+/// AlterConfigsResourceResponse, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterConfigsResourceResponse {
@@ -96,18 +98,6 @@ pub struct AlterConfigsResourceResponse {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub resource_name: String,
 }
-
-impl ApiMessage for AlterConfigsResourceResponse {
-    fn api_key(&self) -> i16 {
-        33
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Response for AlterConfigsResourceResponse { }
 
 impl Default for AlterConfigsResourceResponse {
     fn default() -> Self {

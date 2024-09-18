@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// CreateDelegationTokenRequest, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreateDelegationTokenRequest {
@@ -82,6 +83,7 @@ impl Writable for CreateDelegationTokenRequest {
     }
 }
 
+/// CreatableRenewers, version 0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatableRenewers {
@@ -92,18 +94,6 @@ pub struct CreatableRenewers {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub principal_name: String,
 }
-
-impl ApiMessage for CreatableRenewers {
-    fn api_key(&self) -> i16 {
-        38
-    }
-    
-    fn version(&self) -> i16 {
-        0
-    }
-}
-
-impl Request for CreatableRenewers { }
 
 impl Default for CreatableRenewers {
     fn default() -> Self {

@@ -10,6 +10,7 @@ use crate::markers::{ApiMessage, Request};
 use crate::readable_writable::{Readable, Writable};
 #[cfg(test)] use crate::test_utils::proptest_strategies;
 
+/// CreateTopicsRequest, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreateTopicsRequest {
@@ -89,6 +90,7 @@ impl Writable for CreateTopicsRequest {
     }
 }
 
+/// CreatableTopic, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatableTopic {
@@ -106,18 +108,6 @@ pub struct CreatableTopic {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub configs: Vec<CreateableTopicConfig>,
 }
-
-impl ApiMessage for CreatableTopic {
-    fn api_key(&self) -> i16 {
-        19
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Request for CreatableTopic { }
 
 impl Default for CreatableTopic {
     fn default() -> Self {
@@ -184,6 +174,7 @@ impl Writable for CreatableTopic {
     }
 }
 
+/// CreatableReplicaAssignment, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreatableReplicaAssignment {
@@ -193,18 +184,6 @@ pub struct CreatableReplicaAssignment {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub broker_ids: Vec<i32>,
 }
-
-impl ApiMessage for CreatableReplicaAssignment {
-    fn api_key(&self) -> i16 {
-        19
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Request for CreatableReplicaAssignment { }
 
 impl Default for CreatableReplicaAssignment {
     fn default() -> Self {
@@ -256,6 +235,7 @@ impl Writable for CreatableReplicaAssignment {
     }
 }
 
+/// CreateableTopicConfig, version 2.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CreateableTopicConfig {
@@ -266,18 +246,6 @@ pub struct CreateableTopicConfig {
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub value: Option<String>,
 }
-
-impl ApiMessage for CreateableTopicConfig {
-    fn api_key(&self) -> i16 {
-        19
-    }
-    
-    fn version(&self) -> i16 {
-        2
-    }
-}
-
-impl Request for CreateableTopicConfig { }
 
 impl Default for CreateableTopicConfig {
     fn default() -> Self {
