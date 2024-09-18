@@ -6,7 +6,8 @@
 //! The message structs and the corresponding serialization and deserialization code are generated
 //! based on the Kafka JSON definitions.
 //!
-//! Message versions up to Kafka 3.8.0 are supported at the moment.
+//! Message versions up to Kafka 3.8.0 are supported at the moment. The unsupported message types are
+//! `ProduceRequest`, `FetchResponse`, and `FetchSnapshotResponse`.
 //!
 //! # Message schema
 //!
