@@ -13,7 +13,7 @@ Message versions up to Kafka 3.8.0 are supported at the moment. The unsupported 
 
 ### Rust
 
-See [rust_examples/](rust_examples/) for complete examples.
+See [Documentation](https://docs.rs/kafka_wire_protocol/latest/kafka_wire_protocol/) and [rust_examples/](rust_examples/) for complete examples.
 
 `kafka_wire_protocol::schema` namespace contains generated structs for various message types and versions. These structs have `read` function for reading from `Read` and `write` function for writing into `Write`. This allows reading and writing to/from e.g. `Cursor`.
 
