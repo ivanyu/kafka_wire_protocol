@@ -26,10 +26,12 @@ pub struct ConsumerGroupDescribeRequest {
 }
 
 impl ApiMessage for ConsumerGroupDescribeRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         69
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

@@ -31,10 +31,12 @@ pub struct DescribeUserScramCredentialsResponse {
 }
 
 impl ApiMessage for DescribeUserScramCredentialsResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         50
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

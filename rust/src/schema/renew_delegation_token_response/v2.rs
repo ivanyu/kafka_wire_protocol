@@ -26,10 +26,12 @@ pub struct RenewDelegationTokenResponse {
 }
 
 impl ApiMessage for RenewDelegationTokenResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         39
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         2
     }

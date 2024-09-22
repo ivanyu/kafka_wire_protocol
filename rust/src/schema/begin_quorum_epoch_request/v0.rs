@@ -23,10 +23,12 @@ pub struct BeginQuorumEpochRequest {
 }
 
 impl ApiMessage for BeginQuorumEpochRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         53
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

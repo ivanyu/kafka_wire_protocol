@@ -35,10 +35,12 @@ pub struct PushTelemetryRequest {
 }
 
 impl ApiMessage for PushTelemetryRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         72
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

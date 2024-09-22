@@ -29,10 +29,12 @@ pub struct InitProducerIdRequest {
 }
 
 impl ApiMessage for InitProducerIdRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         22
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         4
     }

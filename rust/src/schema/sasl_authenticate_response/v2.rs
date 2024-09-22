@@ -32,10 +32,12 @@ pub struct SaslAuthenticateResponse {
 }
 
 impl ApiMessage for SaslAuthenticateResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         36
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         2
     }

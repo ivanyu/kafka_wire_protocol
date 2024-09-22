@@ -47,10 +47,12 @@ pub struct FetchRequest {
 }
 
 impl ApiMessage for FetchRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         1
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         12
     }

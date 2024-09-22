@@ -26,10 +26,12 @@ pub struct UpdateFeaturesRequest {
 }
 
 impl ApiMessage for UpdateFeaturesRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         57
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

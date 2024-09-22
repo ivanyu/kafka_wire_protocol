@@ -26,10 +26,12 @@ pub struct ListPartitionReassignmentsRequest {
 }
 
 impl ApiMessage for ListPartitionReassignmentsRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         46
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

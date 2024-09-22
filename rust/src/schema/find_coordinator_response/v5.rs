@@ -26,10 +26,12 @@ pub struct FindCoordinatorResponse {
 }
 
 impl ApiMessage for FindCoordinatorResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         10
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         5
     }

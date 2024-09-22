@@ -27,10 +27,12 @@ pub struct VotersRecord {
 }
 
 impl ApiMessage for VotersRecord {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         -1
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

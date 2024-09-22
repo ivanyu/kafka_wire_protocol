@@ -15,10 +15,12 @@ pub struct ApiVersionsRequest {
 }
 
 impl ApiMessage for ApiVersionsRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         18
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         2
     }

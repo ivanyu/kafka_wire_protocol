@@ -26,10 +26,12 @@ pub struct CreatePartitionsResponse {
 }
 
 impl ApiMessage for CreatePartitionsResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         37
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         3
     }

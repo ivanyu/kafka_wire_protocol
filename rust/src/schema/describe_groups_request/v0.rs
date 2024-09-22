@@ -20,10 +20,12 @@ pub struct DescribeGroupsRequest {
 }
 
 impl ApiMessage for DescribeGroupsRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         15
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

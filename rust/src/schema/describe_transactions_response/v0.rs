@@ -26,10 +26,12 @@ pub struct DescribeTransactionsResponse {
 }
 
 impl ApiMessage for DescribeTransactionsResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         65
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

@@ -22,10 +22,12 @@ pub struct LeaderAndIsrResponse {
 }
 
 impl ApiMessage for LeaderAndIsrResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         4
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         1
     }

@@ -27,10 +27,12 @@ pub struct DescribeGroupsResponse {
 }
 
 impl ApiMessage for DescribeGroupsResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         15
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         5
     }

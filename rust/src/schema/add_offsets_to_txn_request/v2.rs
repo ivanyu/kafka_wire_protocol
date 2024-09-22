@@ -26,10 +26,12 @@ pub struct AddOffsetsToTxnRequest {
 }
 
 impl ApiMessage for AddOffsetsToTxnRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         25
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         2
     }

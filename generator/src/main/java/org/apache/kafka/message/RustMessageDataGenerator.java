@@ -178,6 +178,7 @@ public class RustMessageDataGenerator {
         buffer.printf("impl ApiMessage for %s {%n", className);
         buffer.incrementIndent();
 
+        buffer.printf("#[cfg(not(tarpaulin_include))]%n");
         buffer.printf("fn api_key(&self) -> i16 {%n");
         buffer.incrementIndent();
         buffer.printf("%d%n", message.apiKey().orElseGet(() -> (short) -1));
@@ -186,6 +187,7 @@ public class RustMessageDataGenerator {
 
         buffer.printf("%n");
 
+        buffer.printf("#[cfg(not(tarpaulin_include))]%n");
         buffer.printf("fn version(&self) -> i16 {%n");
         buffer.incrementIndent();
         buffer.printf("%d%n", version);

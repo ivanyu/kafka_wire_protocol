@@ -30,10 +30,12 @@ pub struct MetadataResponse {
 }
 
 impl ApiMessage for MetadataResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         3
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         5
     }

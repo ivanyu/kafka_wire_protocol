@@ -24,10 +24,12 @@ pub struct GetTelemetrySubscriptionsRequest {
 }
 
 impl ApiMessage for GetTelemetrySubscriptionsRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         71
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

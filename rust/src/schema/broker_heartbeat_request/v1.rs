@@ -35,10 +35,12 @@ pub struct BrokerHeartbeatRequest {
 }
 
 impl ApiMessage for BrokerHeartbeatRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         63
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         1
     }

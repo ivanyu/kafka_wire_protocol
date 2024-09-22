@@ -26,10 +26,12 @@ pub struct DescribeClientQuotasRequest {
 }
 
 impl ApiMessage for DescribeClientQuotasRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         48
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         1
     }

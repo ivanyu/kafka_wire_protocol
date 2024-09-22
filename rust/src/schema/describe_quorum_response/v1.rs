@@ -26,10 +26,12 @@ pub struct DescribeQuorumResponse {
 }
 
 impl ApiMessage for DescribeQuorumResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         55
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         1
     }

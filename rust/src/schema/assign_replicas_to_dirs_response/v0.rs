@@ -29,10 +29,12 @@ pub struct AssignReplicasToDirsResponse {
 }
 
 impl ApiMessage for AssignReplicasToDirsResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         73
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

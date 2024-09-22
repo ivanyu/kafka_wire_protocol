@@ -22,10 +22,12 @@ pub struct DescribeClusterRequest {
 }
 
 impl ApiMessage for DescribeClusterRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         60
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

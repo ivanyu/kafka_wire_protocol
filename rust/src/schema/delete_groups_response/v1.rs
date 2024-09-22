@@ -22,10 +22,12 @@ pub struct DeleteGroupsResponse {
 }
 
 impl ApiMessage for DeleteGroupsResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         42
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         1
     }

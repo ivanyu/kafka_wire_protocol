@@ -22,10 +22,12 @@ pub struct SaslHandshakeResponse {
 }
 
 impl ApiMessage for SaslHandshakeResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         17
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         1
     }

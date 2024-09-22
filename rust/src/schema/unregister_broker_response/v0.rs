@@ -27,10 +27,12 @@ pub struct UnregisterBrokerResponse {
 }
 
 impl ApiMessage for UnregisterBrokerResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         64
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

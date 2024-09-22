@@ -22,10 +22,12 @@ pub struct TxnOffsetCommitResponse {
 }
 
 impl ApiMessage for TxnOffsetCommitResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         28
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         1
     }

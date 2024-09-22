@@ -28,10 +28,12 @@ pub struct AlterPartitionRequest {
 }
 
 impl ApiMessage for AlterPartitionRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         56
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         1
     }

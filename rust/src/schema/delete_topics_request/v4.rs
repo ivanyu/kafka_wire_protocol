@@ -26,10 +26,12 @@ pub struct DeleteTopicsRequest {
 }
 
 impl ApiMessage for DeleteTopicsRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         20
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         4
     }

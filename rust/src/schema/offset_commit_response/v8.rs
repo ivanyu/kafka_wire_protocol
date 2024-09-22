@@ -26,10 +26,12 @@ pub struct OffsetCommitResponse {
 }
 
 impl ApiMessage for OffsetCommitResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         8
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         8
     }

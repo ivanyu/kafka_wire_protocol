@@ -33,10 +33,12 @@ pub struct DescribeAclsRequest {
 }
 
 impl ApiMessage for DescribeAclsRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         29
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         1
     }

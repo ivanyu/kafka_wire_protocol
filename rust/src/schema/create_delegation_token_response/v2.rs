@@ -44,10 +44,12 @@ pub struct CreateDelegationTokenResponse {
 }
 
 impl ApiMessage for CreateDelegationTokenResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         38
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         2
     }

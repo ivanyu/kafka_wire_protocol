@@ -36,10 +36,12 @@ pub struct JoinGroupResponse {
 }
 
 impl ApiMessage for JoinGroupResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         11
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         4
     }

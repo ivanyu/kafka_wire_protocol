@@ -19,10 +19,12 @@ pub struct ControlledShutdownRequest {
 }
 
 impl ApiMessage for ControlledShutdownRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         7
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         2
     }

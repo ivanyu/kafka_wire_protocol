@@ -24,10 +24,12 @@ pub struct EndTxnResponse {
 }
 
 impl ApiMessage for EndTxnResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         26
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         3
     }

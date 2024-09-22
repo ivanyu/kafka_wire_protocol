@@ -27,10 +27,12 @@ pub struct OffsetFetchRequest {
 }
 
 impl ApiMessage for OffsetFetchRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         9
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         6
     }

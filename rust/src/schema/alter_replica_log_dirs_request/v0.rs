@@ -20,10 +20,12 @@ pub struct AlterReplicaLogDirsRequest {
 }
 
 impl ApiMessage for AlterReplicaLogDirsRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         34
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

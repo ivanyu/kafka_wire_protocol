@@ -35,10 +35,12 @@ pub struct UpdateRaftVoterRequest {
 }
 
 impl ApiMessage for UpdateRaftVoterRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         82
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

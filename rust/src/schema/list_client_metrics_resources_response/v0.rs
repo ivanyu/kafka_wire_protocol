@@ -28,10 +28,12 @@ pub struct ListClientMetricsResourcesResponse {
 }
 
 impl ApiMessage for ListClientMetricsResourcesResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         74
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

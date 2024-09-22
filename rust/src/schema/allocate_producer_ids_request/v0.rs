@@ -24,10 +24,12 @@ pub struct AllocateProducerIdsRequest {
 }
 
 impl ApiMessage for AllocateProducerIdsRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         67
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

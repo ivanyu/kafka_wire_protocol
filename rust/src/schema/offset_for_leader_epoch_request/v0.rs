@@ -20,10 +20,12 @@ pub struct OffsetForLeaderEpochRequest {
 }
 
 impl ApiMessage for OffsetForLeaderEpochRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         23
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

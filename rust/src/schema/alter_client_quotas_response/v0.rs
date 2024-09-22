@@ -22,10 +22,12 @@ pub struct AlterClientQuotasResponse {
 }
 
 impl ApiMessage for AlterClientQuotasResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         49
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

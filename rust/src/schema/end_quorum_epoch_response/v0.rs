@@ -22,10 +22,12 @@ pub struct EndQuorumEpochResponse {
 }
 
 impl ApiMessage for EndQuorumEpochResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         54
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

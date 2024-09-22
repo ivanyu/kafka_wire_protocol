@@ -27,10 +27,12 @@ pub struct ControllerRegistrationResponse {
 }
 
 impl ApiMessage for ControllerRegistrationResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         70
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

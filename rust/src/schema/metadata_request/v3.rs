@@ -20,10 +20,12 @@ pub struct MetadataRequest {
 }
 
 impl ApiMessage for MetadataRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         3
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         3
     }

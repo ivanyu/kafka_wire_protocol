@@ -23,10 +23,12 @@ pub struct LeaveGroupRequest {
 }
 
 impl ApiMessage for LeaveGroupRequest {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         13
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         3
     }

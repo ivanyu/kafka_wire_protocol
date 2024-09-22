@@ -29,10 +29,12 @@ pub struct DescribeTopicPartitionsResponse {
 }
 
 impl ApiMessage for DescribeTopicPartitionsResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         75
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         0
     }

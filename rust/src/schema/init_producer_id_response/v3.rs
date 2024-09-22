@@ -28,10 +28,12 @@ pub struct InitProducerIdResponse {
 }
 
 impl ApiMessage for InitProducerIdResponse {
+    #[cfg(not(tarpaulin_include))]
     fn api_key(&self) -> i16 {
         22
     }
     
+    #[cfg(not(tarpaulin_include))]
     fn version(&self) -> i16 {
         3
     }
