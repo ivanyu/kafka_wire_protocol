@@ -1,5 +1,7 @@
 # Apache Kafka wire protocol
 
+(![CI Build Status](https://github.com/ivanyu/kafka_wire_protocol/actions/workflows/ci.yml/badge.svg "CI Build Status"))[https://github.com/ivanyu/kafka_wire_protocol/actions/workflows/ci.yml]
+
 Apache Kafka protocol implementations generated for different programming languages (currently, Rust; Go is planned) based on the Kafka code.
 
 The library contains the protocol messages and some convenience code, but this is not a complete client (or server) implementation. 
