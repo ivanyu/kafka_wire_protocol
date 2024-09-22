@@ -1,6 +1,7 @@
 # Apache Kafka wire protocol
 
-(![CI Build Status](https://github.com/ivanyu/kafka_wire_protocol/actions/workflows/ci.yml/badge.svg "CI Build Status"))[https://github.com/ivanyu/kafka_wire_protocol/actions/workflows/ci.yml]
+[![CI Build Status](https://github.com/ivanyu/kafka_wire_protocol/actions/workflows/ci.yml/badge.svg "CI Build Status")](https://github.com/ivanyu/kafka_wire_protocol/actions/workflows/ci.yml)
+[![crates.io](https://img.shields.io/crates/v/kafka_wire_protocol.svg)](https://crates.io/crates/kafka_wire_protocol)
 
 Apache Kafka protocol implementations generated for different programming languages (currently, Rust; Go is planned) based on the Kafka code.
 
