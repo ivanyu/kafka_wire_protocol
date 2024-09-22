@@ -64,14 +64,16 @@ pub(crate) fn write_tagged_fields(output: &mut impl Write, known_tagged_fields: 
         let tag0 = &tag_pair[0].tag;
         let tag1 = &tag_pair[1].tag;
         if tag0 >= tag1 {
-            return Err(Error::new(ErrorKind::Other, format!(
+            let message = format!(
                 "Invalid raw tag field list: tag {tag1:?} comes after tag {tag0:?}, but is not higher than it."
-            )));
+            );
+            return Err(Error::new(ErrorKind::Other, message));
         }
         if *tag0 <= max_known_tag {
-            return Err(Error::new(ErrorKind::Other, format!(
+            let message = format!(
                 "Invalid raw tag field list: tag {tag0:?} comes after tag {max_known_tag:?}, but is not higher than it."
-            )));
+            );
+            return Err(Error::new(ErrorKind::Other, message));
         }
     }
 
@@ -105,7 +107,10 @@ mod tests {
             RawTaggedField { tag: 1, data: vec![0, 1] },
             RawTaggedField { tag: 4, data: vec![0, 1, 2, 3, 4, 5] }
         };
-        let unknown_fields: Vec<RawTaggedField> = vec![];
+        let unknown_fields: Vec<RawTaggedField> = vec![
+            RawTaggedField { tag: 10, data: vec![0, 1, 2] },
+            RawTaggedField { tag: 20, data: vec![] },
+        ];
 
         let mut cur = Cursor::new(Vec::<u8>::new());
 
@@ -114,9 +119,12 @@ mod tests {
         cur.seek(SeekFrom::Start(0)).unwrap();
 
         let tagged_fields_callback = |_: i32, _: &[u8]| { Ok(false) };
-        let read_fields = read_tagged_fields(&mut cur, &tagged_fields_callback).unwrap();
+        let read_unknown_fields = read_tagged_fields(&mut cur, &tagged_fields_callback).unwrap();
 
-        assert_eq!(read_fields, original_fields);
+        let expected_fields: Vec<RawTaggedField> = original_fields.into_iter()
+            .chain(unknown_fields)
+            .collect();
+        assert_eq!(read_unknown_fields, expected_fields);
     }
 
     #[test]
