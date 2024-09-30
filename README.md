@@ -49,7 +49,7 @@ This project contains the unaltered code of the `clients` module and the slightl
 
 Serialization/deserialization is a crucial part of the protocol implementation, which must be correct for the library to be useful. The library is tested on several levels:
 1. Basic handwritten unit tests.
-2. Pure Rust serialization/deserialization property-based tests with [proptest](https://crates.io/crates/proptest).
+2. Pure Rust serialization/deserialization property-based tests with [proptest](https://crates.io/crates/proptest). (See the [blog post](https://ivanyu.me/blog/2024/09/22/proptest-property-testing-in-rust/).)
 3. Serialization/deserialization property-based tests that run against the real Java Kafka code. They aim to ensure that the generated Rust code and the upstream Java code understand the protocol completely identical. See the [Java Tester](#testing-with-java-tester) section below.
 4. Fuzzing tests for deserialization.
 5. Integration tests against a real Kafka instance running in Docker.
