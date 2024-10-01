@@ -16,15 +16,16 @@
  */
 package org.apache.kafka.common.compress;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
+import org.apache.kafka.common.record.CompressionType;
 import org.apache.kafka.common.utils.ByteUtils;
 
 import net.jpountz.lz4.LZ4Compressor;
 import net.jpountz.lz4.LZ4Factory;
 import net.jpountz.xxhash.XXHash32;
 import net.jpountz.xxhash.XXHashFactory;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * A partial implementation of the v1.5.1 LZ4 Frame format.
@@ -75,7 +76,7 @@ public final class Lz4BlockOutputStream extends OutputStream {
          *
          * For backward compatibility, Lz4BlockOutputStream uses fastCompressor with default compression level but, with the other level, it uses highCompressor.
          */
-        compressor = level == Lz4Compression.DEFAULT_LEVEL ? LZ4Factory.fastestInstance().fastCompressor() : LZ4Factory.fastestInstance().highCompressor(level);
+        compressor = level == CompressionType.LZ4.defaultLevel() ? LZ4Factory.fastestInstance().fastCompressor() : LZ4Factory.fastestInstance().highCompressor(level);
         checksum = XXHashFactory.fastestInstance().hash32();
         this.useBrokenFlagDescriptorChecksum = useBrokenFlagDescriptorChecksum;
         bd = new BD(blockSize);
@@ -331,10 +332,6 @@ public final class Lz4BlockOutputStream extends OutputStream {
 
         public boolean isBlockChecksumSet() {
             return blockChecksum == 1;
-        }
-
-        public boolean isBlockIndependenceSet() {
-            return blockIndependence == 1;
         }
 
         public int getVersion() {

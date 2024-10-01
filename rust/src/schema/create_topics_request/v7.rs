@@ -119,7 +119,7 @@ pub struct CreatableTopic {
     pub assignments: Vec<CreatableReplicaAssignment>,
     /// The custom topic configurations to set.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
-    pub configs: Vec<CreateableTopicConfig>,
+    pub configs: Vec<CreatableTopicConfig>,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
@@ -132,14 +132,14 @@ impl Default for CreatableTopic {
             num_partitions: 0_i32,
             replication_factor: 0_i16,
             assignments: Vec::<CreatableReplicaAssignment>::new(),
-            configs: Vec::<CreateableTopicConfig>::new(),
+            configs: Vec::<CreatableTopicConfig>::new(),
             _unknown_tagged_fields: Vec::new(),
         }
     }
 }
 
 impl CreatableTopic {
-    pub fn new<S1: AsRef<str>>(name: S1, num_partitions: i32, replication_factor: i16, assignments: Vec<CreatableReplicaAssignment>, configs: Vec<CreateableTopicConfig>) -> Self {
+    pub fn new<S1: AsRef<str>>(name: S1, num_partitions: i32, replication_factor: i16, assignments: Vec<CreatableReplicaAssignment>, configs: Vec<CreatableTopicConfig>) -> Self {
         Self {
             name: name.as_ref().to_string(),
             num_partitions,
@@ -162,7 +162,7 @@ mod tests_creatable_topic_new_and_default {
             0_i32,
             0_i16,
             Vec::<CreatableReplicaAssignment>::new(),
-            Vec::<CreateableTopicConfig>::new(),
+            Vec::<CreatableTopicConfig>::new(),
         );
         assert_eq!(d, CreatableTopic::default());
     }
@@ -174,7 +174,7 @@ impl Readable for CreatableTopic {
         let num_partitions = i32::read(input)?;
         let replication_factor = i16::read(input)?;
         let assignments = read_array::<CreatableReplicaAssignment>(input, "assignments", true)?;
-        let configs = read_array::<CreateableTopicConfig>(input, "configs", true)?;
+        let configs = read_array::<CreatableTopicConfig>(input, "configs", true)?;
         let tagged_fields_callback = |tag: i32, _: &[u8]| {
             match tag {
                 _ => Ok(false)
@@ -272,10 +272,10 @@ impl Writable for CreatableReplicaAssignment {
     }
 }
 
-/// CreateableTopicConfig, version 7.
+/// CreatableTopicConfig, version 7.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
-pub struct CreateableTopicConfig {
+pub struct CreatableTopicConfig {
     /// The configuration name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
@@ -287,9 +287,9 @@ pub struct CreateableTopicConfig {
     pub _unknown_tagged_fields: Vec<RawTaggedField>,
 }
 
-impl Default for CreateableTopicConfig {
+impl Default for CreatableTopicConfig {
     fn default() -> Self {
-        CreateableTopicConfig {
+        CreatableTopicConfig {
             name: String::from(""),
             value: Some(String::from("")),
             _unknown_tagged_fields: Vec::new(),
@@ -297,7 +297,7 @@ impl Default for CreateableTopicConfig {
     }
 }
 
-impl CreateableTopicConfig {
+impl CreatableTopicConfig {
     pub fn new<S1: AsRef<str>, S2: AsRef<str>>(name: S1, value: Option<S2>) -> Self {
         Self {
             name: name.as_ref().to_string(),
@@ -308,20 +308,20 @@ impl CreateableTopicConfig {
 }
 
 #[cfg(test)]
-mod tests_createable_topic_config_new_and_default {
+mod tests_creatable_topic_config_new_and_default {
     use super::*;
     
     #[test]
     fn test() {
-        let d = CreateableTopicConfig::new(
+        let d = CreatableTopicConfig::new(
             String::from(""),
             Some(String::from("")),
         );
-        assert_eq!(d, CreateableTopicConfig::default());
+        assert_eq!(d, CreatableTopicConfig::default());
     }
 }
 
-impl Readable for CreateableTopicConfig {
+impl Readable for CreatableTopicConfig {
     fn read(#[allow(unused)] input: &mut impl Read) -> Result<Self> {
         let name = String::read_ext(input, "name", true)?;
         let value = Option::<String>::read_ext(input, "value", true)?;
@@ -331,13 +331,13 @@ impl Readable for CreateableTopicConfig {
             }
         };
         let _unknown_tagged_fields = read_tagged_fields(input, tagged_fields_callback)?;
-        Ok(CreateableTopicConfig {
+        Ok(CreatableTopicConfig {
             name, value, _unknown_tagged_fields
         })
     }
 }
 
-impl Writable for CreateableTopicConfig {
+impl Writable for CreatableTopicConfig {
     fn write(&self, #[allow(unused)] output: &mut impl Write) -> Result<()> {
         self.name.write_ext(output, "self.name", true)?;
         self.value.write_ext(output, "self.value", true)?;

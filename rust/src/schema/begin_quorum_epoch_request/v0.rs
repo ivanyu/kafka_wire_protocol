@@ -88,7 +88,7 @@ impl Writable for BeginQuorumEpochRequest {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicData {
-    /// The topic name.
+    /// The topic name
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub topic_name: String,
     /// 
@@ -150,7 +150,7 @@ impl Writable for TopicData {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionData {
-    /// The partition index.
+    /// The partition index
     pub partition_index: i32,
     /// The ID of the newly elected leader
     pub leader_id: i32,

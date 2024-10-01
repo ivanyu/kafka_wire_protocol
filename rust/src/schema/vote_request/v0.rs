@@ -179,7 +179,7 @@ pub struct PartitionData {
     pub partition_index: i32,
     /// The bumped epoch of the candidate sending the request
     pub candidate_epoch: i32,
-    /// The ID of the voter sending the request
+    /// The replica id of the voter sending the request
     pub candidate_id: i32,
     /// The epoch of the last record written to the metadata log
     pub last_offset_epoch: i32,

@@ -17,8 +17,8 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AddRaftVoterRequest {
     /// 
-    #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
-    pub cluster_id: String,
+    #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
+    pub cluster_id: Option<String>,
     /// 
     pub timeout_ms: i32,
     /// The replica id of the voter getting added to the topic partition
@@ -49,7 +49,7 @@ impl Request for AddRaftVoterRequest { }
 impl Default for AddRaftVoterRequest {
     fn default() -> Self {
         AddRaftVoterRequest {
-            cluster_id: String::from(""),
+            cluster_id: Some(String::from("")),
             timeout_ms: 0_i32,
             voter_id: 0_i32,
             voter_directory_id: Uuid::nil(),
@@ -60,9 +60,9 @@ impl Default for AddRaftVoterRequest {
 }
 
 impl AddRaftVoterRequest {
-    pub fn new<S1: AsRef<str>>(cluster_id: S1, timeout_ms: i32, voter_id: i32, voter_directory_id: Uuid, listeners: Vec<Listener>) -> Self {
+    pub fn new<S1: AsRef<str>>(cluster_id: Option<S1>, timeout_ms: i32, voter_id: i32, voter_directory_id: Uuid, listeners: Vec<Listener>) -> Self {
         Self {
-            cluster_id: cluster_id.as_ref().to_string(),
+            cluster_id: cluster_id.map(|s| s.as_ref().to_string()),
             timeout_ms,
             voter_id,
             voter_directory_id,
@@ -79,7 +79,7 @@ mod tests_add_raft_voter_request_new_and_default {
     #[test]
     fn test() {
         let d = AddRaftVoterRequest::new(
-            String::from(""),
+            Some(String::from("")),
             0_i32,
             0_i32,
             Uuid::nil(),
@@ -91,7 +91,7 @@ mod tests_add_raft_voter_request_new_and_default {
 
 impl Readable for AddRaftVoterRequest {
     fn read(#[allow(unused)] input: &mut impl Read) -> Result<Self> {
-        let cluster_id = String::read_ext(input, "cluster_id", true)?;
+        let cluster_id = Option::<String>::read_ext(input, "cluster_id", true)?;
         let timeout_ms = i32::read(input)?;
         let voter_id = i32::read(input)?;
         let voter_directory_id = Uuid::read(input)?;

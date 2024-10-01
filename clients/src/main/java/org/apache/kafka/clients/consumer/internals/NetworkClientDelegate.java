@@ -21,19 +21,24 @@ import org.apache.kafka.clients.ClientRequest;
 import org.apache.kafka.clients.ClientResponse;
 import org.apache.kafka.clients.ClientUtils;
 import org.apache.kafka.clients.KafkaClient;
+import org.apache.kafka.clients.Metadata;
 import org.apache.kafka.clients.NetworkClientUtils;
 import org.apache.kafka.clients.RequestCompletionHandler;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.internals.events.BackgroundEventHandler;
+import org.apache.kafka.clients.consumer.internals.events.ErrorEvent;
 import org.apache.kafka.common.Node;
 import org.apache.kafka.common.errors.AuthenticationException;
 import org.apache.kafka.common.errors.DisconnectException;
 import org.apache.kafka.common.errors.TimeoutException;
 import org.apache.kafka.common.metrics.Metrics;
+import org.apache.kafka.common.metrics.Sensor;
 import org.apache.kafka.common.requests.AbstractRequest;
 import org.apache.kafka.common.telemetry.internals.ClientTelemetrySender;
 import org.apache.kafka.common.utils.LogContext;
 import org.apache.kafka.common.utils.Time;
 import org.apache.kafka.common.utils.Timer;
+
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -57,6 +62,8 @@ import static org.apache.kafka.clients.consumer.internals.ConsumerUtils.CONSUMER
 public class NetworkClientDelegate implements AutoCloseable {
 
     private final KafkaClient client;
+    private final BackgroundEventHandler backgroundEventHandler;
+    private final Metadata metadata;
     private final Time time;
     private final Logger log;
     private final int requestTimeoutMs;
@@ -67,9 +74,13 @@ public class NetworkClientDelegate implements AutoCloseable {
             final Time time,
             final ConsumerConfig config,
             final LogContext logContext,
-            final KafkaClient client) {
+            final KafkaClient client,
+            final Metadata metadata,
+            final BackgroundEventHandler backgroundEventHandler) {
         this.time = time;
         this.client = client;
+        this.metadata = metadata;
+        this.backgroundEventHandler = backgroundEventHandler;
         this.log = logContext.logger(getClass());
         this.unsentRequests = new ArrayDeque<>();
         this.requestTimeoutMs = config.getInt(ConsumerConfig.REQUEST_TIMEOUT_MS_CONFIG);
@@ -79,6 +90,10 @@ public class NetworkClientDelegate implements AutoCloseable {
     // Visible for testing
     Queue<UnsentRequest> unsentRequests() {
         return unsentRequests;
+    }
+
+    public int inflightRequestCount() {
+        return client.inFlightRequestCount();
     }
 
     /**
@@ -127,7 +142,16 @@ public class NetworkClientDelegate implements AutoCloseable {
             pollTimeoutMs = Math.min(retryBackoffMs, pollTimeoutMs);
         }
         this.client.poll(pollTimeoutMs, currentTimeMs);
+        maybePropagateMetadataError();
         checkDisconnects(currentTimeMs);
+    }
+
+    private void maybePropagateMetadataError() {
+        try {
+            metadata.maybeThrowAnyException();
+        } catch (Exception e) {
+            backgroundEventHandler.add(new ErrorEvent(e));
+        }
     }
 
     /**
@@ -386,8 +410,9 @@ public class NetworkClientDelegate implements AutoCloseable {
                                                            final ConsumerConfig config,
                                                            final ApiVersions apiVersions,
                                                            final Metrics metrics,
-                                                           final FetchMetricsManager fetchMetricsManager,
-                                                           final ClientTelemetrySender clientTelemetrySender) {
+                                                           final Sensor throttleTimeSensor,
+                                                           final ClientTelemetrySender clientTelemetrySender,
+                                                           final BackgroundEventHandler backgroundEventHandler) {
         return new CachedSupplier<NetworkClientDelegate>() {
             @Override
             protected NetworkClientDelegate create() {
@@ -399,9 +424,9 @@ public class NetworkClientDelegate implements AutoCloseable {
                         time,
                         CONSUMER_MAX_INFLIGHT_REQUESTS_PER_CONNECTION,
                         metadata,
-                        fetchMetricsManager.throttleTimeSensor(),
+                        throttleTimeSensor,
                         clientTelemetrySender);
-                return new NetworkClientDelegate(time, config, logContext, client);
+                return new NetworkClientDelegate(time, config, logContext, client, metadata, backgroundEventHandler);
             }
         };
     }
