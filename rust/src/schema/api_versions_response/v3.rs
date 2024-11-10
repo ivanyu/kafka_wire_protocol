@@ -22,7 +22,7 @@ pub struct ApiVersionsResponse {
     pub api_keys: Vec<ApiVersion>,
     /// The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota.
     pub throttle_time_ms: i32,
-    /// Features supported by the broker.
+    /// Features supported by the broker. Note: in v0-v3, features with MinSupportedVersion = 0 are omitted.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub supported_features: Vec<SupportedFeatureKey>,
     /// The monotonically increasing epoch for the finalized features information. Valid values are >= 0. A value of -1 is special and represents unknown epoch.

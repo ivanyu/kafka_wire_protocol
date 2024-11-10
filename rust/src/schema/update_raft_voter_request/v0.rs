@@ -17,8 +17,10 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdateRaftVoterRequest {
     /// 
-    #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
-    pub cluster_id: String,
+    #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
+    pub cluster_id: Option<String>,
+    /// The current leader epoch of the partition, -1 for unknown leader epoch
+    pub current_leader_epoch: i32,
     /// The replica id of the voter getting updated in the topic partition
     pub voter_id: i32,
     /// The directory id of the voter getting updated in the topic partition
@@ -49,7 +51,8 @@ impl Request for UpdateRaftVoterRequest { }
 impl Default for UpdateRaftVoterRequest {
     fn default() -> Self {
         UpdateRaftVoterRequest {
-            cluster_id: String::from(""),
+            cluster_id: Some(String::from("")),
+            current_leader_epoch: 0_i32,
             voter_id: 0_i32,
             voter_directory_id: Uuid::nil(),
             listeners: Vec::<Listener>::new(),
@@ -60,9 +63,10 @@ impl Default for UpdateRaftVoterRequest {
 }
 
 impl UpdateRaftVoterRequest {
-    pub fn new<S1: AsRef<str>>(cluster_id: S1, voter_id: i32, voter_directory_id: Uuid, listeners: Vec<Listener>, kraft_version_feature: KRaftVersionFeature) -> Self {
+    pub fn new<S1: AsRef<str>>(cluster_id: Option<S1>, current_leader_epoch: i32, voter_id: i32, voter_directory_id: Uuid, listeners: Vec<Listener>, kraft_version_feature: KRaftVersionFeature) -> Self {
         Self {
-            cluster_id: cluster_id.as_ref().to_string(),
+            cluster_id: cluster_id.map(|s| s.as_ref().to_string()),
+            current_leader_epoch,
             voter_id,
             voter_directory_id,
             listeners,
@@ -79,7 +83,8 @@ mod tests_update_raft_voter_request_new_and_default {
     #[test]
     fn test() {
         let d = UpdateRaftVoterRequest::new(
-            String::from(""),
+            Some(String::from("")),
+            0_i32,
             0_i32,
             Uuid::nil(),
             Vec::<Listener>::new(),
@@ -91,7 +96,8 @@ mod tests_update_raft_voter_request_new_and_default {
 
 impl Readable for UpdateRaftVoterRequest {
     fn read(#[allow(unused)] input: &mut impl Read) -> Result<Self> {
-        let cluster_id = String::read_ext(input, "cluster_id", true)?;
+        let cluster_id = Option::<String>::read_ext(input, "cluster_id", true)?;
+        let current_leader_epoch = i32::read(input)?;
         let voter_id = i32::read(input)?;
         let voter_directory_id = Uuid::read(input)?;
         let listeners = read_array::<Listener>(input, "listeners", true)?;
@@ -103,7 +109,7 @@ impl Readable for UpdateRaftVoterRequest {
         };
         let _unknown_tagged_fields = read_tagged_fields(input, tagged_fields_callback)?;
         Ok(UpdateRaftVoterRequest {
-            cluster_id, voter_id, voter_directory_id, listeners, kraft_version_feature, _unknown_tagged_fields
+            cluster_id, current_leader_epoch, voter_id, voter_directory_id, listeners, kraft_version_feature, _unknown_tagged_fields
         })
     }
 }
@@ -111,6 +117,7 @@ impl Readable for UpdateRaftVoterRequest {
 impl Writable for UpdateRaftVoterRequest {
     fn write(&self, #[allow(unused)] output: &mut impl Write) -> Result<()> {
         self.cluster_id.write_ext(output, "self.cluster_id", true)?;
+        self.current_leader_epoch.write(output)?;
         self.voter_id.write(output)?;
         self.voter_directory_id.write(output)?;
         write_array(output, "self.listeners", &self.listeners, true)?;

@@ -83,7 +83,10 @@ public class RustMessageGenerator {
         if (className.endsWith("Data")) {
             className = className.substring(0, className.length() - 4);
         }
-        if (className.equals("ProduceRequest") || className.equals("FetchResponse") || className.equals("FetchSnapshotResponse")) {
+        if (className.equals("ProduceRequest")
+                || className.equals("FetchResponse")
+                || className.equals("FetchSnapshotResponse")
+                || className.equals("ShareFetchResponse")) {
             return null;
         }
 

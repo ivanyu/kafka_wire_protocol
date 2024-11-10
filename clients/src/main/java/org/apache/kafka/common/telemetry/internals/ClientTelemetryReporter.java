@@ -16,11 +16,6 @@
  */
 package org.apache.kafka.common.telemetry.internals;
 
-import io.opentelemetry.proto.metrics.v1.Metric;
-import io.opentelemetry.proto.metrics.v1.MetricsData;
-import io.opentelemetry.proto.metrics.v1.ResourceMetrics;
-import io.opentelemetry.proto.metrics.v1.ScopeMetrics;
-
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.common.KafkaException;
 import org.apache.kafka.common.Uuid;
@@ -42,6 +37,7 @@ import org.apache.kafka.common.requests.PushTelemetryRequest;
 import org.apache.kafka.common.requests.PushTelemetryResponse;
 import org.apache.kafka.common.telemetry.ClientTelemetryState;
 import org.apache.kafka.common.utils.Time;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,6 +56,11 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Predicate;
+
+import io.opentelemetry.proto.metrics.v1.Metric;
+import io.opentelemetry.proto.metrics.v1.MetricsData;
+import io.opentelemetry.proto.metrics.v1.ResourceMetrics;
+import io.opentelemetry.proto.metrics.v1.ScopeMetrics;
 
 /**
  * The implementation of the {@link MetricsReporter} for client telemetry which manages the life-cycle
@@ -217,10 +218,10 @@ public class ClientTelemetryReporter implements MetricsReporter {
         telemetryProvider.updateLabels(labels);
     }
 
-    public void initiateClose(long timeoutMs) {
+    public void initiateClose() {
         log.debug("Initiate close of ClientTelemetryReporter");
         try {
-            clientTelemetrySender.initiateClose(timeoutMs);
+            clientTelemetrySender.initiateClose();
         } catch (Exception exception) {
             log.error("Failed to initiate close of client telemetry reporter", exception);
         }
@@ -270,7 +271,6 @@ public class ClientTelemetryReporter implements MetricsReporter {
 
         private final ReadWriteLock lock = new ReentrantReadWriteLock();
         private final Condition subscriptionLoaded = lock.writeLock().newCondition();
-        private final Condition terminalPushInProgress = lock.writeLock().newCondition();
         /*
          Initial state should be subscription needed which should allow issuing first telemetry
          request of get telemetry subscription.
@@ -601,8 +601,8 @@ public class ClientTelemetryReporter implements MetricsReporter {
         }
 
         @Override
-        public void initiateClose(long timeoutMs) {
-            log.debug("initiate close for client telemetry, check if terminal push required. Timeout {} ms.", timeoutMs);
+        public void initiateClose() {
+            log.debug("initiate close for client telemetry, check if terminal push required.");
 
             lock.writeLock().lock();
             try {
@@ -622,14 +622,7 @@ public class ClientTelemetryReporter implements MetricsReporter {
                     return;
                 }
 
-                try {
-                    log.info("About to wait {} ms. for terminal telemetry push to be submitted", timeoutMs);
-                    if (!terminalPushInProgress.await(timeoutMs, TimeUnit.MILLISECONDS)) {
-                        log.info("Wait for terminal telemetry push to be submitted has elapsed; may not have actually sent request");
-                    }
-                } catch (InterruptedException e) {
-                    log.warn("Error during client telemetry close", e);
-                }
+                log.debug("Updated state to send terminal telemetry push request");
             } finally {
                 lock.writeLock().unlock();
             }
@@ -826,13 +819,9 @@ public class ClientTelemetryReporter implements MetricsReporter {
                 ClientTelemetryState oldState = state;
                 state = oldState.validateTransition(newState);
                 log.debug("Setting telemetry state from {} to {}", oldState, newState);
-
-                if (newState == ClientTelemetryState.TERMINATING_PUSH_IN_PROGRESS) {
-                    terminalPushInProgress.signalAll();
-                }
                 return true;
             } catch (IllegalStateException e) {
-                log.warn("Error updating client telemetry state, disabled telemetry", e);
+                log.warn("Error updating client telemetry state, disabled telemetry");
                 enabled = false;
                 return false;
             } finally {

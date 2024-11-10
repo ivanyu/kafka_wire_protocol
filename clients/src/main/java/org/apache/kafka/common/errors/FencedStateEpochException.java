@@ -14,11 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.kafka.clients.consumer.internals.events;
+package org.apache.kafka.common.errors;
 
-public class LeaveOnCloseEvent extends CompletableApplicationEvent<Void> {
+/**
+ * Thrown when the share coordinator rejected the request because the share-group state epoch did not match.
+ */
+public class FencedStateEpochException extends ApiException {
+    private static final long serialVersionUID = 1L;
 
-    public LeaveOnCloseEvent(final long deadlineMs) {
-        super(Type.LEAVE_ON_CLOSE, deadlineMs);
+    public FencedStateEpochException(String message) {
+        super(message);
     }
 }
