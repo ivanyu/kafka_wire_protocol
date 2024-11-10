@@ -12,7 +12,7 @@ use testcontainers::core::{ContainerPort, WaitFor};
 use testcontainers::runners::SyncRunner;
 use testcontainers::GenericImage;
 
-const KAFKA_VERSION: &str = "3.8.0";
+const KAFKA_VERSION: &str = "3.9.0";
 const KAFKA_PORT: ContainerPort = ContainerPort::Tcp(9092);
 
 fn main() {

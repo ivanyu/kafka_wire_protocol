@@ -14,9 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.kafka.common.network;
+package org.apache.kafka.common.errors;
 
-/**
- * Connection mode for SSL and SASL connections.
- */
-public enum Mode { CLIENT, SERVER }
+public class DuplicateVoterException extends ApiException {
+
+    private static final long serialVersionUID = 1L;
+
+    public DuplicateVoterException(String message) {
+        super(message);
+    }
+
+    public DuplicateVoterException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}

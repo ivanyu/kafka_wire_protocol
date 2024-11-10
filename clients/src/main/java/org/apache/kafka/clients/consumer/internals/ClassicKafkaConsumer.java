@@ -57,6 +57,7 @@ import org.apache.kafka.common.utils.AppInfoParser;
 import org.apache.kafka.common.utils.LogContext;
 import org.apache.kafka.common.utils.Time;
 import org.apache.kafka.common.utils.Timer;
+
 import org.slf4j.Logger;
 import org.slf4j.event.Level;
 
@@ -86,12 +87,12 @@ import static org.apache.kafka.clients.consumer.internals.ConsumerUtils.CONSUMER
 import static org.apache.kafka.clients.consumer.internals.ConsumerUtils.CONSUMER_METRIC_GROUP_PREFIX;
 import static org.apache.kafka.clients.consumer.internals.ConsumerUtils.DEFAULT_CLOSE_TIMEOUT_MS;
 import static org.apache.kafka.clients.consumer.internals.ConsumerUtils.THROW_ON_FETCH_STABLE_OFFSET_UNSUPPORTED;
+import static org.apache.kafka.clients.consumer.internals.ConsumerUtils.configuredConsumerInterceptors;
 import static org.apache.kafka.clients.consumer.internals.ConsumerUtils.createConsumerNetworkClient;
 import static org.apache.kafka.clients.consumer.internals.ConsumerUtils.createFetchMetricsManager;
 import static org.apache.kafka.clients.consumer.internals.ConsumerUtils.createLogContext;
 import static org.apache.kafka.clients.consumer.internals.ConsumerUtils.createMetrics;
 import static org.apache.kafka.clients.consumer.internals.ConsumerUtils.createSubscriptionState;
-import static org.apache.kafka.clients.consumer.internals.ConsumerUtils.configuredConsumerInterceptors;
 import static org.apache.kafka.common.utils.Utils.closeQuietly;
 import static org.apache.kafka.common.utils.Utils.isBlank;
 import static org.apache.kafka.common.utils.Utils.swallow;
@@ -102,11 +103,15 @@ import static org.apache.kafka.common.utils.Utils.swallow;
  *
  * <p/>
  *
- * <em>Note:</em> per its name, this implementation is left for backward compatibility purposes. The updated consumer
- * group protocol (from KIP-848) introduces allows users continue using the legacy "classic" group protocol.
- * This class should not be invoked directly; users should instead create a {@link KafkaConsumer} as before.
+ * This {@link ConsumerDelegate} implementation exists for backward compatibility to allow users to continue to use
+ * the classic group protocol (pre-KIP 848).
+ *
+ * <p/>
+ *
+ * <em>Note:</em> This class should not be invoked directly; users should instead create and use the
+ * {@link KafkaConsumer} API as before.
  */
-public class LegacyKafkaConsumer<K, V> implements ConsumerDelegate<K, V> {
+public class ClassicKafkaConsumer<K, V> implements ConsumerDelegate<K, V> {
 
     private static final long NO_CURRENT_THREAD = -1L;
     public static final String DEFAULT_REASON = "rebalance enforced by user";
@@ -136,7 +141,7 @@ public class LegacyKafkaConsumer<K, V> implements ConsumerDelegate<K, V> {
     private final List<ConsumerPartitionAssignor> assignors;
     private final Optional<ClientTelemetryReporter> clientTelemetryReporter;
 
-    // currentThread holds the threadId of the current thread accessing LegacyKafkaConsumer
+    // currentThread holds the threadId of the current thread accessing this Consumer
     // and is used to prevent multi-threaded access
     private final AtomicLong currentThread = new AtomicLong(NO_CURRENT_THREAD);
     // refcount is used to allow reentrant access by the thread who has acquired currentThread
@@ -145,7 +150,7 @@ public class LegacyKafkaConsumer<K, V> implements ConsumerDelegate<K, V> {
     // to keep from repeatedly scanning subscriptions in poll(), cache the result during metadata updates
     private boolean cachedSubscriptionHasAllFetchPositions;
 
-    LegacyKafkaConsumer(ConsumerConfig config, Deserializer<K> keyDeserializer, Deserializer<V> valueDeserializer) {
+    ClassicKafkaConsumer(ConsumerConfig config, Deserializer<K> keyDeserializer, Deserializer<V> valueDeserializer) {
         try {
             GroupRebalanceConfig groupRebalanceConfig = new GroupRebalanceConfig(config,
                     GroupRebalanceConfig.ProtocolType.CONSUMER);
@@ -267,15 +272,15 @@ public class LegacyKafkaConsumer<K, V> implements ConsumerDelegate<K, V> {
     }
 
     // visible for testing
-    LegacyKafkaConsumer(LogContext logContext,
-                        Time time,
-                        ConsumerConfig config,
-                        Deserializer<K> keyDeserializer,
-                        Deserializer<V> valueDeserializer,
-                        KafkaClient client,
-                        SubscriptionState subscriptions,
-                        ConsumerMetadata metadata,
-                        List<ConsumerPartitionAssignor> assignors) {
+    ClassicKafkaConsumer(LogContext logContext,
+                         Time time,
+                         ConsumerConfig config,
+                         Deserializer<K> keyDeserializer,
+                         Deserializer<V> valueDeserializer,
+                         KafkaClient client,
+                         SubscriptionState subscriptions,
+                         ConsumerMetadata metadata,
+                         List<ConsumerPartitionAssignor> assignors) {
         this.log = logContext.logger(getClass());
         this.time = time;
         this.subscriptions = subscriptions;
@@ -1125,7 +1130,7 @@ public class LegacyKafkaConsumer<K, V> implements ConsumerDelegate<K, V> {
         AtomicReference<Throwable> firstException = new AtomicReference<>();
 
         final Timer closeTimer = createTimerForRequest(timeout);
-        clientTelemetryReporter.ifPresent(reporter -> reporter.initiateClose(timeout.toMillis()));
+        clientTelemetryReporter.ifPresent(ClientTelemetryReporter::initiateClose);
         closeTimer.update();
         // Close objects with a timeout. The timeout is required because the coordinator & the fetcher send requests to
         // the server in the process of closing which may not respect the overall timeout defined for closing the

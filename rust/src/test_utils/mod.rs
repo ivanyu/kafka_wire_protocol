@@ -28,7 +28,7 @@ where
     Ok(())
 }
 
-#[dynamic(drop)]
+#[dynamic(lazy,drop)]
 static mut JAVA_TESTER: JavaTester = JavaTester::new();
 
 pub(crate) fn test_java_default<T>(class: &str, version: u16)

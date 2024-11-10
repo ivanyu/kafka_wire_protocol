@@ -16,8 +16,8 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct RemoveRaftVoterRequest {
     /// 
-    #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
-    pub cluster_id: String,
+    #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
+    pub cluster_id: Option<String>,
     /// The replica id of the voter getting removed from the topic partition
     pub voter_id: i32,
     /// The directory id of the voter getting removed from the topic partition
@@ -43,7 +43,7 @@ impl Request for RemoveRaftVoterRequest { }
 impl Default for RemoveRaftVoterRequest {
     fn default() -> Self {
         RemoveRaftVoterRequest {
-            cluster_id: String::from(""),
+            cluster_id: Some(String::from("")),
             voter_id: 0_i32,
             voter_directory_id: Uuid::nil(),
             _unknown_tagged_fields: Vec::new(),
@@ -52,9 +52,9 @@ impl Default for RemoveRaftVoterRequest {
 }
 
 impl RemoveRaftVoterRequest {
-    pub fn new<S1: AsRef<str>>(cluster_id: S1, voter_id: i32, voter_directory_id: Uuid) -> Self {
+    pub fn new<S1: AsRef<str>>(cluster_id: Option<S1>, voter_id: i32, voter_directory_id: Uuid) -> Self {
         Self {
-            cluster_id: cluster_id.as_ref().to_string(),
+            cluster_id: cluster_id.map(|s| s.as_ref().to_string()),
             voter_id,
             voter_directory_id,
             _unknown_tagged_fields: vec![],
@@ -69,7 +69,7 @@ mod tests_remove_raft_voter_request_new_and_default {
     #[test]
     fn test() {
         let d = RemoveRaftVoterRequest::new(
-            String::from(""),
+            Some(String::from("")),
             0_i32,
             Uuid::nil(),
         );
@@ -79,7 +79,7 @@ mod tests_remove_raft_voter_request_new_and_default {
 
 impl Readable for RemoveRaftVoterRequest {
     fn read(#[allow(unused)] input: &mut impl Read) -> Result<Self> {
-        let cluster_id = String::read_ext(input, "cluster_id", true)?;
+        let cluster_id = Option::<String>::read_ext(input, "cluster_id", true)?;
         let voter_id = i32::read(input)?;
         let voter_directory_id = Uuid::read(input)?;
         let tagged_fields_callback = |tag: i32, _: &[u8]| {
