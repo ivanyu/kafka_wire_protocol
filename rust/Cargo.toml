@@ -10,7 +10,7 @@ keywords = ["kafka", "protocol"]
 edition = "2021"
 
 [dependencies]
-uuid = { version = "1.12.1", features = ["serde"] }
+uuid = { version = "1.15.1", features = ["serde"] }
 byteorder = "1.5.0"
 varint-rs = "2.2.0"
 serde = { version = "1.0.217", features = ["derive"] }
