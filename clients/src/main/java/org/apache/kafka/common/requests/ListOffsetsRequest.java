@@ -30,7 +30,6 @@ import org.apache.kafka.common.protocol.Errors;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -101,6 +100,11 @@ public class ListOffsetsRequest extends AbstractRequest {
             return this;
         }
 
+        public Builder setTimeoutMs(int timeoutMs) {
+            data.setTimeoutMs(timeoutMs);
+            return this;
+        }
+
         @Override
         public ListOffsetsRequest build(short version) {
             return new ListOffsetsRequest(data, version);
@@ -132,7 +136,6 @@ public class ListOffsetsRequest extends AbstractRequest {
 
     @Override
     public AbstractResponse getErrorResponse(int throttleTimeMs, Throwable e) {
-        short versionId = version();
         short errorCode = Errors.forException(e).code();
 
         List<ListOffsetsTopicResponse> responses = new ArrayList<>();
@@ -143,12 +146,8 @@ public class ListOffsetsRequest extends AbstractRequest {
                 ListOffsetsPartitionResponse partitionResponse = new ListOffsetsPartitionResponse()
                         .setErrorCode(errorCode)
                         .setPartitionIndex(partition.partitionIndex());
-                if (versionId == 0) {
-                    partitionResponse.setOldStyleOffsets(Collections.emptyList());
-                } else {
-                    partitionResponse.setOffset(ListOffsetsResponse.UNKNOWN_OFFSET)
-                                     .setTimestamp(ListOffsetsResponse.UNKNOWN_TIMESTAMP);
-                }
+                partitionResponse.setOffset(ListOffsetsResponse.UNKNOWN_OFFSET)
+                         .setTimestamp(ListOffsetsResponse.UNKNOWN_TIMESTAMP);
                 partitions.add(partitionResponse);
             }
             topicResponse.setPartitions(partitions);
@@ -179,6 +178,10 @@ public class ListOffsetsRequest extends AbstractRequest {
 
     public Set<TopicPartition> duplicatePartitions() {
         return duplicatePartitions;
+    }
+
+    public int timeoutMs() {
+        return data.timeoutMs();
     }
 
     public static ListOffsetsRequest parse(ByteBuffer buffer, short version) {

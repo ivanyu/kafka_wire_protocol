@@ -18,9 +18,9 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 pub struct AssignReplicasToDirsResponse {
     /// The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota.
     pub throttle_time_ms: i32,
-    /// The top level response error code
+    /// The top level response error code.
     pub error_code: i16,
-    /// 
+    /// The list of directories and their assigned partitions.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub directories: Vec<DirectoryData>,
     /// Unknown tagged fields.
@@ -108,10 +108,10 @@ impl Writable for AssignReplicasToDirsResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DirectoryData {
-    /// The ID of the directory
+    /// The ID of the directory.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub id: Uuid,
-    /// 
+    /// The list of topics and their assigned partitions.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
     /// Unknown tagged fields.
@@ -182,10 +182,10 @@ impl Writable for DirectoryData {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicData {
-    /// The ID of the assigned topic
+    /// The ID of the assigned topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub topic_id: Uuid,
-    /// 
+    /// The list of assigned partitions.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
     /// Unknown tagged fields.
@@ -256,9 +256,9 @@ impl Writable for TopicData {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionData {
-    /// The partition index
+    /// The partition index.
     pub partition_index: i32,
-    /// The partition level error code
+    /// The partition level error code.
     pub error_code: i16,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

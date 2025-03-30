@@ -17,7 +17,7 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 pub struct DescribeTransactionsResponse {
     /// The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota.
     pub throttle_time_ms: i32,
-    /// 
+    /// The current state of the transaction.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub transaction_states: Vec<TransactionState>,
     /// Unknown tagged fields.
@@ -100,21 +100,21 @@ impl Writable for DescribeTransactionsResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TransactionState {
-    /// 
+    /// The error code.
     pub error_code: i16,
-    /// 
+    /// The transactional id.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub transactional_id: String,
-    /// 
+    /// The current transaction state of the producer.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub transaction_state: String,
-    /// 
+    /// The timeout in milliseconds for the transaction.
     pub transaction_timeout_ms: i32,
-    /// 
+    /// The start time of the transaction in milliseconds.
     pub transaction_start_time_ms: i64,
-    /// 
+    /// The current producer id associated with the transaction.
     pub producer_id: i64,
-    /// 
+    /// The current epoch associated with the producer id.
     pub producer_epoch: i16,
     /// The set of partitions included in the current transaction (if active). When a transaction is preparing to commit or abort, this will include only partitions which do not have markers.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
@@ -217,10 +217,10 @@ impl Writable for TransactionState {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicData {
-    /// 
+    /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub topic: String,
-    /// 
+    /// The partition ids included in the current transaction.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<i32>,
     /// Unknown tagged fields.

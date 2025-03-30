@@ -23,10 +23,10 @@ pub struct ControllerRegistrationRequest {
     pub incarnation_id: Uuid,
     /// Set if the required configurations for ZK migration are present.
     pub zk_migration_ready: bool,
-    /// The listeners of this controller
+    /// The listeners of this controller.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub listeners: Vec<Listener>,
-    /// The features on this controller
+    /// The features on this controller.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub features: Vec<Feature>,
     /// Unknown tagged fields.

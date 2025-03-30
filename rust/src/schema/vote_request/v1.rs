@@ -16,12 +16,12 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct VoteRequest {
-    /// 
+    /// The cluster id.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub cluster_id: Option<String>,
-    /// The replica id of the voter receiving the request
+    /// The replica id of the voter receiving the request.
     pub voter_id: i32,
-    /// 
+    /// The topic data.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
     /// Unknown tagged fields.
@@ -112,7 +112,7 @@ pub struct TopicData {
     /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub topic_name: String,
-    /// 
+    /// The partition data.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
     /// Unknown tagged fields.
@@ -185,19 +185,19 @@ impl Writable for TopicData {
 pub struct PartitionData {
     /// The partition index.
     pub partition_index: i32,
-    /// The bumped epoch of the candidate sending the request
-    pub candidate_epoch: i32,
+    /// The epoch of the voter sending the request
+    pub replica_epoch: i32,
     /// The replica id of the voter sending the request
-    pub candidate_id: i32,
+    pub replica_id: i32,
     /// The directory id of the voter sending the request
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
-    pub candidate_directory_id: Uuid,
-    /// The ID of the voter sending the request
+    pub replica_directory_id: Uuid,
+    /// The directory id of the voter receiving the request
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub voter_directory_id: Uuid,
-    /// The epoch of the last record written to the metadata log
+    /// The epoch of the last record written to the metadata log.
     pub last_offset_epoch: i32,
-    /// The offset of the last record written to the metadata log
+    /// The log end offset of the metadata log of the voter sending the request.
     pub last_offset: i64,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
@@ -208,9 +208,9 @@ impl Default for PartitionData {
     fn default() -> Self {
         PartitionData {
             partition_index: 0_i32,
-            candidate_epoch: 0_i32,
-            candidate_id: 0_i32,
-            candidate_directory_id: Uuid::nil(),
+            replica_epoch: 0_i32,
+            replica_id: 0_i32,
+            replica_directory_id: Uuid::nil(),
             voter_directory_id: Uuid::nil(),
             last_offset_epoch: 0_i32,
             last_offset: 0_i64,
@@ -220,12 +220,12 @@ impl Default for PartitionData {
 }
 
 impl PartitionData {
-    pub fn new(partition_index: i32, candidate_epoch: i32, candidate_id: i32, candidate_directory_id: Uuid, voter_directory_id: Uuid, last_offset_epoch: i32, last_offset: i64) -> Self {
+    pub fn new(partition_index: i32, replica_epoch: i32, replica_id: i32, replica_directory_id: Uuid, voter_directory_id: Uuid, last_offset_epoch: i32, last_offset: i64) -> Self {
         Self {
             partition_index,
-            candidate_epoch,
-            candidate_id,
-            candidate_directory_id,
+            replica_epoch,
+            replica_id,
+            replica_directory_id,
             voter_directory_id,
             last_offset_epoch,
             last_offset,
@@ -256,9 +256,9 @@ mod tests_partition_data_new_and_default {
 impl Readable for PartitionData {
     fn read(#[allow(unused)] input: &mut impl Read) -> Result<Self> {
         let partition_index = i32::read(input)?;
-        let candidate_epoch = i32::read(input)?;
-        let candidate_id = i32::read(input)?;
-        let candidate_directory_id = Uuid::read(input)?;
+        let replica_epoch = i32::read(input)?;
+        let replica_id = i32::read(input)?;
+        let replica_directory_id = Uuid::read(input)?;
         let voter_directory_id = Uuid::read(input)?;
         let last_offset_epoch = i32::read(input)?;
         let last_offset = i64::read(input)?;
@@ -269,7 +269,7 @@ impl Readable for PartitionData {
         };
         let _unknown_tagged_fields = read_tagged_fields(input, tagged_fields_callback)?;
         Ok(PartitionData {
-            partition_index, candidate_epoch, candidate_id, candidate_directory_id, voter_directory_id, last_offset_epoch, last_offset, _unknown_tagged_fields
+            partition_index, replica_epoch, replica_id, replica_directory_id, voter_directory_id, last_offset_epoch, last_offset, _unknown_tagged_fields
         })
     }
 }
@@ -277,9 +277,9 @@ impl Readable for PartitionData {
 impl Writable for PartitionData {
     fn write(&self, #[allow(unused)] output: &mut impl Write) -> Result<()> {
         self.partition_index.write(output)?;
-        self.candidate_epoch.write(output)?;
-        self.candidate_id.write(output)?;
-        self.candidate_directory_id.write(output)?;
+        self.replica_epoch.write(output)?;
+        self.replica_id.write(output)?;
+        self.replica_directory_id.write(output)?;
         self.voter_directory_id.write(output)?;
         self.last_offset_epoch.write(output)?;
         self.last_offset.write(output)?;

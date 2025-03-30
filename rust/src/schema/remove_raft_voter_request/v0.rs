@@ -15,12 +15,12 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct RemoveRaftVoterRequest {
-    /// 
+    /// The cluster id of the request.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub cluster_id: Option<String>,
-    /// The replica id of the voter getting removed from the topic partition
+    /// The replica id of the voter getting removed from the topic partition.
     pub voter_id: i32,
-    /// The directory id of the voter getting removed from the topic partition
+    /// The directory id of the voter getting removed from the topic partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub voter_directory_id: Uuid,
     /// Unknown tagged fields.

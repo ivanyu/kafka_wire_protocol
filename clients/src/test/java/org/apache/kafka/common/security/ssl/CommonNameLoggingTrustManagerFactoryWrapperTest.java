@@ -16,8 +16,6 @@
  */
 package org.apache.kafka.common.security.ssl;
 
-import org.apache.kafka.common.security.ssl.CommonNameLoggingTrustManagerFactoryWrapper.CommonNameLoggingTrustManager;
-import org.apache.kafka.common.security.ssl.CommonNameLoggingTrustManagerFactoryWrapper.NeverExpiringX509Certificate;
 import org.apache.kafka.common.utils.LogCaptureAppender;
 import org.apache.kafka.test.TestSslUtils;
 
@@ -469,17 +467,17 @@ public class CommonNameLoggingTrustManagerFactoryWrapperTest {
             CommonNameLoggingTrustManager testTrustManager = new CommonNameLoggingTrustManager(origTrustManager, 2);
 
             // Call with valid certificate
-            //assertDoesNotThrow(() -> testTrustManager.checkClientTrusted(validChainWithoutCa, "RSA"));
+            assertDoesNotThrow(() -> testTrustManager.checkClientTrusted(validChainWithoutCa, "RSA"));
             // Call with invalid certificate
             assertThrows(CertificateException.class,
                     () -> testTrustManager.checkClientTrusted(invalidChainWithoutCa, "RSA"));
             // Call with valid certificate again
-            //assertDoesNotThrow(() -> testTrustManager.checkClientTrusted(validChainWithoutCa, "RSA"));
+            assertDoesNotThrow(() -> testTrustManager.checkClientTrusted(validChainWithoutCa, "RSA"));
             // Call with invalid certificate
             assertThrows(CertificateException.class,
                     () -> testTrustManager.checkClientTrusted(invalidChainWithoutCa, "RSA"));
             // Call with valid certificate again
-            //assertDoesNotThrow(() -> testTrustManager.checkClientTrusted(validChainWithoutCa, "RSA"));
+            assertDoesNotThrow(() -> testTrustManager.checkClientTrusted(validChainWithoutCa, "RSA"));
         }
     }
 

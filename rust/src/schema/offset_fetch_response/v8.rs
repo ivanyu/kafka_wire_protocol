@@ -184,7 +184,7 @@ pub struct OffsetFetchResponseTopics {
     /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// The responses per partition
+    /// The responses per partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<OffsetFetchResponsePartitions>,
     /// Unknown tagged fields.

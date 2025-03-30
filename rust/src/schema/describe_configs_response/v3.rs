@@ -186,7 +186,7 @@ pub struct DescribeConfigsResourceResult {
     /// The synonyms for this configuration key.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub synonyms: Vec<DescribeConfigsSynonym>,
-    /// The configuration data type. Type can be one of the following values - BOOLEAN, STRING, INT, SHORT, LONG, DOUBLE, LIST, CLASS, PASSWORD
+    /// The configuration data type. Type can be one of the following values - BOOLEAN, STRING, INT, SHORT, LONG, DOUBLE, LIST, CLASS, PASSWORD.
     pub config_type: i8,
     /// The configuration documentation.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]

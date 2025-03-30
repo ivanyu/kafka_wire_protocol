@@ -100,7 +100,7 @@ impl Writable for DescribeProducersResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicResponse {
-    /// The topic name
+    /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
     /// Each partition in the response.
@@ -178,10 +178,10 @@ pub struct PartitionResponse {
     pub partition_index: i32,
     /// The partition error code, or 0 if there was no error.
     pub error_code: i16,
-    /// The partition error message, which may be null if no additional details are available
+    /// The partition error message, which may be null if no additional details are available.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
-    /// 
+    /// The active producers for the partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub active_producers: Vec<ProducerState>,
     /// Unknown tagged fields.
@@ -262,17 +262,17 @@ impl Writable for PartitionResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ProducerState {
-    /// 
+    /// The producer id.
     pub producer_id: i64,
-    /// 
+    /// The producer epoch.
     pub producer_epoch: i32,
-    /// 
+    /// The last sequence number sent by the producer.
     pub last_sequence: i32,
-    /// 
+    /// The last timestamp sent by the producer.
     pub last_timestamp: i64,
-    /// 
+    /// The current epoch of the producer group.
     pub coordinator_epoch: i32,
-    /// 
+    /// The current transaction start offset of the producer.
     pub current_txn_start_offset: i64,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

@@ -91,26 +91,6 @@ public class RustApiMessageTypeGenerator extends ApiMessageTypeGenerator {
             short apiKey = entry.getKey();
             ApiData apiData = entry.getValue();
             String name = apiData.name();
-            buffer.printf("%d => {  // %s%n", apiKey, MessageGenerator.capitalizeFirst(name));
-            buffer.incrementIndent();
-            if (type.equals("response") && apiKey == 18) {
-                buffer.printf("// ApiVersionsResponse always includes a v0 header.%n");
-                buffer.printf("// See KIP-511 for details.%n");
-                buffer.printf("0%n");
-                buffer.decrementIndent();
-                buffer.printf("}%n");
-                continue;
-            }
-            if (type.equals("request") && apiKey == 7) {
-                buffer.printf("// Version 0 of ControlledShutdownRequest has a non-standard request header%n");
-                buffer.printf("// which does not include clientId.  Version 1 of ControlledShutdownRequest%n");
-                buffer.printf("// and later use the standard request header.%n");
-                buffer.printf("if _version == 0 {%n");
-                buffer.incrementIndent();
-                buffer.printf("0%n");
-                buffer.decrementIndent();
-                buffer.printf("} else ");
-            }
             ApiData data = entry.getValue();
             MessageSpec spec;
             if (type.equals("request")) {
@@ -122,6 +102,21 @@ public class RustApiMessageTypeGenerator extends ApiMessageTypeGenerator {
             }
             if (spec == null) {
                 throw new RuntimeException("failed to find " + type + " for API key " + apiKey);
+            }
+
+            if (!spec.hasValidVersion()) {
+                continue;
+            }
+
+            buffer.printf("%d => {  // %s%n", apiKey, MessageGenerator.capitalizeFirst(name));
+            buffer.incrementIndent();
+            if (type.equals("response") && apiKey == 18) {
+                buffer.printf("// ApiVersionsResponse always includes a v0 header.%n");
+                buffer.printf("// See KIP-511 for details.%n");
+                buffer.printf("0%n");
+                buffer.decrementIndent();
+                buffer.printf("}%n");
+                continue;
             }
 
             CodeBuffer tmpBuffer = new CodeBuffer();
@@ -205,14 +200,6 @@ public class RustApiMessageTypeGenerator extends ApiMessageTypeGenerator {
 
         buffer.printf("assert_eq!(ApiMessageType::PRODUCE.request_header_version(1), 1);%n");
         buffer.printf("assert_eq!(ApiMessageType::PRODUCE.response_header_version(1), 0);%n");
-        buffer.printf("%n");
-
-        buffer.printf("assert_eq!(ApiMessageType::CONTROLLED_SHUTDOWN.request_header_version(0), 0);%n");
-        buffer.printf("assert_eq!(ApiMessageType::CONTROLLED_SHUTDOWN.response_header_version(0), 0);%n");
-        buffer.printf("%n");
-
-        buffer.printf("assert_eq!(ApiMessageType::CONTROLLED_SHUTDOWN.request_header_version(1), 1);%n");
-        buffer.printf("assert_eq!(ApiMessageType::CONTROLLED_SHUTDOWN.response_header_version(1), 0);%n");
         buffer.printf("%n");
 
         buffer.printf("assert_eq!(ApiMessageType::CREATE_TOPICS.request_header_version(4), 1);%n");

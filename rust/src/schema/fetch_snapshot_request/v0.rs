@@ -15,14 +15,14 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct FetchSnapshotRequest {
-    /// The clusterId if known, this is used to validate metadata fetches prior to broker registration
+    /// The clusterId if known, this is used to validate metadata fetches prior to broker registration.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub cluster_id: Option<String>,
-    /// The broker ID of the follower
+    /// The broker ID of the follower.
     pub replica_id: i32,
-    /// The maximum bytes to fetch from all of the snapshots
+    /// The maximum bytes to fetch from all of the snapshots.
     pub max_bytes: i32,
-    /// The topics to fetch
+    /// The topics to fetch.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicSnapshot>,
     /// Unknown tagged fields.
@@ -125,10 +125,10 @@ impl Writable for FetchSnapshotRequest {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicSnapshot {
-    /// The name of the topic to fetch
+    /// The name of the topic to fetch.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// The partitions to fetch
+    /// The partitions to fetch.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionSnapshot>,
     /// Unknown tagged fields.
@@ -199,13 +199,13 @@ impl Writable for TopicSnapshot {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionSnapshot {
-    /// The partition index
+    /// The partition index.
     pub partition: i32,
-    /// The current leader epoch of the partition, -1 for unknown leader epoch
+    /// The current leader epoch of the partition, -1 for unknown leader epoch.
     pub current_leader_epoch: i32,
-    /// The snapshot endOffset and epoch to fetch
+    /// The snapshot endOffset and epoch to fetch.
     pub snapshot_id: SnapshotId,
-    /// The byte position within the snapshot to start fetching from
+    /// The byte position within the snapshot to start fetching from.
     pub position: i64,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
@@ -285,9 +285,9 @@ impl Writable for PartitionSnapshot {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct SnapshotId {
-    /// 
+    /// The end offset of the snapshot.
     pub end_offset: i64,
-    /// 
+    /// The epoch of the snapshot.
     pub epoch: i32,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

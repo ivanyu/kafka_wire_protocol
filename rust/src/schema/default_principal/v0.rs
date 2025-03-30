@@ -14,10 +14,10 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DefaultPrincipal {
-    /// The principal type
+    /// The principal type.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub type_: String,
-    /// The principal name
+    /// The principal name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
     /// Whether the principal was authenticated by a delegation token on the forwarding broker.

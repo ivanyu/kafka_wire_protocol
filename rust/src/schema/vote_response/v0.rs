@@ -17,7 +17,7 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 pub struct VoteResponse {
     /// The top level error code.
     pub error_code: i16,
-    /// 
+    /// The results for each topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
     /// Unknown tagged fields.
@@ -103,7 +103,7 @@ pub struct TopicData {
     /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub topic_name: String,
-    /// 
+    /// The results for each partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
     /// Unknown tagged fields.
@@ -176,13 +176,13 @@ impl Writable for TopicData {
 pub struct PartitionData {
     /// The partition index.
     pub partition_index: i32,
-    /// 
+    /// The partition level error code.
     pub error_code: i16,
     /// The ID of the current leader or -1 if the leader is unknown.
     pub leader_id: i32,
-    /// The latest known leader epoch
+    /// The latest known leader epoch.
     pub leader_epoch: i32,
-    /// True if the vote was granted and false otherwise
+    /// True if the vote was granted and false otherwise.
     pub vote_granted: bool,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

@@ -16,11 +16,11 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 pub struct AllocateProducerIdsResponse {
     /// The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota.
     pub throttle_time_ms: i32,
-    /// The top level response error code
+    /// The top level response error code.
     pub error_code: i16,
-    /// The first producer ID in this range, inclusive
+    /// The first producer ID in this range, inclusive.
     pub producer_id_start: i64,
-    /// The number of producer IDs in this range
+    /// The number of producer IDs in this range.
     pub producer_id_len: i32,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

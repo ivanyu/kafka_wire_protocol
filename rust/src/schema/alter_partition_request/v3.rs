@@ -16,11 +16,11 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AlterPartitionRequest {
-    /// The ID of the requesting broker
+    /// The ID of the requesting broker.
     pub broker_id: i32,
-    /// The epoch of the requesting broker
+    /// The epoch of the requesting broker.
     pub broker_epoch: i64,
-    /// 
+    /// The topics to alter ISRs for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
     /// Unknown tagged fields.
@@ -108,10 +108,10 @@ impl Writable for AlterPartitionRequest {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicData {
-    /// The ID of the topic to alter ISRs for
+    /// The ID of the topic to alter ISRs for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub topic_id: Uuid,
-    /// 
+    /// The partitions to alter ISRs for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
     /// Unknown tagged fields.
@@ -182,16 +182,16 @@ impl Writable for TopicData {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionData {
-    /// The partition index
+    /// The partition index.
     pub partition_index: i32,
-    /// The leader epoch of this partition
+    /// The leader epoch of this partition.
     pub leader_epoch: i32,
-    /// 
+    /// The ISR for this partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub new_isr_with_epochs: Vec<BrokerState>,
     /// 1 if the partition is recovering from an unclean leader election; 0 otherwise.
     pub leader_recovery_state: i8,
-    /// The expected epoch of the partition which is being updated. For legacy cluster this is the ZkVersion in the LeaderAndIsr request.
+    /// The expected epoch of the partition which is being updated.
     pub partition_epoch: i32,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

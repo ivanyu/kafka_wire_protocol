@@ -174,7 +174,7 @@ impl Writable for DescribedGroup {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribedGroupMember {
-    /// The member ID assigned by the group coordinator.
+    /// The member id.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub member_id: String,
     /// The client ID used in the member's latest join group request.

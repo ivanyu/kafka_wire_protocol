@@ -21,10 +21,10 @@ pub struct DescribeQuorumResponse {
     /// The error message, or null if there was no error.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
-    /// 
+    /// The response from the describe quorum API.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
-    /// 
+    /// The nodes in the quorum.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub nodes: Vec<Node>,
     /// Unknown tagged fields.
@@ -120,7 +120,7 @@ pub struct TopicData {
     /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub topic_name: String,
-    /// 
+    /// The partition data.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
     /// Unknown tagged fields.
@@ -193,21 +193,21 @@ impl Writable for TopicData {
 pub struct PartitionData {
     /// The partition index.
     pub partition_index: i32,
-    /// 
+    /// The partition error code.
     pub error_code: i16,
     /// The error message, or null if there was no error.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
     /// The ID of the current leader or -1 if the leader is unknown.
     pub leader_id: i32,
-    /// The latest known leader epoch
+    /// The latest known leader epoch.
     pub leader_epoch: i32,
-    /// 
+    /// The high water mark.
     pub high_watermark: i64,
-    /// 
+    /// The current voters of the partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub current_voters: Vec<ReplicaState>,
-    /// 
+    /// The observers of the partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub observers: Vec<ReplicaState>,
     /// Unknown tagged fields.
@@ -308,9 +308,9 @@ impl Writable for PartitionData {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Node {
-    /// The ID of the associated node
+    /// The ID of the associated node.
     pub node_id: i32,
-    /// The listeners of this controller
+    /// The listeners of this controller.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub listeners: Vec<Listener>,
     /// Unknown tagged fields.
@@ -381,13 +381,13 @@ impl Writable for Node {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Listener {
-    /// The name of the endpoint
+    /// The name of the endpoint.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// The hostname
+    /// The hostname.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub host: String,
-    /// The port
+    /// The port.
     pub port: u16,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
@@ -462,16 +462,16 @@ impl Writable for Listener {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ReplicaState {
-    /// 
+    /// The ID of the replica.
     pub replica_id: i32,
-    /// 
+    /// The replica directory ID of the replica.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub replica_directory_id: Uuid,
-    /// The last known log end offset of the follower or -1 if it is unknown
+    /// The last known log end offset of the follower or -1 if it is unknown.
     pub log_end_offset: i64,
-    /// The last known leader wall clock time time when a follower fetched from the leader. This is reported as -1 both for the current leader or if it is unknown for a voter
+    /// The last known leader wall clock time time when a follower fetched from the leader. This is reported as -1 both for the current leader or if it is unknown for a voter.
     pub last_fetch_timestamp: i64,
-    /// The leader wall clock append time of the offset for which the follower made the most recent fetch request. This is reported as the current time for the leader and -1 if unknown for a voter
+    /// The leader wall clock append time of the offset for which the follower made the most recent fetch request. This is reported as the current time for the leader and -1 if unknown for a voter.
     pub last_caught_up_timestamp: i64,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

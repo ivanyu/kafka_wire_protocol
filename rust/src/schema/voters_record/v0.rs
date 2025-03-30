@@ -16,9 +16,9 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct VotersRecord {
-    /// The version of the voters record
+    /// The version of the voters record.
     pub version: i16,
-    /// 
+    /// The set of voters in the quorum for this epoch.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub voters: Vec<Voter>,
     /// Unknown tagged fields.
@@ -101,15 +101,15 @@ impl Writable for VotersRecord {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Voter {
-    /// The replica id of the voter in the topic partition
+    /// The replica id of the voter in the topic partition.
     pub voter_id: i32,
-    /// The directory id of the voter in the topic partition
+    /// The directory id of the voter in the topic partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub voter_directory_id: Uuid,
-    /// The endpoint that can be used to communicate with the voter
+    /// The endpoint that can be used to communicate with the voter.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub endpoints: Vec<Endpoint>,
-    /// The range of versions of the protocol that the replica supports
+    /// The range of versions of the protocol that the replica supports.
     pub kraft_version_feature: KRaftVersionFeature,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
@@ -189,13 +189,13 @@ impl Writable for Voter {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Endpoint {
-    /// The name of the endpoint
+    /// The name of the endpoint.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// The hostname
+    /// The hostname.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub host: String,
-    /// The port
+    /// The port.
     pub port: u16,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
@@ -270,9 +270,9 @@ impl Writable for Endpoint {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct KRaftVersionFeature {
-    /// The minimum supported KRaft protocol version
+    /// The minimum supported KRaft protocol version.
     pub min_supported_version: i16,
-    /// The maximum supported KRaft protocol version
+    /// The maximum supported KRaft protocol version.
     pub max_supported_version: i16,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

@@ -30,7 +30,7 @@ pub struct ApiVersionsResponse {
     /// List of cluster-wide finalized features. The information is valid only if FinalizedFeaturesEpoch >= 0.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub finalized_features: Vec<FinalizedFeatureKey>,
-    /// Set by a KRaft controller if the required configurations for ZK migration are present
+    /// Set by a KRaft controller if the required configurations for ZK migration are present.
     pub zk_migration_ready: bool,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

@@ -15,14 +15,14 @@ use crate::readable_writable::{Readable, Writable};
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ConsumerProtocolSubscription {
-    /// 
+    /// The topics that the member wants to consume.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<String>,
-    /// 
+    /// User data that will be passed back to the consumer.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_bytes()"))]
     #[cfg_attr(test, serde(with="serde_option_bytes"))]
     pub user_data: Option<Vec<u8>>,
-    /// 
+    /// The partitions that the member owns.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub owned_partitions: Vec<TopicPartition>,
 }
@@ -98,10 +98,10 @@ impl Writable for ConsumerProtocolSubscription {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicPartition {
-    /// 
+    /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub topic: String,
-    /// 
+    /// The partition ids.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<i32>,
 }

@@ -17,10 +17,10 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 pub struct VoteResponse {
     /// The top level error code.
     pub error_code: i16,
-    /// 
+    /// The results for each topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
-    /// Endpoints for all current-leaders enumerated in PartitionData
+    /// Endpoints for all current-leaders enumerated in PartitionData.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub node_endpoints: Vec<NodeEndpoint>,
     /// Unknown tagged fields.
@@ -121,7 +121,7 @@ pub struct TopicData {
     /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub topic_name: String,
-    /// 
+    /// The results for each partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
     /// Unknown tagged fields.
@@ -194,13 +194,13 @@ impl Writable for TopicData {
 pub struct PartitionData {
     /// The partition index.
     pub partition_index: i32,
-    /// 
+    /// The partition level error code.
     pub error_code: i16,
     /// The ID of the current leader or -1 if the leader is unknown.
     pub leader_id: i32,
-    /// The latest known leader epoch
+    /// The latest known leader epoch.
     pub leader_epoch: i32,
-    /// True if the vote was granted and false otherwise
+    /// True if the vote was granted and false otherwise.
     pub vote_granted: bool,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
@@ -285,12 +285,12 @@ impl Writable for PartitionData {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct NodeEndpoint {
-    /// The ID of the associated node
+    /// The ID of the associated node.
     pub node_id: i32,
-    /// The node's hostname
+    /// The node's hostname.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub host: String,
-    /// The node's port
+    /// The node's port.
     pub port: u16,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

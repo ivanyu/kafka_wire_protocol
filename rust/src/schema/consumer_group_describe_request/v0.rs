@@ -15,7 +15,7 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ConsumerGroupDescribeRequest {
-    /// The ids of the groups to describe
+    /// The ids of the groups to describe.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub group_ids: Vec<String>,
     /// Whether to include authorized operations.

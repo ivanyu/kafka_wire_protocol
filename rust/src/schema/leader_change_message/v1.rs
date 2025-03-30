@@ -16,14 +16,14 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderChangeMessage {
-    /// The version of the leader change message
+    /// The version of the leader change message.
     pub version: i16,
-    /// The ID of the newly elected leader
+    /// The ID of the newly elected leader.
     pub leader_id: i32,
-    /// The set of voters in the quorum for this epoch
+    /// The set of voters in the quorum for this epoch.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub voters: Vec<Voter>,
-    /// The voters who voted for the leader at the time of election
+    /// The voters who voted for the leader at the time of election.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub granting_voters: Vec<Voter>,
     /// Unknown tagged fields.
@@ -116,9 +116,9 @@ impl Writable for LeaderChangeMessage {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Voter {
-    /// 
+    /// The ID of the voter.
     pub voter_id: i32,
-    /// The directory id of the voter
+    /// The directory id of the voter.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub voter_directory_id: Uuid,
     /// Unknown tagged fields.

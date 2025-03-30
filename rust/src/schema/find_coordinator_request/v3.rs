@@ -17,7 +17,7 @@ pub struct FindCoordinatorRequest {
     /// The coordinator key.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub key: String,
-    /// The coordinator key type. (Group, transaction, etc.)
+    /// The coordinator key type. (group, transaction, share).
     pub key_type: i8,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

@@ -17,12 +17,12 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 pub struct ListTransactionsResponse {
     /// The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota.
     pub throttle_time_ms: i32,
-    /// 
+    /// The error code, or 0 if there was no error.
     pub error_code: i16,
-    /// Set of state filters provided in the request which were unknown to the transaction coordinator
+    /// Set of state filters provided in the request which were unknown to the transaction coordinator.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub unknown_state_filters: Vec<String>,
-    /// 
+    /// The current state of the transaction for the transactional id.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub transaction_states: Vec<TransactionState>,
     /// Unknown tagged fields.
@@ -115,12 +115,12 @@ impl Writable for ListTransactionsResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TransactionState {
-    /// 
+    /// The transactional id.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub transactional_id: String,
-    /// 
+    /// The producer id.
     pub producer_id: i64,
-    /// The current transaction state of the producer
+    /// The current transaction state of the producer.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub transaction_state: String,
     /// Unknown tagged fields.

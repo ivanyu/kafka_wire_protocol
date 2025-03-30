@@ -15,7 +15,7 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeleteTopicsRequest {
-    /// The names of the topics to delete
+    /// The names of the topics to delete.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topic_names: Vec<String>,
     /// The length of time in milliseconds to wait for the deletions to complete.

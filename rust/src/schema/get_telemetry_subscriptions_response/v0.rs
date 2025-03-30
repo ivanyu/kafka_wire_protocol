@@ -32,7 +32,7 @@ pub struct GetTelemetrySubscriptionsResponse {
     pub push_interval_ms: i32,
     /// The maximum bytes of binary data the broker accepts in PushTelemetryRequest.
     pub telemetry_max_bytes: i32,
-    /// Flag to indicate monotonic/counter metrics are to be emitted as deltas or cumulative values
+    /// Flag to indicate monotonic/counter metrics are to be emitted as deltas or cumulative values.
     pub delta_temporality: bool,
     /// Requested metrics prefix string match. Empty array: No metrics subscribed, Array[0] empty string: All metrics subscribed.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]

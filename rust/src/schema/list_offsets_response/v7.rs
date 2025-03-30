@@ -100,7 +100,7 @@ impl Writable for ListOffsetsResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListOffsetsTopicResponse {
-    /// The topic name
+    /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
     /// Each partition in the response.
@@ -182,7 +182,7 @@ pub struct ListOffsetsPartitionResponse {
     pub timestamp: i64,
     /// The returned offset.
     pub offset: i64,
-    /// 
+    /// The leader epoch associated with the returned offset.
     pub leader_epoch: i32,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

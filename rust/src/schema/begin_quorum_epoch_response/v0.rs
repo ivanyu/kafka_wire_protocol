@@ -16,7 +16,7 @@ use crate::readable_writable::{Readable, Writable};
 pub struct BeginQuorumEpochResponse {
     /// The top level error code.
     pub error_code: i16,
-    /// 
+    /// The topic data.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
 }
@@ -90,7 +90,7 @@ pub struct TopicData {
     /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub topic_name: String,
-    /// 
+    /// The partition data.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
 }
@@ -151,11 +151,11 @@ impl Writable for TopicData {
 pub struct PartitionData {
     /// The partition index.
     pub partition_index: i32,
-    /// 
+    /// The error code for this partition.
     pub error_code: i16,
     /// The ID of the current leader or -1 if the leader is unknown.
     pub leader_id: i32,
-    /// The latest known leader epoch
+    /// The latest known leader epoch.
     pub leader_epoch: i32,
 }
 

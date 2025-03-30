@@ -15,7 +15,7 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ProduceResponse {
-    /// Each produce response
+    /// Each produce response.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub responses: Vec<TopicProduceResponse>,
     /// The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota.
@@ -118,7 +118,7 @@ impl Writable for ProduceResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicProduceResponse {
-    /// The topic name
+    /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
     /// Each partition that we produced to within the topic.
@@ -202,13 +202,13 @@ pub struct PartitionProduceResponse {
     pub log_append_time_ms: i64,
     /// The log start offset.
     pub log_start_offset: i64,
-    /// The batch indices of records that caused the batch to be dropped
+    /// The batch indices of records that caused the batch to be dropped.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub record_errors: Vec<BatchIndexAndErrorMessage>,
-    /// The global error message summarizing the common root cause of the records that caused the batch to be dropped
+    /// The global error message summarizing the common root cause of the records that caused the batch to be dropped.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
-    /// 
+    /// The leader broker that the producer should use for future requests.
     pub current_leader: LeaderIdAndEpoch,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
@@ -318,9 +318,9 @@ impl Writable for PartitionProduceResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct BatchIndexAndErrorMessage {
-    /// The batch index of the record that cause the batch to be dropped
+    /// The batch index of the record that caused the batch to be dropped.
     pub batch_index: i32,
-    /// The error message of the record that caused the batch to be dropped
+    /// The error message of the record that caused the batch to be dropped.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub batch_index_error_message: Option<String>,
     /// Unknown tagged fields.
@@ -393,7 +393,7 @@ impl Writable for BatchIndexAndErrorMessage {
 pub struct LeaderIdAndEpoch {
     /// The ID of the current leader or -1 if the leader is unknown.
     pub leader_id: i32,
-    /// The latest known leader epoch
+    /// The latest known leader epoch.
     pub leader_epoch: i32,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

@@ -19,7 +19,7 @@ pub struct FetchRequest {
     /// The clusterId if known. This is used to validate metadata fetches prior to broker registration.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub cluster_id: Option<String>,
-    /// 
+    /// The state of the replica in the follower.
     pub replica_state: ReplicaState,
     /// The maximum time in milliseconds to wait for the response.
     pub max_wait_ms: i32,
@@ -27,7 +27,7 @@ pub struct FetchRequest {
     pub min_bytes: i32,
     /// The maximum bytes to fetch.  See KIP-74 for cases where this limit may not be honored.
     pub max_bytes: i32,
-    /// This setting controls the visibility of transactional records. Using READ_UNCOMMITTED (isolation_level = 0) makes all records visible. With READ_COMMITTED (isolation_level = 1), non-transactional and COMMITTED transactional records are visible. To be more concrete, READ_COMMITTED returns all data from offsets smaller than the current LSO (last stable offset), and enables the inclusion of the list of aborted transactions in the result, which allows consumers to discard ABORTED transactional records
+    /// This setting controls the visibility of transactional records. Using READ_UNCOMMITTED (isolation_level = 0) makes all records visible. With READ_COMMITTED (isolation_level = 1), non-transactional and COMMITTED transactional records are visible. To be more concrete, READ_COMMITTED returns all data from offsets smaller than the current LSO (last stable offset), and enables the inclusion of the list of aborted transactions in the result, which allows consumers to discard ABORTED transactional records.
     pub isolation_level: i8,
     /// The fetch session ID.
     pub session_id: i32,
@@ -39,7 +39,7 @@ pub struct FetchRequest {
     /// In an incremental fetch request, the partitions to remove.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub forgotten_topics_data: Vec<ForgottenTopic>,
-    /// Rack ID of the consumer making this request
+    /// Rack ID of the consumer making this request.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub rack_id: String,
     /// Unknown tagged fields.
@@ -258,7 +258,7 @@ impl Writable for ReplicaState {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct FetchTopic {
-    /// The unique topic ID
+    /// The unique topic ID.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub topic_id: Uuid,
     /// The partitions to fetch.
@@ -338,7 +338,7 @@ pub struct FetchPartition {
     pub current_leader_epoch: i32,
     /// The message offset.
     pub fetch_offset: i64,
-    /// The epoch of the last fetched record or -1 if there is none
+    /// The epoch of the last fetched record or -1 if there is none.
     pub last_fetched_epoch: i32,
     /// The earliest available offset of the follower replica.  The field is only used when the request is sent by the follower.
     pub log_start_offset: i64,
@@ -432,7 +432,7 @@ impl Writable for FetchPartition {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ForgottenTopic {
-    /// The unique topic ID
+    /// The unique topic ID.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub topic_id: Uuid,
     /// The partitions indexes to forget.

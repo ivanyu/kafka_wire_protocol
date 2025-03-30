@@ -24,7 +24,7 @@ pub struct BrokerRegistrationRequest {
     /// The incarnation id of the broker process.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub incarnation_id: Uuid,
-    /// The listeners of this broker
+    /// The listeners of this broker.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub listeners: Vec<Listener>,
     /// The features on this broker. Note: in v0-v3, features with MinSupportedVersion = 0 are omitted.
@@ -33,7 +33,7 @@ pub struct BrokerRegistrationRequest {
     /// The rack which this broker is in.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub rack: Option<String>,
-    /// If the required configurations for ZK migration are present, this value is set to true
+    /// If the required configurations for ZK migration are present, this value is set to true.
     pub is_migrating_zk_broker: bool,
     /// Log directories configured in this broker which are available.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec_elem::<Uuid>(proptest_strategies::uuid())"))]

@@ -24,7 +24,7 @@ pub struct BrokerRegistrationRequest {
     /// The incarnation id of the broker process.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub incarnation_id: Uuid,
-    /// The listeners of this broker
+    /// The listeners of this broker.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub listeners: Vec<Listener>,
     /// The features on this broker. Note: in v0-v3, features with MinSupportedVersion = 0 are omitted.

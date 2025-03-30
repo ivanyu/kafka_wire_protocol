@@ -184,7 +184,7 @@ pub struct PartitionData {
     pub leader_epoch: i32,
     /// The share-partition start offset, or -1 if the start offset is not being written.
     pub start_offset: i64,
-    /// 
+    /// The state batches for the share-partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub state_batches: Vec<StateBatch>,
     /// Unknown tagged fields.
@@ -274,7 +274,7 @@ pub struct StateBatch {
     pub first_offset: i64,
     /// The last offset of this state batch.
     pub last_offset: i64,
-    /// The state - 0:Available,2:Acked,4:Archived
+    /// The state - 0:Available,2:Acked,4:Archived.
     pub delivery_state: i8,
     /// The delivery count.
     pub delivery_count: i16,

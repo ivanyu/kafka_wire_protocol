@@ -16,13 +16,13 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct EndQuorumEpochRequest {
-    /// 
+    /// The cluster id.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub cluster_id: Option<String>,
-    /// 
+    /// The topics.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
-    /// Endpoints for the leader
+    /// Endpoints for the leader.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub leader_endpoints: Vec<LeaderEndpoint>,
     /// Unknown tagged fields.
@@ -113,7 +113,7 @@ pub struct TopicData {
     /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub topic_name: String,
-    /// 
+    /// The partitions.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
     /// Unknown tagged fields.
@@ -186,11 +186,11 @@ impl Writable for TopicData {
 pub struct PartitionData {
     /// The partition index.
     pub partition_index: i32,
-    /// The current leader ID that is resigning
+    /// The current leader ID that is resigning.
     pub leader_id: i32,
-    /// The current epoch
+    /// The current epoch.
     pub leader_epoch: i32,
-    /// A sorted list of preferred candidates to start the election
+    /// A sorted list of preferred candidates to start the election.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub preferred_candidates: Vec<ReplicaInfo>,
     /// Unknown tagged fields.
@@ -271,9 +271,9 @@ impl Writable for PartitionData {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ReplicaInfo {
-    /// 
+    /// The ID of the candidate replica.
     pub candidate_id: i32,
-    /// 
+    /// The directory ID of the candidate replica.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub candidate_directory_id: Uuid,
     /// Unknown tagged fields.
@@ -344,13 +344,13 @@ impl Writable for ReplicaInfo {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderEndpoint {
-    /// The name of the endpoint
+    /// The name of the endpoint.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// The node's hostname
+    /// The node's hostname.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub host: String,
-    /// The node's port
+    /// The node's port.
     pub port: u16,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

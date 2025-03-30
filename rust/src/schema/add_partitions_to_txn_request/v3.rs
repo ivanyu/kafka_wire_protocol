@@ -118,7 +118,7 @@ pub struct AddPartitionsToTxnTopic {
     /// The name of the topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// The partition indexes to add to the transaction
+    /// The partition indexes to add to the transaction.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<i32>,
     /// Unknown tagged fields.

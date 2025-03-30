@@ -16,11 +16,11 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AssignReplicasToDirsRequest {
-    /// The ID of the requesting broker
+    /// The ID of the requesting broker.
     pub broker_id: i32,
-    /// The epoch of the requesting broker
+    /// The epoch of the requesting broker.
     pub broker_epoch: i64,
-    /// 
+    /// The directories to which replicas should be assigned.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub directories: Vec<DirectoryData>,
     /// Unknown tagged fields.
@@ -108,10 +108,10 @@ impl Writable for AssignReplicasToDirsRequest {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DirectoryData {
-    /// The ID of the directory
+    /// The ID of the directory.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub id: Uuid,
-    /// 
+    /// The topics assigned to the directory.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
     /// Unknown tagged fields.
@@ -182,10 +182,10 @@ impl Writable for DirectoryData {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicData {
-    /// The ID of the assigned topic
+    /// The ID of the assigned topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub topic_id: Uuid,
-    /// 
+    /// The partitions assigned to the directory.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
     /// Unknown tagged fields.
@@ -256,7 +256,7 @@ impl Writable for TopicData {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionData {
-    /// The partition index
+    /// The partition index.
     pub partition_index: i32,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

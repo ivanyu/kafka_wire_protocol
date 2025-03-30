@@ -39,16 +39,6 @@ impl Connection {
         cur.write_i32::<BigEndian>(0).unwrap(); // size placeholder
 
         match api_message_type.request_header_version(request_api_version) {
-            0 => {
-                let header = kafka_wire_protocol::schema::request_header::v0::RequestHeader
-                ::new(
-                    api_message_type.api_key,
-                    request_api_version,
-                    self.correlation_id,
-                );
-                header.write(&mut cur).unwrap();
-            }
-
             1 => {
                 let header = kafka_wire_protocol::schema::request_header::v1::RequestHeader
                 ::new(
@@ -115,7 +105,7 @@ impl Drop for Connection {
     }
 }
 
-const KAFKA_VERSION: &str = "3.9.0";
+const KAFKA_VERSION: &str = "4.0.0";
 const KAFKA_PORT: ContainerPort = ContainerPort::Tcp(9092);
 
 #[test]
@@ -158,11 +148,13 @@ fn test_api_versions(connection: &mut Connection) {
         }
     }
 
-    macro_rules! test_api_versions_v3 {
-        (3) => {
+    macro_rules! test_api_versions_v3_v4 {
+        ($version: literal) => {
             {
-                use kafka_wire_protocol::schema::api_versions_request::v3::*;
-                use kafka_wire_protocol::schema::api_versions_response::v3::*;
+                paste! {
+                    use kafka_wire_protocol::schema::api_versions_request::[<v $version>]::*;
+                    use kafka_wire_protocol::schema::api_versions_response::[<v $version>]::*;
+                }
 
                 let request = ApiVersionsRequest::new("client".to_string(), "123".to_string());
                 let response: ApiVersionsResponse = connection.send_request(request);
@@ -174,7 +166,8 @@ fn test_api_versions(connection: &mut Connection) {
     test_api_versions_v0_v2!(0);
     test_api_versions_v0_v2!(1);
     test_api_versions_v0_v2!(2);
-    test_api_versions_v3!(3);
+    test_api_versions_v3_v4!(3);
+    test_api_versions_v3_v4!(4);
 }
 
 fn test_create_topics(connection: &mut Connection) {
@@ -187,24 +180,7 @@ fn test_create_topics(connection: &mut Connection) {
         };
     }
 
-    macro_rules! test_create_topics_v0 {
-        (0) => {
-            {
-                use kafka_wire_protocol::schema::create_topics_request::v0::*;
-                use kafka_wire_protocol::schema::create_topics_response::v0::*;
-
-                let request = CreateTopicsRequest::new(
-                    vec![
-                        CreatableTopic::new("topic0", 1, 1, vec![], vec![])
-                    ],
-                    10_000);
-                let response: CreateTopicsResponse = connection.send_request(request);
-                check!(response);
-            }
-        }
-    }
-
-    macro_rules! test_create_topics_v1_v7 {
+    macro_rules! test_create_topics_v2_v7 {
         ($version: literal) => {
             {
                 paste! {
@@ -226,14 +202,12 @@ fn test_create_topics(connection: &mut Connection) {
         }
     }
 
-    test_create_topics_v0!(0);
-    test_create_topics_v1_v7!(1);
-    test_create_topics_v1_v7!(2);
-    test_create_topics_v1_v7!(3);
-    test_create_topics_v1_v7!(4);
-    test_create_topics_v1_v7!(5);
-    test_create_topics_v1_v7!(6);
-    test_create_topics_v1_v7!(7);
+    test_create_topics_v2_v7!(2);
+    test_create_topics_v2_v7!(3);
+    test_create_topics_v2_v7!(4);
+    test_create_topics_v2_v7!(5);
+    test_create_topics_v2_v7!(6);
+    test_create_topics_v2_v7!(7);
 }
 
 fn test_alter_configs(connection: &mut Connection) {
@@ -277,21 +251,6 @@ fn test_describe_configs(connection: &mut Connection) {
         };
     }
 
-    macro_rules! test_describe_configs_v0 {
-        (0) => {
-            {
-                use kafka_wire_protocol::schema::describe_configs_request::v0::*;
-                use kafka_wire_protocol::schema::describe_configs_response::v0::*;
-
-                let request = DescribeConfigsRequest::new(vec![
-                    DescribeConfigsResource::new(2, "topic0", None)
-                ]);
-                let response: DescribeConfigsResponse = connection.send_request(request);
-                check!(response);
-            }
-        }
-    }
-
     macro_rules! test_describe_configs_v1_v2 {
         ($version: literal) => {
             {
@@ -301,9 +260,12 @@ fn test_describe_configs(connection: &mut Connection) {
                 }
 
                 let request = DescribeConfigsRequest::new(vec![
-                    DescribeConfigsResource::new(2, String::from("topic0"), None)
+                    DescribeConfigsResource::new(2, String::from("topic2"), None)
                 ], true);
                 let response: DescribeConfigsResponse = connection.send_request(request);
+                if (response.results[0].error_code != 0) {
+                    println!("{:?}", response);
+                }
                 check!(response);
             }
         }
@@ -318,7 +280,7 @@ fn test_describe_configs(connection: &mut Connection) {
                 }
 
                 let request = DescribeConfigsRequest::new(vec![
-                    DescribeConfigsResource::new(2, String::from("topic0"), None)
+                    DescribeConfigsResource::new(2, String::from("topic2"), None)
                 ], true, true);
                 let response: DescribeConfigsResponse = connection.send_request(request);
                 check!(response);
@@ -326,7 +288,6 @@ fn test_describe_configs(connection: &mut Connection) {
         }
     }
 
-    test_describe_configs_v0!(0);
     test_describe_configs_v1_v2!(1);
     test_describe_configs_v1_v2!(2);
     test_describe_configs_v3_v4!(3);
@@ -399,7 +360,7 @@ fn test_metadata(connection: &mut Connection) {
         }
     }
 
-    macro_rules! test_metadata_v11_v12 {
+    macro_rules! test_metadata_v11_v13 {
         ($version: literal) => {
             {
                 paste! {
@@ -425,6 +386,7 @@ fn test_metadata(connection: &mut Connection) {
     test_metadata_v8_v10!(8);
     test_metadata_v8_v10!(9);
     test_metadata_v8_v10!(10);
-    test_metadata_v11_v12!(11);
-    test_metadata_v11_v12!(12);
+    test_metadata_v11_v13!(11);
+    test_metadata_v11_v13!(12);
+    test_metadata_v11_v13!(13);
 }

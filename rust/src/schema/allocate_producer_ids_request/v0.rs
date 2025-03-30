@@ -14,9 +14,9 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AllocateProducerIdsRequest {
-    /// The ID of the requesting broker
+    /// The ID of the requesting broker.
     pub broker_id: i32,
-    /// The epoch of the requesting broker
+    /// The epoch of the requesting broker.
     pub broker_epoch: i64,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

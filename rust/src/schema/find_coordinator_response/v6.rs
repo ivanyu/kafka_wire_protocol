@@ -17,7 +17,7 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 pub struct FindCoordinatorResponse {
     /// The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota.
     pub throttle_time_ms: i32,
-    /// Each coordinator result in the response
+    /// Each coordinator result in the response.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub coordinators: Vec<Coordinator>,
     /// Unknown tagged fields.
