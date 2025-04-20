@@ -104,7 +104,7 @@ pub struct CreatableTopicResult {
     /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// The unique topic ID
+    /// The unique topic ID.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub topic_id: Uuid,
     /// The error code, or 0 if there was no error.

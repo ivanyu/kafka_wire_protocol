@@ -107,10 +107,10 @@ impl Writable for ElectLeadersResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ReplicaElectionResult {
-    /// The topic name
+    /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub topic: String,
-    /// The results for each partition
+    /// The results for each partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partition_result: Vec<PartitionResult>,
     /// Unknown tagged fields.
@@ -181,7 +181,7 @@ impl Writable for ReplicaElectionResult {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionResult {
-    /// The partition id
+    /// The partition id.
     pub partition_id: i32,
     /// The result error, or zero if there was no error.
     pub error_code: i16,

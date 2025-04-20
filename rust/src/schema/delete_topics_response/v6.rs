@@ -101,10 +101,10 @@ impl Writable for DeleteTopicsResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeletableTopicResult {
-    /// The topic name
+    /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub name: Option<String>,
-    /// the unique topic ID
+    /// The unique topic ID.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub topic_id: Uuid,
     /// The deletion error, or 0 if the deletion succeeded.

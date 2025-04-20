@@ -14,7 +14,7 @@ use crate::readable_writable::{Readable, Writable};
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ProduceResponse {
-    /// Each produce response
+    /// Each produce response.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub responses: Vec<TopicProduceResponse>,
     /// The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota.
@@ -87,7 +87,7 @@ impl Writable for ProduceResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicProduceResponse {
-    /// The topic name
+    /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
     /// Each partition that we produced to within the topic.

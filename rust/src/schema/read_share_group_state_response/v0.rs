@@ -16,7 +16,7 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ReadShareGroupStateResponse {
-    /// The read results
+    /// The read results.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub results: Vec<ReadStateResult>,
     /// Unknown tagged fields.
@@ -94,7 +94,7 @@ impl Writable for ReadShareGroupStateResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ReadStateResult {
-    /// The topic identifier
+    /// The topic identifier.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub topic_id: Uuid,
     /// The results for the partitions.
@@ -179,7 +179,7 @@ pub struct PartitionResult {
     pub state_epoch: i32,
     /// The share-partition start offset, which can be -1 if it is not yet initialized.
     pub start_offset: i64,
-    /// 
+    /// The state batches for this share-partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub state_batches: Vec<StateBatch>,
     /// Unknown tagged fields.

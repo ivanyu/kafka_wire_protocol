@@ -102,7 +102,7 @@ pub struct WritableTxnMarker {
     /// Each topic that we want to write transaction marker(s) for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<WritableTxnMarkerTopic>,
-    /// Epoch associated with the transaction state partition hosted by this transaction coordinator
+    /// Epoch associated with the transaction state partition hosted by this transaction coordinator.
     pub coordinator_epoch: i32,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

@@ -16,7 +16,7 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct WriteShareGroupStateResponse {
-    /// The write results
+    /// The write results.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub results: Vec<WriteStateResult>,
     /// Unknown tagged fields.
@@ -94,7 +94,7 @@ impl Writable for WriteShareGroupStateResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct WriteStateResult {
-    /// The topic identifier
+    /// The topic identifier.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub topic_id: Uuid,
     /// The results for the partitions.

@@ -16,20 +16,20 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct UpdateRaftVoterRequest {
-    /// 
+    /// The cluster id.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub cluster_id: Option<String>,
-    /// The current leader epoch of the partition, -1 for unknown leader epoch
+    /// The current leader epoch of the partition, -1 for unknown leader epoch.
     pub current_leader_epoch: i32,
-    /// The replica id of the voter getting updated in the topic partition
+    /// The replica id of the voter getting updated in the topic partition.
     pub voter_id: i32,
-    /// The directory id of the voter getting updated in the topic partition
+    /// The directory id of the voter getting updated in the topic partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub voter_directory_id: Uuid,
-    /// The endpoint that can be used to communicate with the leader
+    /// The endpoint that can be used to communicate with the leader.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub listeners: Vec<Listener>,
-    /// The range of versions of the protocol that the replica supports
+    /// The range of versions of the protocol that the replica supports.
     pub kraft_version_feature: KRaftVersionFeature,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
@@ -131,13 +131,13 @@ impl Writable for UpdateRaftVoterRequest {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Listener {
-    /// The name of the endpoint
+    /// The name of the endpoint.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// The hostname
+    /// The hostname.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub host: String,
-    /// The port
+    /// The port.
     pub port: u16,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
@@ -212,9 +212,9 @@ impl Writable for Listener {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct KRaftVersionFeature {
-    /// The minimum supported KRaft protocol version
+    /// The minimum supported KRaft protocol version.
     pub min_supported_version: i16,
-    /// The maximum supported KRaft protocol version
+    /// The maximum supported KRaft protocol version.
     pub max_supported_version: i16,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

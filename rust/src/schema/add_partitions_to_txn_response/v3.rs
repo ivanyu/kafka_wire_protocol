@@ -175,7 +175,7 @@ pub struct AddPartitionsToTxnTopicResult {
     /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// The results for each partition
+    /// The results for each partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub results_by_partition: Vec<AddPartitionsToTxnPartitionResult>,
     /// Unknown tagged fields.

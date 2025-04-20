@@ -16,9 +16,9 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 pub struct UpdateRaftVoterResponse {
     /// The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota.
     pub throttle_time_ms: i32,
-    /// The error code, or 0 if there was no error
+    /// The error code, or 0 if there was no error.
     pub error_code: i16,
-    /// 
+    /// Details of the current Raft cluster leader.
     pub current_leader: CurrentLeader,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
@@ -115,14 +115,14 @@ impl Writable for UpdateRaftVoterResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct CurrentLeader {
-    /// The replica id of the current leader or -1 if the leader is unknown
+    /// The replica id of the current leader or -1 if the leader is unknown.
     pub leader_id: i32,
-    /// The latest known leader epoch
+    /// The latest known leader epoch.
     pub leader_epoch: i32,
-    /// The node's hostname
+    /// The node's hostname.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub host: String,
-    /// The node's port
+    /// The node's port.
     pub port: i32,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

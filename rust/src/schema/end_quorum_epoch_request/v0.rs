@@ -14,10 +14,10 @@ use crate::readable_writable::{Readable, Writable};
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct EndQuorumEpochRequest {
-    /// 
+    /// The cluster id.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub cluster_id: Option<String>,
-    /// 
+    /// The topics.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
 }
@@ -91,7 +91,7 @@ pub struct TopicData {
     /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub topic_name: String,
-    /// 
+    /// The partitions.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
 }
@@ -152,11 +152,11 @@ impl Writable for TopicData {
 pub struct PartitionData {
     /// The partition index.
     pub partition_index: i32,
-    /// The current leader ID that is resigning
+    /// The current leader ID that is resigning.
     pub leader_id: i32,
-    /// The current epoch
+    /// The current epoch.
     pub leader_epoch: i32,
-    /// A sorted list of preferred successors to start the election
+    /// A sorted list of preferred successors to start the election.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub preferred_successors: Vec<i32>,
 }

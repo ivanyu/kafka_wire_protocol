@@ -18,9 +18,9 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 pub struct AlterPartitionResponse {
     /// The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota.
     pub throttle_time_ms: i32,
-    /// The top level response error code
+    /// The top level response error code.
     pub error_code: i16,
-    /// 
+    /// The responses for each topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
     /// Unknown tagged fields.
@@ -108,10 +108,10 @@ impl Writable for AlterPartitionResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicData {
-    /// The ID of the topic
+    /// The ID of the topic.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub topic_id: Uuid,
-    /// 
+    /// The responses for each partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
     /// Unknown tagged fields.
@@ -182,9 +182,9 @@ impl Writable for TopicData {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionData {
-    /// The partition index
+    /// The partition index.
     pub partition_index: i32,
-    /// The partition level error code
+    /// The partition level error code.
     pub error_code: i16,
     /// The broker ID of the leader.
     pub leader_id: i32,
@@ -195,7 +195,7 @@ pub struct PartitionData {
     pub isr: Vec<i32>,
     /// 1 if the partition is recovering from an unclean leader election; 0 otherwise.
     pub leader_recovery_state: i8,
-    /// The current epoch for the partition for KRaft controllers. The current ZK version for the legacy controllers.
+    /// The current epoch for the partition for KRaft controllers.
     pub partition_epoch: i32,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

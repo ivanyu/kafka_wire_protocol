@@ -92,7 +92,7 @@ pub struct DescribeLogDirsResult {
     /// The absolute log directory path.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub log_dir: String,
-    /// Each topic.
+    /// The topics.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<DescribeLogDirsTopic>,
 }
@@ -159,7 +159,7 @@ pub struct DescribeLogDirsTopic {
     /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// 
+    /// The partitions.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<DescribeLogDirsPartition>,
 }
@@ -222,7 +222,7 @@ pub struct DescribeLogDirsPartition {
     pub partition_index: i32,
     /// The size of the log segments in this partition in bytes.
     pub partition_size: i64,
-    /// The lag of the log's LEO w.r.t. partition's HW (if it is the current log for the partition) or current replica's LEO (if it is the future log for the partition)
+    /// The lag of the log's LEO w.r.t. partition's HW (if it is the current log for the partition) or current replica's LEO (if it is the future log for the partition).
     pub offset_lag: i64,
     /// True if this log is created by AlterReplicaLogDirsRequest and will replace the current log of the replica in the future.
     pub is_future_key: bool,

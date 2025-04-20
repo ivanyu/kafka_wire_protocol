@@ -15,10 +15,10 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ListTransactionsRequest {
-    /// The transaction states to filter by: if empty, all transactions are returned; if non-empty, then only transactions matching one of the filtered states will be returned
+    /// The transaction states to filter by: if empty, all transactions are returned; if non-empty, then only transactions matching one of the filtered states will be returned.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub state_filters: Vec<String>,
-    /// The producerIds to filter by: if empty, all transactions will be returned; if non-empty, only transactions which match one of the filtered producerIds will be returned
+    /// The producerIds to filter by: if empty, all transactions will be returned; if non-empty, only transactions which match one of the filtered producerIds will be returned.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub producer_id_filters: Vec<i64>,
     /// Unknown tagged fields.

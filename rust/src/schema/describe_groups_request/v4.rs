@@ -14,7 +14,7 @@ use crate::readable_writable::{Readable, Writable};
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribeGroupsRequest {
-    /// The names of the groups to describe
+    /// The names of the groups to describe.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub groups: Vec<String>,
     /// Whether to include authorized operations.

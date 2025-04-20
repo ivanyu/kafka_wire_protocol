@@ -16,15 +16,15 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct BeginQuorumEpochRequest {
-    /// 
+    /// The cluster id.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub cluster_id: Option<String>,
-    /// The replica id of the voter receiving the request
+    /// The replica id of the voter receiving the request.
     pub voter_id: i32,
-    /// 
+    /// The topics.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<TopicData>,
-    /// Endpoints for the leader
+    /// Endpoints for the leader.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub leader_endpoints: Vec<LeaderEndpoint>,
     /// Unknown tagged fields.
@@ -117,10 +117,10 @@ impl Writable for BeginQuorumEpochRequest {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct TopicData {
-    /// The topic name
+    /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub topic_name: String,
-    /// 
+    /// The partitions.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<PartitionData>,
     /// Unknown tagged fields.
@@ -191,14 +191,14 @@ impl Writable for TopicData {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct PartitionData {
-    /// The partition index
+    /// The partition index.
     pub partition_index: i32,
-    /// The directory id of the receiving replica
+    /// The directory id of the receiving replica.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub voter_directory_id: Uuid,
-    /// The ID of the newly elected leader
+    /// The ID of the newly elected leader.
     pub leader_id: i32,
-    /// The epoch of the newly elected leader
+    /// The epoch of the newly elected leader.
     pub leader_epoch: i32,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]
@@ -278,13 +278,13 @@ impl Writable for PartitionData {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct LeaderEndpoint {
-    /// The name of the endpoint
+    /// The name of the endpoint.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// The node's hostname
+    /// The node's hostname.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub host: String,
-    /// The node's port
+    /// The node's port.
     pub port: u16,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

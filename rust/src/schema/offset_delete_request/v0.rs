@@ -17,7 +17,7 @@ pub struct OffsetDeleteRequest {
     /// The unique group identifier.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub group_id: String,
-    /// The topics to delete offsets for
+    /// The topics to delete offsets for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub topics: Vec<OffsetDeleteRequestTopic>,
 }

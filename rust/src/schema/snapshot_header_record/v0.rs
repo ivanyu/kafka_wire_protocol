@@ -14,9 +14,9 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct SnapshotHeaderRecord {
-    /// The version of the snapshot header record
+    /// The version of the snapshot header record.
     pub version: i16,
-    /// The append time of the last record from the log contained in this snapshot
+    /// The append time of the last record from the log contained in this snapshot.
     pub last_contained_log_timestamp: i64,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

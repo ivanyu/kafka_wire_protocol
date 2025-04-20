@@ -16,17 +16,17 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct AddRaftVoterRequest {
-    /// 
+    /// The cluster id.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub cluster_id: Option<String>,
-    /// 
+    /// The maximum time to wait for the request to complete before returning.
     pub timeout_ms: i32,
-    /// The replica id of the voter getting added to the topic partition
+    /// The replica id of the voter getting added to the topic partition.
     pub voter_id: i32,
-    /// The directory id of the voter getting added to the topic partition
+    /// The directory id of the voter getting added to the topic partition.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::uuid()"))]
     pub voter_directory_id: Uuid,
-    /// The endpoints that can be used to communicate with the voter
+    /// The endpoints that can be used to communicate with the voter.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub listeners: Vec<Listener>,
     /// Unknown tagged fields.
@@ -124,13 +124,13 @@ impl Writable for AddRaftVoterRequest {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Listener {
-    /// The name of the endpoint
+    /// The name of the endpoint.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// The hostname
+    /// The hostname.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub host: String,
-    /// The port
+    /// The port.
     pub port: u16,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

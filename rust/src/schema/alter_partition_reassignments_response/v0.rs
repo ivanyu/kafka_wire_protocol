@@ -115,10 +115,10 @@ impl Writable for AlterPartitionReassignmentsResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct ReassignableTopicResponse {
-    /// The topic name
+    /// The topic name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub name: String,
-    /// The responses to partitions to reassign
+    /// The responses to partitions to reassign.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub partitions: Vec<ReassignablePartitionResponse>,
     /// Unknown tagged fields.

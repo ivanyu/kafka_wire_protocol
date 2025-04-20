@@ -30,7 +30,7 @@ pub struct JoinGroupResponse {
     /// The member ID assigned by the group coordinator.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub member_id: String,
-    /// 
+    /// The group members.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub members: Vec<JoinGroupResponseMember>,
 }

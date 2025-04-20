@@ -15,7 +15,7 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct OffsetFetchRequest {
-    /// Each group we would like to fetch offsets for
+    /// Each group we would like to fetch offsets for.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub groups: Vec<OffsetFetchRequestGroup>,
     /// Whether broker should hold on returning unstable offsets but set a retriable error code for the partitions.
@@ -103,7 +103,7 @@ pub struct OffsetFetchRequestGroup {
     /// The group ID.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub group_id: String,
-    /// The member ID assigned by the group coordinator if using the new consumer protocol (KIP-848).
+    /// The member id.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub member_id: Option<String>,
     /// The member epoch if using the new consumer protocol (KIP-848).

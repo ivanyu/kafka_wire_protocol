@@ -337,10 +337,10 @@ impl Writable for DescribeTopicPartitionsResponsePartition {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct Cursor {
-    /// The name for the first topic to process
+    /// The name for the first topic to process.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub topic_name: String,
-    /// The partition index to start with
+    /// The partition index to start with.
     pub partition_index: i32,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

@@ -203,10 +203,10 @@ impl Writable for DescribedDelegationToken {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DescribedDelegationTokenRenewer {
-    /// The renewer principal type
+    /// The renewer principal type.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub principal_type: String,
-    /// The renewer principal name
+    /// The renewer principal name.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub principal_name: String,
 }

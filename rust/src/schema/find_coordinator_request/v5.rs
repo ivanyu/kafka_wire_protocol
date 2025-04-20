@@ -15,7 +15,7 @@ use crate::tagged_fields::{RawTaggedField, read_tagged_fields, write_tagged_fiel
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct FindCoordinatorRequest {
-    /// The coordinator key type. (Group, transaction, etc.)
+    /// The coordinator key type. (group, transaction, share).
     pub key_type: i8,
     /// The coordinator keys.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]

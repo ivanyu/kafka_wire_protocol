@@ -205,7 +205,7 @@ pub struct PartitionData {
     /// The error message, or null if there was no error.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
-    /// 
+    /// The current leader of the partition.
     pub current_leader: LeaderIdAndEpoch,
     /// Unknown tagged fields.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::unknown_tagged_fields()"))]

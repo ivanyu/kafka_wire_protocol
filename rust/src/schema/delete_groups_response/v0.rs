@@ -16,7 +16,7 @@ use crate::readable_writable::{Readable, Writable};
 pub struct DeleteGroupsResponse {
     /// The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota.
     pub throttle_time_ms: i32,
-    /// The deletion results
+    /// The deletion results.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::vec()"))]
     pub results: Vec<DeletableGroupResult>,
 }
@@ -87,7 +87,7 @@ impl Writable for DeleteGroupsResponse {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct DeletableGroupResult {
-    /// The group id
+    /// The group id.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::string()"))]
     pub group_id: String,
     /// The deletion error, or 0 if the deletion succeeded.

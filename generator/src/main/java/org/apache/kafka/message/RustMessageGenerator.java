@@ -76,6 +76,9 @@ public class RustMessageGenerator {
     private static String processJson(String outputDir, Path inputPath,
                                       RustApiMessageTypeGenerator apiMessageTypeGenerator) throws Exception {
         MessageSpec spec = MessageGenerator.JSON_SERDE.readValue(inputPath.toFile(), MessageSpec.class);
+        if (!spec.hasValidVersion()) {
+            return null;
+        }
 
         apiMessageTypeGenerator.registerMessageType(spec);
 
