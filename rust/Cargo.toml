@@ -21,7 +21,7 @@ paste = "1.0.15"
 serde_json = "1.0.140"
 rstest = "0.25.0"
 proptest = "1.7.0"
-proptest-derive = "0.5.1"
+proptest-derive = "0.6.0"
 base64 = "0.22.1"
 static_init = "1.0.4"
 testcontainers = { version = "0.24.0", features = ["blocking"] }
