@@ -24,4 +24,4 @@ proptest = "1.7.0"
 proptest-derive = "0.6.0"
 base64 = "0.22.1"
 static_init = "1.0.4"
-testcontainers = { version = "0.24.0", features = ["blocking"] }
+testcontainers = { version = "0.25.0", features = ["blocking"] }
