@@ -20,7 +20,7 @@ paste = "1.0.15"
 [dev-dependencies]
 serde_json = "1.0.143"
 rstest = "0.26.1"
-proptest = "1.7.0"
+proptest = "1.8.0"
 proptest-derive = "0.6.0"
 base64 = "0.22.1"
 static_init = "1.0.4"
