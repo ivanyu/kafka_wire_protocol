@@ -178,7 +178,7 @@ impl Writable for WriteStateData {
 pub struct PartitionData {
     /// The partition index.
     pub partition: i32,
-    /// The state epoch for this share-partition.
+    /// The state epoch of the share-partition.
     pub state_epoch: i32,
     /// The leader epoch of the share-partition.
     pub leader_epoch: i32,
@@ -270,11 +270,11 @@ impl Writable for PartitionData {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct StateBatch {
-    /// The base offset of this state batch.
+    /// The first offset of this state batch.
     pub first_offset: i64,
     /// The last offset of this state batch.
     pub last_offset: i64,
-    /// The state - 0:Available,2:Acked,4:Archived.
+    /// The delivery state - 0:Available,2:Acked,4:Archived.
     pub delivery_state: i8,
     /// The delivery count.
     pub delivery_count: i16,

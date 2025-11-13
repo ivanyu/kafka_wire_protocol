@@ -46,6 +46,12 @@ public class Tls13SelectorTest extends SslSelectorTest {
         return configs;
     }
 
+    @Test
+    @Override
+    public void testCloseOldestConnection() throws Exception {
+        super.testCloseOldestConnection();
+    }
+
     /**
      * TLS 1.3 has a post-handshake key and IV update, which will update the sending and receiving keys
      * for one side of the connection.

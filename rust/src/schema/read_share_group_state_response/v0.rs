@@ -175,7 +175,7 @@ pub struct PartitionResult {
     /// The error message, or null if there was no error.
     #[cfg_attr(test, proptest(strategy = "proptest_strategies::optional_string()"))]
     pub error_message: Option<String>,
-    /// The state epoch for this share-partition.
+    /// The state epoch of the share-partition.
     pub state_epoch: i32,
     /// The share-partition start offset, which can be -1 if it is not yet initialized.
     pub start_offset: i64,
@@ -270,11 +270,11 @@ impl Writable for PartitionResult {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 #[cfg_attr(test, derive(Arbitrary))]
 pub struct StateBatch {
-    /// The base offset of this state batch.
+    /// The first offset of this state batch.
     pub first_offset: i64,
     /// The last offset of this state batch.
     pub last_offset: i64,
-    /// The state - 0:Available,2:Acked,4:Archived.
+    /// The delivery state - 0:Available,2:Acked,4:Archived.
     pub delivery_state: i8,
     /// The delivery count.
     pub delivery_count: i16,

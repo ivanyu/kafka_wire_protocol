@@ -1218,7 +1218,7 @@ public class NetworkClient implements KafkaClient {
                 return metadataTimeout;
             }
 
-            if (!metadataAttemptStartMs.isPresent())
+            if (metadataAttemptStartMs.isEmpty())
                 metadataAttemptStartMs = Optional.of(now);
 
             // Beware that the behavior of this method and the computation of timeouts for poll() are
@@ -1411,7 +1411,7 @@ public class NetworkClient implements KafkaClient {
             if (canSendRequest(nodeConnectionId, now)) {
                 Optional<AbstractRequest.Builder<?>> requestOpt = clientTelemetrySender.createRequest();
 
-                if (!requestOpt.isPresent())
+                if (requestOpt.isEmpty())
                     return Long.MAX_VALUE;
 
                 AbstractRequest.Builder<?> request = requestOpt.get();
