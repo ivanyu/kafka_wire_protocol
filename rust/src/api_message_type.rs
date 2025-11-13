@@ -12,14 +12,14 @@ pub struct ApiMessageType {
 }
 
 impl ApiMessageType {
-    pub const PRODUCE: ApiMessageType = ApiMessageType { name: "Produce", api_key: 0, lowest_supported_version: 3, highest_supported_version: 12, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
-    pub const FETCH: ApiMessageType = ApiMessageType { name: "Fetch", api_key: 1, lowest_supported_version: 4, highest_supported_version: 17, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const PRODUCE: ApiMessageType = ApiMessageType { name: "Produce", api_key: 0, lowest_supported_version: 3, highest_supported_version: 13, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const FETCH: ApiMessageType = ApiMessageType { name: "Fetch", api_key: 1, lowest_supported_version: 4, highest_supported_version: 18, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const LIST_OFFSETS: ApiMessageType = ApiMessageType { name: "ListOffsets", api_key: 2, lowest_supported_version: 1, highest_supported_version: 10, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const METADATA: ApiMessageType = ApiMessageType { name: "Metadata", api_key: 3, lowest_supported_version: 0, highest_supported_version: 13, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
-    pub const OFFSET_COMMIT: ApiMessageType = ApiMessageType { name: "OffsetCommit", api_key: 8, lowest_supported_version: 2, highest_supported_version: 9, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
-    pub const OFFSET_FETCH: ApiMessageType = ApiMessageType { name: "OffsetFetch", api_key: 9, lowest_supported_version: 1, highest_supported_version: 9, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const OFFSET_COMMIT: ApiMessageType = ApiMessageType { name: "OffsetCommit", api_key: 8, lowest_supported_version: 2, highest_supported_version: 10, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: true };
+    pub const OFFSET_FETCH: ApiMessageType = ApiMessageType { name: "OffsetFetch", api_key: 9, lowest_supported_version: 1, highest_supported_version: 10, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: true };
     pub const FIND_COORDINATOR: ApiMessageType = ApiMessageType { name: "FindCoordinator", api_key: 10, lowest_supported_version: 0, highest_supported_version: 6, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
-    pub const JOIN_GROUP: ApiMessageType = ApiMessageType { name: "JoinGroup", api_key: 11, lowest_supported_version: 2, highest_supported_version: 9, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const JOIN_GROUP: ApiMessageType = ApiMessageType { name: "JoinGroup", api_key: 11, lowest_supported_version: 0, highest_supported_version: 9, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const HEARTBEAT: ApiMessageType = ApiMessageType { name: "Heartbeat", api_key: 12, lowest_supported_version: 0, highest_supported_version: 4, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const LEAVE_GROUP: ApiMessageType = ApiMessageType { name: "LeaveGroup", api_key: 13, lowest_supported_version: 0, highest_supported_version: 5, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const SYNC_GROUP: ApiMessageType = ApiMessageType { name: "SyncGroup", api_key: 14, lowest_supported_version: 0, highest_supported_version: 5, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
@@ -30,7 +30,7 @@ impl ApiMessageType {
     pub const CREATE_TOPICS: ApiMessageType = ApiMessageType { name: "CreateTopics", api_key: 19, lowest_supported_version: 2, highest_supported_version: 7, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const DELETE_TOPICS: ApiMessageType = ApiMessageType { name: "DeleteTopics", api_key: 20, lowest_supported_version: 1, highest_supported_version: 6, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const DELETE_RECORDS: ApiMessageType = ApiMessageType { name: "DeleteRecords", api_key: 21, lowest_supported_version: 0, highest_supported_version: 2, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
-    pub const INIT_PRODUCER_ID: ApiMessageType = ApiMessageType { name: "InitProducerId", api_key: 22, lowest_supported_version: 0, highest_supported_version: 5, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const INIT_PRODUCER_ID: ApiMessageType = ApiMessageType { name: "InitProducerId", api_key: 22, lowest_supported_version: 0, highest_supported_version: 6, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: true };
     pub const OFFSET_FOR_LEADER_EPOCH: ApiMessageType = ApiMessageType { name: "OffsetForLeaderEpoch", api_key: 23, lowest_supported_version: 2, highest_supported_version: 4, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const ADD_PARTITIONS_TO_TXN: ApiMessageType = ApiMessageType { name: "AddPartitionsToTxn", api_key: 24, lowest_supported_version: 0, highest_supported_version: 5, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const ADD_OFFSETS_TO_TXN: ApiMessageType = ApiMessageType { name: "AddOffsetsToTxn", api_key: 25, lowest_supported_version: 0, highest_supported_version: 4, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
@@ -53,7 +53,7 @@ impl ApiMessageType {
     pub const DELETE_GROUPS: ApiMessageType = ApiMessageType { name: "DeleteGroups", api_key: 42, lowest_supported_version: 0, highest_supported_version: 2, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const ELECT_LEADERS: ApiMessageType = ApiMessageType { name: "ElectLeaders", api_key: 43, lowest_supported_version: 0, highest_supported_version: 2, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const INCREMENTAL_ALTER_CONFIGS: ApiMessageType = ApiMessageType { name: "IncrementalAlterConfigs", api_key: 44, lowest_supported_version: 0, highest_supported_version: 1, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
-    pub const ALTER_PARTITION_REASSIGNMENTS: ApiMessageType = ApiMessageType { name: "AlterPartitionReassignments", api_key: 45, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const ALTER_PARTITION_REASSIGNMENTS: ApiMessageType = ApiMessageType { name: "AlterPartitionReassignments", api_key: 45, lowest_supported_version: 0, highest_supported_version: 1, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const LIST_PARTITION_REASSIGNMENTS: ApiMessageType = ApiMessageType { name: "ListPartitionReassignments", api_key: 46, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const OFFSET_DELETE: ApiMessageType = ApiMessageType { name: "OffsetDelete", api_key: 47, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const DESCRIBE_CLIENT_QUOTAS: ApiMessageType = ApiMessageType { name: "DescribeClientQuotas", api_key: 48, lowest_supported_version: 0, highest_supported_version: 1, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
@@ -74,7 +74,7 @@ impl ApiMessageType {
     pub const BROKER_HEARTBEAT: ApiMessageType = ApiMessageType { name: "BrokerHeartbeat", api_key: 63, lowest_supported_version: 0, highest_supported_version: 1, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const UNREGISTER_BROKER: ApiMessageType = ApiMessageType { name: "UnregisterBroker", api_key: 64, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const DESCRIBE_TRANSACTIONS: ApiMessageType = ApiMessageType { name: "DescribeTransactions", api_key: 65, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
-    pub const LIST_TRANSACTIONS: ApiMessageType = ApiMessageType { name: "ListTransactions", api_key: 66, lowest_supported_version: 0, highest_supported_version: 1, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const LIST_TRANSACTIONS: ApiMessageType = ApiMessageType { name: "ListTransactions", api_key: 66, lowest_supported_version: 0, highest_supported_version: 2, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const ALLOCATE_PRODUCER_IDS: ApiMessageType = ApiMessageType { name: "AllocateProducerIds", api_key: 67, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const CONSUMER_GROUP_HEARTBEAT: ApiMessageType = ApiMessageType { name: "ConsumerGroupHeartbeat", api_key: 68, lowest_supported_version: 0, highest_supported_version: 1, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const CONSUMER_GROUP_DESCRIBE: ApiMessageType = ApiMessageType { name: "ConsumerGroupDescribe", api_key: 69, lowest_supported_version: 0, highest_supported_version: 1, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
@@ -82,20 +82,25 @@ impl ApiMessageType {
     pub const GET_TELEMETRY_SUBSCRIPTIONS: ApiMessageType = ApiMessageType { name: "GetTelemetrySubscriptions", api_key: 71, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const PUSH_TELEMETRY: ApiMessageType = ApiMessageType { name: "PushTelemetry", api_key: 72, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const ASSIGN_REPLICAS_TO_DIRS: ApiMessageType = ApiMessageType { name: "AssignReplicasToDirs", api_key: 73, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
-    pub const LIST_CLIENT_METRICS_RESOURCES: ApiMessageType = ApiMessageType { name: "ListClientMetricsResources", api_key: 74, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const LIST_CONFIG_RESOURCES: ApiMessageType = ApiMessageType { name: "ListConfigResources", api_key: 74, lowest_supported_version: 0, highest_supported_version: 1, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const DESCRIBE_TOPIC_PARTITIONS: ApiMessageType = ApiMessageType { name: "DescribeTopicPartitions", api_key: 75, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
-    pub const SHARE_GROUP_HEARTBEAT: ApiMessageType = ApiMessageType { name: "ShareGroupHeartbeat", api_key: 76, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: true };
-    pub const SHARE_GROUP_DESCRIBE: ApiMessageType = ApiMessageType { name: "ShareGroupDescribe", api_key: 77, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: true };
-    pub const SHARE_FETCH: ApiMessageType = ApiMessageType { name: "ShareFetch", api_key: 78, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: true };
-    pub const SHARE_ACKNOWLEDGE: ApiMessageType = ApiMessageType { name: "ShareAcknowledge", api_key: 79, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: true };
+    pub const SHARE_GROUP_HEARTBEAT: ApiMessageType = ApiMessageType { name: "ShareGroupHeartbeat", api_key: 76, lowest_supported_version: 1, highest_supported_version: 1, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const SHARE_GROUP_DESCRIBE: ApiMessageType = ApiMessageType { name: "ShareGroupDescribe", api_key: 77, lowest_supported_version: 1, highest_supported_version: 1, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const SHARE_FETCH: ApiMessageType = ApiMessageType { name: "ShareFetch", api_key: 78, lowest_supported_version: 1, highest_supported_version: 1, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const SHARE_ACKNOWLEDGE: ApiMessageType = ApiMessageType { name: "ShareAcknowledge", api_key: 79, lowest_supported_version: 1, highest_supported_version: 1, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const ADD_RAFT_VOTER: ApiMessageType = ApiMessageType { name: "AddRaftVoter", api_key: 80, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const REMOVE_RAFT_VOTER: ApiMessageType = ApiMessageType { name: "RemoveRaftVoter", api_key: 81, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     pub const UPDATE_RAFT_VOTER: ApiMessageType = ApiMessageType { name: "UpdateRaftVoter", api_key: 82, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
-    pub const INITIALIZE_SHARE_GROUP_STATE: ApiMessageType = ApiMessageType { name: "InitializeShareGroupState", api_key: 83, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: true };
-    pub const READ_SHARE_GROUP_STATE: ApiMessageType = ApiMessageType { name: "ReadShareGroupState", api_key: 84, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: true };
-    pub const WRITE_SHARE_GROUP_STATE: ApiMessageType = ApiMessageType { name: "WriteShareGroupState", api_key: 85, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: true };
-    pub const DELETE_SHARE_GROUP_STATE: ApiMessageType = ApiMessageType { name: "DeleteShareGroupState", api_key: 86, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: true };
-    pub const READ_SHARE_GROUP_STATE_SUMMARY: ApiMessageType = ApiMessageType { name: "ReadShareGroupStateSummary", api_key: 87, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: true };
+    pub const INITIALIZE_SHARE_GROUP_STATE: ApiMessageType = ApiMessageType { name: "InitializeShareGroupState", api_key: 83, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const READ_SHARE_GROUP_STATE: ApiMessageType = ApiMessageType { name: "ReadShareGroupState", api_key: 84, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const WRITE_SHARE_GROUP_STATE: ApiMessageType = ApiMessageType { name: "WriteShareGroupState", api_key: 85, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const DELETE_SHARE_GROUP_STATE: ApiMessageType = ApiMessageType { name: "DeleteShareGroupState", api_key: 86, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const READ_SHARE_GROUP_STATE_SUMMARY: ApiMessageType = ApiMessageType { name: "ReadShareGroupStateSummary", api_key: 87, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const STREAMS_GROUP_HEARTBEAT: ApiMessageType = ApiMessageType { name: "StreamsGroupHeartbeat", api_key: 88, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: true };
+    pub const STREAMS_GROUP_DESCRIBE: ApiMessageType = ApiMessageType { name: "StreamsGroupDescribe", api_key: 89, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: true };
+    pub const DESCRIBE_SHARE_GROUP_OFFSETS: ApiMessageType = ApiMessageType { name: "DescribeShareGroupOffsets", api_key: 90, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const ALTER_SHARE_GROUP_OFFSETS: ApiMessageType = ApiMessageType { name: "AlterShareGroupOffsets", api_key: 91, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
+    pub const DELETE_SHARE_GROUP_OFFSETS: ApiMessageType = ApiMessageType { name: "DeleteShareGroupOffsets", api_key: 92, lowest_supported_version: 0, highest_supported_version: 0, lowest_deprecated_version: 0, highest_deprecated_version: -1, latest_version_unstable: false };
     
     /// Get request header version for the message version.
     pub fn request_header_version(&self, _version: i16) -> i16 {
@@ -380,7 +385,7 @@ impl ApiMessageType {
                 2
             }
 
-            74 => {  // ListClientMetricsResources
+            74 => {  // ListConfigResources
                 2
             }
 
@@ -433,6 +438,26 @@ impl ApiMessageType {
             }
 
             87 => {  // ReadShareGroupStateSummary
+                2
+            }
+
+            88 => {  // StreamsGroupHeartbeat
+                2
+            }
+
+            89 => {  // StreamsGroupDescribe
+                2
+            }
+
+            90 => {  // DescribeShareGroupOffsets
+                2
+            }
+
+            91 => {  // AlterShareGroupOffsets
+                2
+            }
+
+            92 => {  // DeleteShareGroupOffsets
                 2
             }
 
@@ -726,7 +751,7 @@ impl ApiMessageType {
                 1
             }
 
-            74 => {  // ListClientMetricsResources
+            74 => {  // ListConfigResources
                 1
             }
 
@@ -779,6 +804,26 @@ impl ApiMessageType {
             }
 
             87 => {  // ReadShareGroupStateSummary
+                1
+            }
+
+            88 => {  // StreamsGroupHeartbeat
+                1
+            }
+
+            89 => {  // StreamsGroupDescribe
+                1
+            }
+
+            90 => {  // DescribeShareGroupOffsets
+                1
+            }
+
+            91 => {  // AlterShareGroupOffsets
+                1
+            }
+
+            92 => {  // DeleteShareGroupOffsets
                 1
             }
 
@@ -860,7 +905,7 @@ impl ApiMessageType {
             71 => Self::GET_TELEMETRY_SUBSCRIPTIONS,
             72 => Self::PUSH_TELEMETRY,
             73 => Self::ASSIGN_REPLICAS_TO_DIRS,
-            74 => Self::LIST_CLIENT_METRICS_RESOURCES,
+            74 => Self::LIST_CONFIG_RESOURCES,
             75 => Self::DESCRIBE_TOPIC_PARTITIONS,
             76 => Self::SHARE_GROUP_HEARTBEAT,
             77 => Self::SHARE_GROUP_DESCRIBE,
@@ -874,6 +919,11 @@ impl ApiMessageType {
             85 => Self::WRITE_SHARE_GROUP_STATE,
             86 => Self::DELETE_SHARE_GROUP_STATE,
             87 => Self::READ_SHARE_GROUP_STATE_SUMMARY,
+            88 => Self::STREAMS_GROUP_HEARTBEAT,
+            89 => Self::STREAMS_GROUP_DESCRIBE,
+            90 => Self::DESCRIBE_SHARE_GROUP_OFFSETS,
+            91 => Self::ALTER_SHARE_GROUP_OFFSETS,
+            92 => Self::DELETE_SHARE_GROUP_OFFSETS,
             _ => panic!("Unsupported API key {}", api_key)
         }
     }

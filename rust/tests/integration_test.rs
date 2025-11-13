@@ -105,7 +105,7 @@ impl Drop for Connection {
     }
 }
 
-const KAFKA_VERSION: &str = "4.0.0";
+const KAFKA_VERSION: &str = "4.1.0";
 const KAFKA_PORT: ContainerPort = ContainerPort::Tcp(9092);
 
 #[test]

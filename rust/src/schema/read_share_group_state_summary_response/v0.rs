@@ -177,6 +177,8 @@ pub struct PartitionResult {
     pub error_message: Option<String>,
     /// The state epoch of the share-partition.
     pub state_epoch: i32,
+    /// The leader epoch of the share-partition.
+    pub leader_epoch: i32,
     /// The share-partition start offset.
     pub start_offset: i64,
     /// Unknown tagged fields.
@@ -191,6 +193,7 @@ impl Default for PartitionResult {
             error_code: 0_i16,
             error_message: None,
             state_epoch: 0_i32,
+            leader_epoch: 0_i32,
             start_offset: 0_i64,
             _unknown_tagged_fields: Vec::new(),
         }
@@ -198,12 +201,13 @@ impl Default for PartitionResult {
 }
 
 impl PartitionResult {
-    pub fn new<S1: AsRef<str>>(partition: i32, error_code: i16, error_message: Option<S1>, state_epoch: i32, start_offset: i64) -> Self {
+    pub fn new<S1: AsRef<str>>(partition: i32, error_code: i16, error_message: Option<S1>, state_epoch: i32, leader_epoch: i32, start_offset: i64) -> Self {
         Self {
             partition,
             error_code,
             error_message: error_message.map(|s| s.as_ref().to_string()),
             state_epoch,
+            leader_epoch,
             start_offset,
             _unknown_tagged_fields: vec![],
         }
@@ -221,6 +225,7 @@ mod tests_partition_result_new_and_default {
             0_i16,
             None::<String>,
             0_i32,
+            0_i32,
             0_i64,
         );
         assert_eq!(d, PartitionResult::default());
@@ -233,6 +238,7 @@ impl Readable for PartitionResult {
         let error_code = i16::read(input)?;
         let error_message = Option::<String>::read_ext(input, "error_message", true)?;
         let state_epoch = i32::read(input)?;
+        let leader_epoch = i32::read(input)?;
         let start_offset = i64::read(input)?;
         let tagged_fields_callback = |tag: i32, _: &[u8]| {
             match tag {
@@ -241,7 +247,7 @@ impl Readable for PartitionResult {
         };
         let _unknown_tagged_fields = read_tagged_fields(input, tagged_fields_callback)?;
         Ok(PartitionResult {
-            partition, error_code, error_message, state_epoch, start_offset, _unknown_tagged_fields
+            partition, error_code, error_message, state_epoch, leader_epoch, start_offset, _unknown_tagged_fields
         })
     }
 }
@@ -252,6 +258,7 @@ impl Writable for PartitionResult {
         self.error_code.write(output)?;
         self.error_message.write_ext(output, "self.error_message", true)?;
         self.state_epoch.write(output)?;
+        self.leader_epoch.write(output)?;
         self.start_offset.write(output)?;
         write_tagged_fields(output, &[], &self._unknown_tagged_fields)?;
         Ok(())
