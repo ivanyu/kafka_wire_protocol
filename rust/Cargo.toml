@@ -18,7 +18,7 @@ log = "0.4.28"
 paste = "1.0.15"
 
 [dev-dependencies]
-serde_json = "1.0.145"
+serde_json = "1.0.148"
 rstest = "0.26.1"
 proptest = "1.9.0"
 proptest-derive = "0.7.0"
